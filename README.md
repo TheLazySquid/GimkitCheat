@@ -2,6 +2,8 @@
 
 This version of Gimkit Cheat was inspired by Gimkit Utility by [UndercoverGoose](https://github.com/UndercoverGoose), which was sadly taken down. The main things that were carried over from the other script are using Typescript, Rollup and Tampermonkey, which makes it easier to develop and use. If you do want to try out the older versions, check out [v1 here](/v1) or [v2 here](/v2).
 
+Install it by clicking on [this link](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js) while having [Tampermonkey](https://www.tampermonkey.net/) installed on your browser.
+
 ## Features
 
 Gimkit Cheat provides a nice, unified way to use different cheats. To open/close the hud, press "\" (backslash) on your keyboard while on Gimkit. It will show various menus, which should be fairly self explanatory. While it might look like a lot is missing, this script includes all still-working features from the old one. Which is to say, not a lot, since Gimkit patched almost everything out.

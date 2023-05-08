@@ -1,0 +1,26 @@
+{
+  "name": "gimkitcheat",
+  "version": "0.3.0",
+  "description": "A userscript that allows you to cheat across various gimkit games",
+  "main": "rollup.config.js",
+  "type": "module",
+  "scripts": {
+    "build": "rollup --config"
+  },
+  "author": "TheLazySquid",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-terser": "^0.4.1",
+    "@rollup/plugin-typescript": "^11.1.0",
+    "rollup": "^3.21.2",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-svg": "^2.0.0",
+    "rollup-plugin-userscript-metablock": "^0.3.3",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/tampermonkey": "^4.0.10",
+    "rollup-plugin-svg-import": "^2.0.0"
+  }
+}

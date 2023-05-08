@@ -1,0 +1,18 @@
+{
+	"name": "gimkitcheat",
+	"namespace": "https://www.github.com/TheLazySquid/GimkitCheat",
+	"match": [
+		"https://www.gimkit.com/join*"
+	],
+	"run-at": "document-start",
+	"description": "A userscript that allows you to cheat across various gimkit games",
+	"iconURL": "https://www.gimkit.com/favicon.png",
+	"author": "TheLazySquid",
+	"grant": [
+		"GM_getValue",
+		"GM_setValue",
+		"GM_deleteValue"
+	],
+	"updateURL": "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js",
+	"downloadURL": "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js"
+}

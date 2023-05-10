@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
-// @version     0.3.0
+// @version     0.3.1
 // @license     ISC
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
 
-  var version = "0.3.0";
+  var version = "0.3.1";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -2428,7 +2428,7 @@
       }
   }
 
-  const hudAddition$4 = {
+  const hudAddition$5 = {
       menus: [
           {
               name: "Devtools",
@@ -2449,7 +2449,7 @@
   class DevtoolsClass {
       constructor() {
           this.name = "Gimkit Cheat Devtools";
-          this.hudAddition = hudAddition$4;
+          this.hudAddition = hudAddition$5;
           this.loggingIncomingMessages = false;
           this.funcs = new Map([
               ["logIncomingMessages", (enabled) => {
@@ -2469,7 +2469,7 @@
       return new DevtoolsClass();
   }
 
-  const hudAddition$3 = {
+  const hudAddition$4 = {
       menus: [
           {
               name: "General Cheats",
@@ -2492,7 +2492,7 @@
   class AutoanswerClass {
       constructor() {
           this.name = "Autoanswer";
-          this.hudAddition = hudAddition$3;
+          this.hudAddition = hudAddition$4;
           this.autoAnswering = false;
           this.funcs = new Map([
               ["setAutoAnswer", (enabled) => {
@@ -2586,7 +2586,7 @@
   let trails = ["None", "origin_token"];
   skins = skins.sort();
   trails = trails.sort();
-  const hudAddition$2 = {
+  const hudAddition$3 = {
       menus: [
           {
               name: "General Cheats",
@@ -2627,7 +2627,7 @@
   class CosmeticpickerClass {
       constructor() {
           this.name = "Cosmetic Picker";
-          this.hudAddition = hudAddition$2;
+          this.hudAddition = hudAddition$3;
           this.funcs = new Map([
               ["setSkin", (skin) => {
                       this.setSkin(skin);
@@ -2702,7 +2702,7 @@
       return new CosmeticpickerClass();
   }
 
-  const hudAddition$1 = {
+  const hudAddition$2 = {
       menus: [
           {
               name: "General Cheats",
@@ -2749,7 +2749,7 @@
   class PlayerhighlighterClass {
       constructor() {
           this.name = "Player Highlighter";
-          this.hudAddition = hudAddition$1;
+          this.hudAddition = hudAddition$2;
           this.funcs = new Map([
               ["highlightTeammates", (value) => {
                       this.highlightingTeammates = value;
@@ -2940,7 +2940,7 @@
       UpgradeType["Multiplier"] = "multiplier";
       UpgradeType["Streak Bonus"] = "streakBonus";
   })(UpgradeType || (UpgradeType = {}));
-  const hudAddition = {
+  const hudAddition$1 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -2954,9 +2954,9 @@
                                   textEnabled: "Stop Auto Purchasing",
                                   textDisabled: "Start Auto Purchasing",
                                   default: false,
-                                  runFunction: "setAutoPurchasing",
+                                  runFunction: "setAutoPurchasingClassic",
                                   keybind: true,
-                                  keybindId: "autoPurchasing"
+                                  keybindId: "autoPurchasingClassic"
                               }
                           }
                       ]
@@ -2975,10 +2975,10 @@
               multiplier: 1,
               streakBonus: 1
           };
-          this.hudAddition = hudAddition;
+          this.hudAddition = hudAddition$1;
           this.autoPurchasing = false;
           this.funcs = new Map([
-              ["setAutoPurchasing", (enabled) => {
+              ["setAutoPurchasingClassic", (enabled) => {
                       this.autoPurchasing = enabled;
                       if (this.autoPurchasing)
                           this.checkAutoBuy();
@@ -3057,6 +3057,73 @@
       return new ClassicClass();
   }
 
+  const hudAddition = {
+      menus: [
+          {
+              name: "Cheats for gamemodes",
+              groups: [
+                  {
+                      name: "Super Rich Mode",
+                      elements: [
+                          {
+                              type: "toggle",
+                              options: {
+                                  textEnabled: "Stop Auto Purchasing",
+                                  textDisabled: "Start Auto Purchasing",
+                                  default: false,
+                                  runFunction: "setAutoPurchasingRichMode",
+                                  keybind: true,
+                                  keybindId: "autoPurchasingRichMode"
+                              }
+                          }
+                      ]
+                  }
+              ]
+          }
+      ]
+  };
+  class RichModeClass extends ClassicClass {
+      constructor() {
+          super(...arguments);
+          this.name = "Rich Mode Script";
+          this.hudAddition = hudAddition;
+          this.funcs = new Map([
+              ["setAutoPurchasingRichMode", (enabled) => {
+                      this.autoPurchasing = enabled;
+                      if (this.autoPurchasing)
+                          this.checkAutoBuy();
+                  }]
+          ]);
+          this.upgradesToGet = [
+              ["Streak Bonus", 2, 10000],
+              ["Money Per Question", 3, 5000],
+              ["Streak Bonus", 3, 100000],
+              ["Multiplier", 3, 150000],
+              ["Streak Bonus", 4, 1000000],
+              ["Multiplier", 4, 1000000],
+              ["Money Per Question", 5, 5000000],
+              ["Streak Bonus", 5, 10000000],
+              ["Multiplier", 5, 6000000],
+              ["Money Per Question", 6, 37500000],
+              ["Multiplier", 6, 42500000],
+              ["Streak Bonus", 6, 100000000],
+              ["Streak Bonus", 7, 1000000000],
+              ["Streak Bonus", 8, 10000000000],
+              ["Multiplier", 7, 350000000],
+              ["Money Per Question", 9, 5000000000],
+              ["Multiplier", 8, 3250000000],
+              ["Streak Bonus", 9, 100000000000],
+              ["Multiplier", 9, 32500000000],
+              ["Streak Bonus", 10, 1000000000000],
+              ["Money Per Question", 10, 50000000000],
+              ["Multiplier", 10, 500000000000]
+          ];
+      }
+  }
+  function RichMode() {
+      return new RichModeClass();
+  }
+
   class Cheat extends EventTarget {
       constructor() {
           super();
@@ -3079,7 +3146,8 @@
               Cosmeticpicker(),
               Playerhighlighter(),
               Freecam(),
-              Classic()
+              Classic(),
+              RichMode()
           ];
           this.initScripts();
       }

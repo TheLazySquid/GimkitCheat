@@ -10,6 +10,7 @@ import { Cosmeticpicker } from './scripts/general/cosmeticpicker';
 import { Playerhighlighter } from './scripts/general/playerhighlighter';
 import { Freecam } from './scripts/general/freecam';
 import { Classic } from './scripts/gamemodes/classic';
+import { RichMode } from './scripts/gamemodes/superrichmode';
 
 class Cheat extends EventTarget {
     socketHandler: SocketHandler;
@@ -43,7 +44,8 @@ class Cheat extends EventTarget {
             Cosmeticpicker(),
             Playerhighlighter(),
             Freecam(),
-            Classic()
+            Classic(),
+            RichMode()
         ]
 
         this.initScripts();

@@ -21,9 +21,9 @@ const hudAddition: HudObject = {
                                 textEnabled: "Stop Auto Purchasing",
                                 textDisabled: "Start Auto Purchasing",
                                 default: false,
-                                runFunction: "setAutoPurchasing",
+                                runFunction: "setAutoPurchasingClassic",
                                 keybind: true,
-                                keybindId: "autoPurchasing"
+                                keybindId: "autoPurchasingClassic"
                             }
                         }
                     ]
@@ -33,7 +33,7 @@ const hudAddition: HudObject = {
     ]
 }
 
-class ClassicClass {
+export class ClassicClass {
     name: string = "Classic Script";
     cheat: any;
     money: number = 0;
@@ -46,7 +46,7 @@ class ClassicClass {
     hudAddition: HudObject = hudAddition;
     autoPurchasing: boolean = false;
     funcs: Map<string, Function> = new Map([
-        ["setAutoPurchasing", (enabled: boolean) => {
+        ["setAutoPurchasingClassic", (enabled: boolean) => {
             this.autoPurchasing = enabled;
             if(this.autoPurchasing) this.checkAutoBuy();
         }]

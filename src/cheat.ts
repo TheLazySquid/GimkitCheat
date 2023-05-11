@@ -1,7 +1,6 @@
 import SocketHandler from './network/socket';
 import KeybindManager from './keybindManager';
 import Hud from './hud/hud';
-import DeviceManager from './deviceManager';
 import { Script } from './interfaces';
 
 import { Devtools } from './scripts/general/devtools';
@@ -11,11 +10,11 @@ import { Playerhighlighter } from './scripts/general/playerhighlighter';
 import { Freecam } from './scripts/general/freecam';
 import { Classic } from './scripts/gamemodes/classic';
 import { RichMode } from './scripts/gamemodes/superrichmode';
+import { TrustNoOne } from './scripts/gamemodes/trustnoone';
 
 class Cheat extends EventTarget {
     socketHandler: SocketHandler;
     keybindManager: KeybindManager = new KeybindManager();
-    deviceManager: DeviceManager;
     hud: Hud;
     funcs: Map<string, Function> = new Map();
     scripts: Script[] = [];
@@ -27,7 +26,6 @@ class Cheat extends EventTarget {
         (window as any).cheat = this;
 
         this.socketHandler = new SocketHandler(this);
-        this.deviceManager = new DeviceManager(this);
 
         this.socketHandler.addEventListener("socket", (e) => {
             cheat.log("Socket connected", e)
@@ -44,8 +42,10 @@ class Cheat extends EventTarget {
             Cosmeticpicker(),
             Playerhighlighter(),
             Freecam(),
+            
             Classic(),
-            RichMode()
+            RichMode(),
+            TrustNoOne()
         ]
 
         this.initScripts();

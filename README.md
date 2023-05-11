@@ -18,5 +18,7 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 ### Gamemode Specific Cheats
 
 - **Classic**: Automatically purchases upgrades for you. Best used with Auto Answer.
+- **Super Rich Mode**: Identical to Classic, with adjusted values.
+- **Trust No One**: Tells you who the imposters are. Doesn't work if you join mid-game.
 
 and more to come!

@@ -2356,62 +2356,6 @@
       }
   }
 
-  class DeviceManager {
-      constructor(cheat) {
-          this.devices = [];
-          this.cheat = cheat;
-          this.cheat.socketHandler.addEventListener("recieveMessage", (e) => {
-              var _a;
-              // listen for when the devices are sent through or updated
-              if ((_a = e.detail) === null || _a === void 0 ? void 0 : _a.devices) {
-                  this.updateDevices(e.detail.devices);
-              }
-          });
-      }
-      updateDevices(devices) {
-          let devicesFixed = devices.addedDevices.devices.map((d) => {
-              let data = {};
-              for (let val of d[6]) {
-                  let key1 = devices.addedDevices.values[val[0]];
-                  let key2 = devices.addedDevices.values[val[1]];
-                  data[key1] = key2;
-              }
-              return {
-                  id: d[0],
-                  data
-              };
-          });
-          // merge/overwrite devices
-          if (this.devices) {
-              for (let device of devicesFixed) {
-                  let existingDeviceIndex = this.devices.findIndex(d => d.id == device.id);
-                  if (existingDeviceIndex != -1) {
-                      this.devices[existingDeviceIndex] = device;
-                  }
-                  else {
-                      this.devices.push(device);
-                  }
-              }
-          }
-          else {
-              this.devices = devicesFixed;
-          }
-      }
-      getDevices(selector) {
-          if (selector.id) {
-              return this.devices.filter(d => d.id == selector.id);
-          }
-          let devices = this.devices;
-          for (let key in selector) {
-              devices = devices.filter(d => d.data[key] == selector[key]);
-          }
-          return devices;
-      }
-      getDevice(selector) {
-          return this.getDevices(selector)[0];
-      }
-  }
-
   const hudAddition$5 = {
       menus: [
           {
@@ -3108,6 +3052,33 @@
       return new RichModeClass();
   }
 
+  class TrustNoOneClass {
+      constructor() {
+          this.name = "Trust No One Script";
+          this.people = [];
+      }
+      init(cheat) {
+          this.cheat = cheat;
+          // add the imposter display
+          let group = cheat.hud.createMenu("Cheats for gamemodes").createGroup("Trust No One");
+          let text = group.addElement("text", {
+              text: "Imposters: Waiting... (only works if you don't join mid-game)"
+          });
+          cheat.socketHandler.addEventListener("recieveMessage", (e) => {
+              if (this.cheat.socketHandler.transportType != "blueboat")
+                  return;
+              if (e.detail.key == "IMPOSTER_MODE_PEOPLE") {
+                  this.people = e.detail.data;
+                  let imposters = this.people.filter((person) => person.role == "imposter");
+                  text.text = `Imposter(s): ${imposters.map((person) => person.name).join(", ")}`;
+              }
+          });
+      }
+  }
+  function TrustNoOne() {
+      return new TrustNoOneClass();
+  }
+
   class Cheat extends EventTarget {
       constructor() {
           super();
@@ -3117,7 +3088,6 @@
           // add cheat to the global scope
           window.cheat = this;
           this.socketHandler = new SocketHandler(this);
-          this.deviceManager = new DeviceManager(this);
           this.socketHandler.addEventListener("socket", (e) => {
               cheat.log("Socket connected", e);
           });
@@ -3131,7 +3101,8 @@
               Playerhighlighter(),
               Freecam(),
               Classic(),
-              RichMode()
+              RichMode(),
+              TrustNoOne()
           ];
           this.initScripts();
       }

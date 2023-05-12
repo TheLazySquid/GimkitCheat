@@ -57,7 +57,7 @@ class AutoanswerClass {
     
                     // check whether it includes the new question ID
                     for(let [key, value] of Object.entries(change.data)) {
-                        if(key.includes("currentQuestionId")) {
+                        if(key.includes("currentQuestionId") && key.includes((unsafeWindow as any).stores?.phaser?.mainCharacter?.id)) {
                             this.currentQuestionId = value;
                         }
                     }

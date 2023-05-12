@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var version = "0.3.1";
+  var version = "0.3.3";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -2436,7 +2436,7 @@
       }
       init(cheat) {
           cheat.socketHandler.addEventListener("recieveMessage", (e) => {
-              var _a, _b;
+              var _a, _b, _c, _d, _e;
               if (cheat.socketHandler.transportType == "colyseus") {
                   if (!((_a = e.detail) === null || _a === void 0 ? void 0 : _a.changes))
                       return;
@@ -2451,7 +2451,7 @@
                       }
                       // check whether it includes the new question ID
                       for (let [key, value] of Object.entries(change.data)) {
-                          if (key.includes("currentQuestionId")) {
+                          if (key.includes("currentQuestionId") && key.includes((_d = (_c = (_b = unsafeWindow.stores) === null || _b === void 0 ? void 0 : _b.phaser) === null || _c === void 0 ? void 0 : _c.mainCharacter) === null || _d === void 0 ? void 0 : _d.id)) {
                               this.currentQuestionId = value;
                           }
                       }
@@ -2459,7 +2459,7 @@
               }
               else {
                   // get the questions and question list
-                  if (((_b = e.detail) === null || _b === void 0 ? void 0 : _b.key) != "STATE_UPDATE")
+                  if (((_e = e.detail) === null || _e === void 0 ? void 0 : _e.key) != "STATE_UPDATE")
                       return;
                   switch (e.detail.data.type) {
                       case "GAME_QUESTIONS":

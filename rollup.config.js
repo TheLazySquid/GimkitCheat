@@ -5,8 +5,10 @@ import metablock from 'rollup-plugin-userscript-metablock';
 import typescript from '@rollup/plugin-typescript';
 import { string } from "rollup-plugin-string"
 import svg from 'rollup-plugin-svg-import';
+import resolve from '@rollup/plugin-node-resolve';
 
 import pkg from './package.json' assert { type: 'json' }
+import commonjs from '@rollup/plugin-commonjs';
 
 export default {
 	input: 'src/main.ts',
@@ -46,6 +48,10 @@ export default {
 		string({
 			include: "**/*.css"
 		}),
-		svg()
+		svg(),
+		resolve({
+			browser: true
+		}),
+		commonjs()
 	]
 };

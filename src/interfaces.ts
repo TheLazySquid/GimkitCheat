@@ -151,3 +151,8 @@ export interface ChangePacket {
 	changes: any[];
 	values: String[];
 }
+
+export interface BotInfo {
+	id: string;
+	type: string;
+}

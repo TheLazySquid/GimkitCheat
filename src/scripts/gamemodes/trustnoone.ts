@@ -1,4 +1,4 @@
-export class TrustNoOneClass {
+class TrustNoOneClass {
     name: string = "Trust No One Script";
     cheat: any;
 	people = [];

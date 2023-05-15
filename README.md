@@ -14,6 +14,7 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **Cosmetic Picker**: Allows you to use any cosmetic you want, even unused ones. These are only visible to you.
 - **Freecam**: Allows you to move your camera wherever you want, or even spectate other players. Once in freecam, use UHJK to move around.
 - **Player Highlighter**: Marks on your screen where teammates or enemies are in relation to you.
+- **Instant Use**: Tired of waiting for painfully slow bars to fill up just to purchase something minor? This allows you to use the nearest thing instantly by hitting enter.
 
 ### Gamemode Specific Cheats
 

@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
-// @version     0.3.3
+// @version     0.3.4
 // @license     ISC
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
 
-  var version = "0.3.3";
+  var version = "0.3.4";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -1051,6 +1051,9 @@
               // intercept any outgoing socket connections
               WebSocket.prototype._send = WebSocket.prototype.send;
               WebSocket.prototype.send = function (data) {
+                  // if the url is a local url, don't intercept it
+                  if (this.url.startsWith("ws://localhost"))
+                      return this._send(data);
                   handlerThis.registerSocket(this);
                   if (!handlerThis.socket)
                       return;
@@ -1798,6 +1801,12 @@
           (_b = this.parentGroup) === null || _b === void 0 ? void 0 : _b.groups.splice(this.parentGroup.groups.indexOf(this), 1);
           this.menu.groups.splice(this.menu.groups.indexOf(this), 1);
       }
+      clearElements() {
+          this.elements = [];
+          if (!this.element)
+              return;
+          this.element.innerHTML = "";
+      }
       loadFromObject(object) {
           const loadGroups = () => {
               if (object.groups) {
@@ -2372,7 +2381,7 @@
       }
   }
 
-  const hudAddition$5 = {
+  const hudAddition$6 = {
       menus: [
           {
               name: "Devtools",
@@ -2393,7 +2402,7 @@
   class DevtoolsClass {
       constructor() {
           this.name = "Gimkit Cheat Devtools";
-          this.hudAddition = hudAddition$5;
+          this.hudAddition = hudAddition$6;
           this.loggingIncomingMessages = false;
           this.funcs = new Map([
               ["logIncomingMessages", (enabled) => {
@@ -2413,7 +2422,7 @@
       return new DevtoolsClass();
   }
 
-  const hudAddition$4 = {
+  const hudAddition$5 = {
       menus: [
           {
               name: "General Cheats",
@@ -2436,7 +2445,7 @@
   class AutoanswerClass {
       constructor() {
           this.name = "Autoanswer";
-          this.hudAddition = hudAddition$4;
+          this.hudAddition = hudAddition$5;
           this.autoAnswering = false;
           this.funcs = new Map([
               ["setAutoAnswer", (enabled) => {
@@ -2530,7 +2539,7 @@
   let trails = ["None", "origin_token"];
   skins = skins.sort();
   trails = trails.sort();
-  const hudAddition$3 = {
+  const hudAddition$4 = {
       menus: [
           {
               name: "General Cheats",
@@ -2571,7 +2580,7 @@
   class CosmeticpickerClass {
       constructor() {
           this.name = "Cosmetic Picker";
-          this.hudAddition = hudAddition$3;
+          this.hudAddition = hudAddition$4;
           this.funcs = new Map([
               ["setSkin", (skin) => {
                       this.setSkin(skin);
@@ -2646,7 +2655,7 @@
       return new CosmeticpickerClass();
   }
 
-  const hudAddition$2 = {
+  const hudAddition$3 = {
       menus: [
           {
               name: "General Cheats",
@@ -2693,7 +2702,7 @@
   class PlayerhighlighterClass {
       constructor() {
           this.name = "Player Highlighter";
-          this.hudAddition = hudAddition$2;
+          this.hudAddition = hudAddition$3;
           this.funcs = new Map([
               ["highlightTeammates", (value) => {
                       this.highlightingTeammates = value;
@@ -2884,7 +2893,7 @@
       UpgradeType["Multiplier"] = "multiplier";
       UpgradeType["Streak Bonus"] = "streakBonus";
   })(UpgradeType || (UpgradeType = {}));
-  const hudAddition$1 = {
+  const hudAddition$2 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -2919,7 +2928,7 @@
               multiplier: 1,
               streakBonus: 1
           };
-          this.hudAddition = hudAddition$1;
+          this.hudAddition = hudAddition$2;
           this.autoPurchasing = false;
           this.funcs = new Map([
               ["setAutoPurchasingClassic", (enabled) => {
@@ -3001,7 +3010,7 @@
       return new ClassicClass();
   }
 
-  const hudAddition = {
+  const hudAddition$1 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3030,7 +3039,7 @@
       constructor() {
           super(...arguments);
           this.name = "Rich Mode Script";
-          this.hudAddition = hudAddition;
+          this.hudAddition = hudAddition$1;
           this.funcs = new Map([
               ["setAutoPurchasingRichMode", (enabled) => {
                       this.autoPurchasing = enabled;
@@ -3095,6 +3104,75 @@
       return new TrustNoOneClass();
   }
 
+  const hudAddition = {
+      menus: [
+          {
+              name: "General Cheats",
+              elements: [
+                  {
+                      type: "toggle",
+                      options: {
+                          textEnabled: "Stop instant use",
+                          textDisabled: "Instant use",
+                          default: true,
+                          runFunction: "setInstantUse",
+                          keybind: true,
+                          keybindId: "instantUse"
+                      }
+                  }
+              ]
+          }
+      ]
+  };
+  class InstantuseClass {
+      constructor() {
+          this.name = "Instantuse";
+          this.hudAddition = hudAddition;
+          this.instantUseEnabled = true;
+          this.funcs = new Map([
+              ["setInstantUse", (enabled) => {
+                      this.instantUseEnabled = enabled;
+                  }]
+          ]);
+      }
+      init(cheat) {
+          let self = this;
+          cheat.keybindManager.registerBind({
+              keys: new Set(["enter"]),
+              exclusive: false,
+              callback() {
+                  self.useNearest();
+              }
+          });
+      }
+      useNearest() {
+          var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+          let devices = (_e = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices) === null || _e === void 0 ? void 0 : _e.devicesInView;
+          let body = (_h = (_g = (_f = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _f === void 0 ? void 0 : _f.phaser) === null || _g === void 0 ? void 0 : _g.mainCharacter) === null || _h === void 0 ? void 0 : _h.body;
+          if (!devices || !body)
+              return;
+          let closest = null;
+          let closestDistance = Infinity;
+          for (let device of devices) {
+              if (device.interactiveZones.zones.length == 0)
+                  continue;
+              let distance = Math.sqrt(Math.pow(device.x - body.x, 2) + Math.pow(device.y - body.y, 2));
+              if (distance < closestDistance) {
+                  closest = device;
+                  closestDistance = distance;
+              }
+          }
+          console.log(closest);
+          if (!closest)
+              return;
+          (_k = (_j = closest === null || closest === void 0 ? void 0 : closest.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction) === null || _k === void 0 ? void 0 : _k.call(_j);
+      }
+  }
+  function Instantuse() {
+      return new InstantuseClass();
+  }
+
+  // import { BotCreator } from './scripts/general/botcreator';
   class Cheat extends EventTarget {
       constructor() {
           super();
@@ -3112,13 +3190,15 @@
           // initialize any scripts
           this.scripts = [
               Devtools(),
+              Instantuse(),
               Autoanswer(),
               Cosmeticpicker(),
               Playerhighlighter(),
               Freecam(),
               Classic(),
               RichMode(),
-              TrustNoOne()
+              TrustNoOne(),
+              // BotCreator()
           ];
           this.initScripts();
       }

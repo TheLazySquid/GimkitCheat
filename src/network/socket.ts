@@ -23,6 +23,9 @@ class SocketHandler extends EventTarget {
 			// intercept any outgoing socket connections
 			(WebSocket.prototype as GCSocket)._send = WebSocket.prototype.send;
 			WebSocket.prototype.send = function(data) {
+				// if the url is a local url, don't intercept it
+				if(this.url.startsWith("ws://localhost")) return (this as GCSocket)._send(data);
+
 				handlerThis.registerSocket(this as GCSocket);
 
 				if(!handlerThis.socket) return

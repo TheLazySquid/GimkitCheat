@@ -126,6 +126,12 @@ export default class Group {
 		this.menu.groups.splice(this.menu.groups.indexOf(this), 1);
 	}
 
+	clearElements() {
+		this.elements = [];
+		if(!this.element) return;
+		this.element.innerHTML = "";
+	}
+
 	loadFromObject(object: GroupObject) {
 		const loadGroups = () => {
 			if(object.groups) {

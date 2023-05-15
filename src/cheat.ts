@@ -11,6 +11,8 @@ import { Freecam } from './scripts/general/freecam';
 import { Classic } from './scripts/gamemodes/classic';
 import { RichMode } from './scripts/gamemodes/superrichmode';
 import { TrustNoOne } from './scripts/gamemodes/trustnoone';
+import { Instantuse } from './scripts/general/instantuse';
+// import { BotCreator } from './scripts/general/botcreator';
 
 class Cheat extends EventTarget {
     socketHandler: SocketHandler;
@@ -38,6 +40,7 @@ class Cheat extends EventTarget {
         // initialize any scripts
         this.scripts = [
             Devtools(),
+            Instantuse(),
             Autoanswer(),
             Cosmeticpicker(),
             Playerhighlighter(),
@@ -45,7 +48,9 @@ class Cheat extends EventTarget {
             
             Classic(),
             RichMode(),
-            TrustNoOne()
+            TrustNoOne(),
+
+            // BotCreator()
         ]
 
         this.initScripts();

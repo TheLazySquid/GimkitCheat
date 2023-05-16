@@ -12,6 +12,7 @@ import { Classic } from './scripts/gamemodes/classic';
 import { RichMode } from './scripts/gamemodes/superrichmode';
 import { TrustNoOne } from './scripts/gamemodes/trustnoone';
 import { Instantuse } from './scripts/general/instantuse';
+import { Instapurchasers } from './scripts/gamemodes/purchasers';
 // import { BotCreator } from './scripts/general/botcreator';
 
 class Cheat extends EventTarget {
@@ -49,11 +50,44 @@ class Cheat extends EventTarget {
             Classic(),
             RichMode(),
             TrustNoOne(),
+            Instapurchasers()
 
             // BotCreator()
         ]
 
         this.initScripts();
+        this.waitForLoad();
+    }
+
+    waitForLoad() {
+        let loadTimeout: NodeJS.Timeout | null = null;
+        let hasLoaded = false;
+
+        this.socketHandler.addEventListener("recieveMessage", (e) => {
+            let data = (e as CustomEvent).detail;
+            if(typeof data != "object") return;
+            if('devices' in data) { // colyseus exclusive
+                let devices = (unsafeWindow as any)?.stores?.phaser?.scene?.worldManager?.devices
+                let nativeAddDevice = devices.addDevice;
+
+                // modify addDevice so that once devices stop being added, we mark the game as loaded
+                devices.addDevice = (device: any) => {
+                    nativeAddDevice.call(devices, device);
+
+                    if(hasLoaded) return;
+
+                    // wait a bit to see if any more devices are added
+                    if(loadTimeout) clearTimeout(loadTimeout)
+                    loadTimeout = setTimeout(() => {
+                        hasLoaded = true;
+                        this.log("Game Loaded")
+                        this.dispatchEvent(new CustomEvent("gameLoaded"))
+                    }, 1000)
+                }
+            }
+
+            // TODO: Add a version for blueboat
+        })
     }
 
     initScripts() {

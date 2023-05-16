@@ -156,3 +156,9 @@ export interface BotInfo {
 	id: string;
 	type: string;
 }
+
+export interface Purchase {
+	displayName: string;
+	id: string;
+	reusable: boolean
+}

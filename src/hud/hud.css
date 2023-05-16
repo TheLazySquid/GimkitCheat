@@ -161,7 +161,8 @@
 #gc_hud .toggle, #gc_hud .button {
     /* make it take up as much space as possible */
     width: 100%;
-    margin: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 #gc_hud .keybind_opener {

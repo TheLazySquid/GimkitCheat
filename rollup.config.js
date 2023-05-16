@@ -15,7 +15,7 @@ export default {
 	output: [
 		{
 			file: 'build/bundle.js',
-			format: 'iife' // change this 
+			format: 'iife'
 		},
 		{
 			file: 'build/bundle.min.js',

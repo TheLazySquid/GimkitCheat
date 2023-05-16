@@ -62,7 +62,6 @@ class InstantuseClass {
 			}
 		}
 
-		console.log(closest)
 		if(!closest) return
 
 		closest?.interactiveZones?.onInteraction?.()

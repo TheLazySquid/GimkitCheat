@@ -1171,7 +1171,7 @@
       }
   }
 
-  var css = "#gc_hud {\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    z-index: 999999999999;\r\n    pointer-events: none;\r\n    color: var(--text-color);\r\n}\r\n\r\n#gc_hud .menu_controls {\r\n    width: 100%;\r\n    height: 20px;\r\n    background-color: var(--menu-controls-bg-color);\r\n    color: var(--menu-controls-text-color);\r\n    border-radius: 5px 5px 0px 0px;\r\n    text-align: center;\r\n    position: relative;\r\n}\r\n\r\n#gc_hud .menu_minimizer {\r\n    margin-left: 20px;\r\n    margin-right: 20px;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    user-select: none;\r\n}\r\n\r\n#gc_hud .menu {\r\n    pointer-events: auto;\r\n    position: absolute;\r\n    background-color: var(--menu-bg-color);\r\n    display: inline-block;\r\n    border-radius: 5px;\r\n    overflow-x: hidden;\r\n    overflow-y: hidden;\r\n    resize: both;\r\n    width: 300px;\r\n    height: 200px;\r\n    outline: 3px solid var(--menu-border-color);\r\n}\r\n\r\n#gc_hud .menu.minimized {\r\n    height: 20px !important;\r\n    overflow-y: hidden;\r\n    resize: horizontal;\r\n}\r\n\r\n#gc_hud .group {\r\n    margin: 0px;\r\n    padding: 0px;\r\n    width: 100%;\r\n    /* allocate some space at the top and bottom */\r\n    height: calc(100% - 40px); \r\n    position: absolute;\r\n    top: 20px;\r\n    left: 0;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    overflow-y: auto;\r\n    overflow-x: hidden;\r\n}\r\n\r\n#gc_hud .button, #gc_hud .group_opener {\r\n    background-color: var(--button-bg-color);\r\n    border: 1px solid var(--button-border-color);\r\n}\r\n\r\n#gc_hud .toggle {\r\n    background-color: var(--toggle-bg-color);\r\n    border: 1px solid var(--toggle-border-color);\r\n}\r\n\r\n#gc_hud .button, #gc_hud .toggle, #gc_hud .group_opener {\r\n    border-radius: 5px;\r\n    padding: 5px;\r\n    margin: 5px;\r\n    cursor: pointer;\r\n    width: 90%;\r\n    transition: transform 0.2s ease-in-out;\r\n}\r\n\r\n/* make it bounce smaller when clicked */\r\n#gc_hud .button:active, #gc_hud .toggle:active, #gc_hud .group_opener:active {\r\n    transform: scale(0.93);\r\n}\r\n\r\n#gc_hud .colorpicker {\r\n    width: 100%;\r\n}\r\n\r\n#gc_hud .colorpicker_wrapper {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n    margin: 5px;\r\n}\r\n\r\n#gc_hud .colorpicker_opacity_wrapper {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n}\r\n\r\n#gc_hud .colorpicker_preview {\r\n    width: 50px;\r\n    height: 50px;\r\n    border-radius: 5px;\r\n    opacity: 1;\r\n}\r\n\r\n#gc_hud .text {\r\n    text-align: center;\r\n    width: 100%;\r\n}\r\n\r\n#gc_hud .textinput_wrapper, #gc_hud .dropdown_wrapper, #gc_hud .slider_wrapper {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n}\r\n\r\n#gc_hud .textinput {\r\n    width: 90%;\r\n    border-radius: 5px;\r\n    border: 1px solid var(--textinput-border-color);\r\n    background-color: var(--textinput-bg-color);\r\n    color: var(--text-color);\r\n    padding: 5px;\r\n    margin: 5px;\r\n}\r\n\r\n#gc_hud .dropdown {\r\n    width: 90%;\r\n    border-radius: 5px;\r\n    border: 1px solid var(--dropdown-border-color);\r\n    background-color: var(--dropdown-bg-color);\r\n    color: var(--text-color);\r\n    padding: 5px;\r\n    margin: 5px;\r\n}\r\n\r\n#gc_hud .toggle_wrapper, #gc_hud .button_wrapper {\r\n    width: 90%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n    padding: 0px;\r\n}\r\n\r\n#gc_hud .toggle, #gc_hud .button {\r\n    /* make it take up as much space as possible */\r\n    width: 100%;\r\n    margin: 0px;\r\n}\r\n\r\n#gc_hud .keybind_opener {\r\n    width: 30px;\r\n    height: 30px;\r\n    font-size: 30px;\r\n    margin-left: 10px;\r\n}\r\n\r\n#gc_hud .keybind_editor_wrapper {\r\n    background-color: var(--keybind-editor-bg-color);\r\n    border: 3px solid var(--keybind-editor-border-color);\r\n    border-radius: 8px;\r\n}\r\n\r\n#gc_hud .keybind_editor {\r\n    width: 50vw;\r\n    height: 50vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n    color: var(--text-color);\r\n}\r\n\r\n#gc_hud .close {\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    width: 20px;\r\n    height: 20px;\r\n    font-size: 20px;\r\n    cursor: pointer;\r\n    user-select: none;\r\n}\r\n\r\n#gc_hud .keybind_title {\r\n    font-size: 40px;\r\n    text-align: center;\r\n}\r\n\r\n#gc_hud .keybind_controls {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n}\r\n\r\n#gc_hud .keybind_display {\r\n    border: 3px solid white;\r\n    min-width: 300px;\r\n    border-radius: 5px;\r\n    height: 50px;\r\n    text-align: center;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    cursor: pointer;\r\n}\r\n\r\n#gc_hud .keybind_exclusive {\r\n    display: flex;\r\n}\r\n\r\n#gc_hud .keybind_exclusive .text {\r\n    margin-right: 10px;\r\n}\r\n\r\n#gc_hud .keybind_editor .action {\r\n    cursor: pointer;\r\n}\r\n\r\n#gc_hud .slider {\r\n    width: 90%;\r\n    margin: 5px;\r\n}\r\n\r\n.gc_overlay_canvas {\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    width: 100vw;\r\n    height: 100vh;\r\n    z-index: 9999;\r\n    pointer-events: none;\r\n}\r\n\r\n@keyframes slide_out_left {\r\n    0% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(-100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n}\r\n\r\n@keyframes slide_out_right {\r\n    0% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n}\r\n\r\n@keyframes slide_in_left {\r\n    0% {\r\n        transform: translateX(-100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n}\r\n\r\n@keyframes slide_in_right {\r\n    0% {\r\n        transform: translateX(100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n}\r\n\r\n@keyframes idle {}";
+  var css = "#gc_hud {\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    z-index: 999999999999;\r\n    pointer-events: none;\r\n    color: var(--text-color);\r\n}\r\n\r\n#gc_hud .menu_controls {\r\n    width: 100%;\r\n    height: 20px;\r\n    background-color: var(--menu-controls-bg-color);\r\n    color: var(--menu-controls-text-color);\r\n    border-radius: 5px 5px 0px 0px;\r\n    text-align: center;\r\n    position: relative;\r\n}\r\n\r\n#gc_hud .menu_minimizer {\r\n    margin-left: 20px;\r\n    margin-right: 20px;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    user-select: none;\r\n}\r\n\r\n#gc_hud .menu {\r\n    pointer-events: auto;\r\n    position: absolute;\r\n    background-color: var(--menu-bg-color);\r\n    display: inline-block;\r\n    border-radius: 5px;\r\n    overflow-x: hidden;\r\n    overflow-y: hidden;\r\n    resize: both;\r\n    width: 300px;\r\n    height: 200px;\r\n    outline: 3px solid var(--menu-border-color);\r\n}\r\n\r\n#gc_hud .menu.minimized {\r\n    height: 20px !important;\r\n    overflow-y: hidden;\r\n    resize: horizontal;\r\n}\r\n\r\n#gc_hud .group {\r\n    margin: 0px;\r\n    padding: 0px;\r\n    width: 100%;\r\n    /* allocate some space at the top and bottom */\r\n    height: calc(100% - 40px); \r\n    position: absolute;\r\n    top: 20px;\r\n    left: 0;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    overflow-y: auto;\r\n    overflow-x: hidden;\r\n}\r\n\r\n#gc_hud .button, #gc_hud .group_opener {\r\n    background-color: var(--button-bg-color);\r\n    border: 1px solid var(--button-border-color);\r\n}\r\n\r\n#gc_hud .toggle {\r\n    background-color: var(--toggle-bg-color);\r\n    border: 1px solid var(--toggle-border-color);\r\n}\r\n\r\n#gc_hud .button, #gc_hud .toggle, #gc_hud .group_opener {\r\n    border-radius: 5px;\r\n    padding: 5px;\r\n    margin: 5px;\r\n    cursor: pointer;\r\n    width: 90%;\r\n    transition: transform 0.2s ease-in-out;\r\n}\r\n\r\n/* make it bounce smaller when clicked */\r\n#gc_hud .button:active, #gc_hud .toggle:active, #gc_hud .group_opener:active {\r\n    transform: scale(0.93);\r\n}\r\n\r\n#gc_hud .colorpicker {\r\n    width: 100%;\r\n}\r\n\r\n#gc_hud .colorpicker_wrapper {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n    margin: 5px;\r\n}\r\n\r\n#gc_hud .colorpicker_opacity_wrapper {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n}\r\n\r\n#gc_hud .colorpicker_preview {\r\n    width: 50px;\r\n    height: 50px;\r\n    border-radius: 5px;\r\n    opacity: 1;\r\n}\r\n\r\n#gc_hud .text {\r\n    text-align: center;\r\n    width: 100%;\r\n}\r\n\r\n#gc_hud .textinput_wrapper, #gc_hud .dropdown_wrapper, #gc_hud .slider_wrapper {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n}\r\n\r\n#gc_hud .textinput {\r\n    width: 90%;\r\n    border-radius: 5px;\r\n    border: 1px solid var(--textinput-border-color);\r\n    background-color: var(--textinput-bg-color);\r\n    color: var(--text-color);\r\n    padding: 5px;\r\n    margin: 5px;\r\n}\r\n\r\n#gc_hud .dropdown {\r\n    width: 90%;\r\n    border-radius: 5px;\r\n    border: 1px solid var(--dropdown-border-color);\r\n    background-color: var(--dropdown-bg-color);\r\n    color: var(--text-color);\r\n    padding: 5px;\r\n    margin: 5px;\r\n}\r\n\r\n#gc_hud .toggle_wrapper, #gc_hud .button_wrapper {\r\n    width: 90%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n    padding: 0px;\r\n}\r\n\r\n#gc_hud .toggle, #gc_hud .button {\r\n    /* make it take up as much space as possible */\r\n    width: 100%;\r\n    margin-left: 0px;\r\n    margin-right: 0px;\r\n}\r\n\r\n#gc_hud .keybind_opener {\r\n    width: 30px;\r\n    height: 30px;\r\n    font-size: 30px;\r\n    margin-left: 10px;\r\n}\r\n\r\n#gc_hud .keybind_editor_wrapper {\r\n    background-color: var(--keybind-editor-bg-color);\r\n    border: 3px solid var(--keybind-editor-border-color);\r\n    border-radius: 8px;\r\n}\r\n\r\n#gc_hud .keybind_editor {\r\n    width: 50vw;\r\n    height: 50vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n    color: var(--text-color);\r\n}\r\n\r\n#gc_hud .close {\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    width: 20px;\r\n    height: 20px;\r\n    font-size: 20px;\r\n    cursor: pointer;\r\n    user-select: none;\r\n}\r\n\r\n#gc_hud .keybind_title {\r\n    font-size: 40px;\r\n    text-align: center;\r\n}\r\n\r\n#gc_hud .keybind_controls {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n    align-items: center;\r\n}\r\n\r\n#gc_hud .keybind_display {\r\n    border: 3px solid white;\r\n    min-width: 300px;\r\n    border-radius: 5px;\r\n    height: 50px;\r\n    text-align: center;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    cursor: pointer;\r\n}\r\n\r\n#gc_hud .keybind_exclusive {\r\n    display: flex;\r\n}\r\n\r\n#gc_hud .keybind_exclusive .text {\r\n    margin-right: 10px;\r\n}\r\n\r\n#gc_hud .keybind_editor .action {\r\n    cursor: pointer;\r\n}\r\n\r\n#gc_hud .slider {\r\n    width: 90%;\r\n    margin: 5px;\r\n}\r\n\r\n.gc_overlay_canvas {\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    width: 100vw;\r\n    height: 100vh;\r\n    z-index: 9999;\r\n    pointer-events: none;\r\n}\r\n\r\n@keyframes slide_out_left {\r\n    0% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(-100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n}\r\n\r\n@keyframes slide_out_right {\r\n    0% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n}\r\n\r\n@keyframes slide_in_left {\r\n    0% {\r\n        transform: translateX(-100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n}\r\n\r\n@keyframes slide_in_right {\r\n    0% {\r\n        transform: translateX(100%);\r\n        opacity: 0;\r\n        pointer-events: none;\r\n    }\r\n\r\n    100% {\r\n        transform: translateX(0);\r\n        opacity: 1;\r\n        pointer-events: all;\r\n    }\r\n}\r\n\r\n@keyframes idle {}";
 
   class HudElement extends EventTarget {
       // any is used to avoid circular dependencies
@@ -2394,6 +2394,13 @@
                           default: false,
                           runFunction: "logIncomingMessages"
                       }
+                  },
+                  {
+                      type: "button",
+                      options: {
+                          text: "Log closest device",
+                          runFunction: "logClosestDevice"
+                      }
                   }
               ]
           }
@@ -2407,6 +2414,9 @@
           this.funcs = new Map([
               ["logIncomingMessages", (enabled) => {
                       this.loggingIncomingMessages = enabled;
+                  }],
+              ["logClosestDevice", () => {
+                      this.logClosestDevice();
                   }]
           ]);
       }
@@ -2416,6 +2426,23 @@
                   return;
               cheat.log("Incoming message", e.detail);
           });
+      }
+      logClosestDevice() {
+          var _a, _b, _c, _d, _e, _f, _g, _h;
+          let devices = (_e = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices) === null || _e === void 0 ? void 0 : _e.devicesInView;
+          let body = (_h = (_g = (_f = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _f === void 0 ? void 0 : _f.phaser) === null || _g === void 0 ? void 0 : _g.mainCharacter) === null || _h === void 0 ? void 0 : _h.body;
+          let closest = null;
+          let closestDistance = Infinity;
+          for (let device of devices) {
+              if (device.interactiveZones.zones.length == 0)
+                  continue;
+              let distance = Math.sqrt(Math.pow(device.x - body.x, 2) + Math.pow(device.y - body.y, 2));
+              if (distance < closestDistance) {
+                  closest = device;
+                  closestDistance = distance;
+              }
+          }
+          console.log(closest);
       }
   }
   function Devtools() {
@@ -3162,7 +3189,6 @@
                   closestDistance = distance;
               }
           }
-          console.log(closest);
           if (!closest)
               return;
           (_k = (_j = closest === null || closest === void 0 ? void 0 : closest.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction) === null || _k === void 0 ? void 0 : _k.call(_j);
@@ -3170,6 +3196,149 @@
   }
   function Instantuse() {
       return new InstantuseClass();
+  }
+
+  /******************************************************************************
+  Copyright (c) Microsoft Corporation.
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+  ***************************************************************************** */
+
+  function __awaiter(thisArg, _arguments, P, generator) {
+      function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+      return new (P || (P = Promise))(function (resolve, reject) {
+          function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+          function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+          function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+  }
+
+  const purchases = {
+      "Capture The Flag": [
+          {
+              displayName: "Speed Upgrade",
+              id: "Speed Upgrade",
+              reusable: false
+          },
+          {
+              displayName: "Efficiency Upgrade",
+              id: "Efficiency Upgrade",
+              reusable: false
+          },
+          {
+              displayName: "Energy Per Question Upgrade",
+              id: "Energy Per Question Upgrade",
+              reusable: false
+          },
+          {
+              displayName: "InvisaBits",
+              id: "silver-ore",
+              reusable: true
+          }
+      ],
+      "Tag": [
+          {
+              displayName: "Speed Upgrade",
+              id: "Speed Upgrade",
+              reusable: false
+          },
+          {
+              displayName: "Efficiency Upgrade",
+              id: "Efficiency Upgrade",
+              reusable: false
+          },
+          {
+              displayName: "Energy Per Question Upgrade",
+              id: "Energy Per Question Upgrade",
+              reusable: false
+          },
+          {
+              displayName: "Endurance Upgrade",
+              id: "Endurance Upgrade",
+              reusable: false
+          }
+      ],
+      "Snowbrawl": [
+          {
+              displayName: "Med Pack",
+              id: "medpack",
+              reusable: true
+          },
+          {
+              displayName: "Shield Can",
+              id: "shield-can",
+              reusable: true
+          }
+      ]
+  };
+  class InstapurchasersClass {
+      constructor() {
+          this.name = "Instapurchasers";
+      }
+      init(cheat) {
+          cheat.addEventListener("gameLoaded", () => {
+              this.createButtons(cheat);
+          });
+      }
+      createButtons(cheat) {
+          var _a, _b, _c, _d, _e, _f, _g;
+          let devices = (_e = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices) === null || _e === void 0 ? void 0 : _e.allDevices;
+          if (!devices) {
+              setTimeout(() => this.createButtons(cheat), 1000); // try again in case something went wrong
+              return;
+          }
+          for (let gamemode in purchases) {
+              let group = cheat.hud.createMenu("Cheats for gamemodes").createGroup(gamemode);
+              for (let purchase of purchases[gamemode]) {
+                  let { id, displayName, reusable } = purchase;
+                  let purchaseDevices = devices.filter((device) => {
+                      var _a, _b;
+                      return ((_a = device === null || device === void 0 ? void 0 : device.options) === null || _a === void 0 ? void 0 : _a.grantedItemName) == id ||
+                          ((_b = device === null || device === void 0 ? void 0 : device.options) === null || _b === void 0 ? void 0 : _b.grantedItemId) == id;
+                  });
+                  if (purchaseDevices.length == 0)
+                      continue;
+                  // sort them by price
+                  purchaseDevices.sort((a, b) => { var _a, _b; return ((_a = a === null || a === void 0 ? void 0 : a.options) === null || _a === void 0 ? void 0 : _a.amountOfRequiredItem) - ((_b = b === null || b === void 0 ? void 0 : b.options) === null || _b === void 0 ? void 0 : _b.amountOfRequiredItem); });
+                  let buttonText = `Purchase ${displayName} (${(_g = (_f = purchaseDevices[0]) === null || _f === void 0 ? void 0 : _f.options) === null || _g === void 0 ? void 0 : _g.amountOfRequiredItem})`;
+                  let button = group.addElement('button', {
+                      text: buttonText
+                  });
+                  button.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+                      var _h, _j, _k, _l;
+                      (_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction();
+                      if (reusable)
+                          return;
+                      // check whether it was successfully purchased
+                      // wait 500ms for the purchase to go through
+                      yield new Promise((resolve) => setTimeout(resolve, 500));
+                      if (purchaseDevices[0].state.active)
+                          return; // it wasn't purchased
+                      purchaseDevices.shift();
+                      if (purchaseDevices.length == 0) {
+                          button.remove();
+                          return;
+                      }
+                      // update the button text
+                      buttonText = `Purchase ${displayName} (${(_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.options) === null || _l === void 0 ? void 0 : _l.amountOfRequiredItem})`;
+                      button.text = buttonText;
+                  }));
+              }
+          }
+      }
+  }
+  function Instapurchasers() {
+      return new InstapurchasersClass();
   }
 
   // import { BotCreator } from './scripts/general/botcreator';
@@ -3198,9 +3367,40 @@
               Classic(),
               RichMode(),
               TrustNoOne(),
+              Instapurchasers()
               // BotCreator()
           ];
           this.initScripts();
+          this.waitForLoad();
+      }
+      waitForLoad() {
+          let loadTimeout = null;
+          let hasLoaded = false;
+          this.socketHandler.addEventListener("recieveMessage", (e) => {
+              var _a, _b, _c, _d;
+              let data = e.detail;
+              if (typeof data != "object")
+                  return;
+              if ('devices' in data) { // colyseus exclusive
+                  let devices = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices;
+                  let nativeAddDevice = devices.addDevice;
+                  // modify addDevice so that once devices stop being added, we mark the game as loaded
+                  devices.addDevice = (device) => {
+                      nativeAddDevice.call(devices, device);
+                      if (hasLoaded)
+                          return;
+                      // wait a bit to see if any more devices are added
+                      if (loadTimeout)
+                          clearTimeout(loadTimeout);
+                      loadTimeout = setTimeout(() => {
+                          hasLoaded = true;
+                          this.log("Game Loaded");
+                          this.dispatchEvent(new CustomEvent("gameLoaded"));
+                      }, 1000);
+                  };
+              }
+              // TODO: Add a version for blueboat
+          });
       }
       initScripts() {
           for (let script of this.scripts) {

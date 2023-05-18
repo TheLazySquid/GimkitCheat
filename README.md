@@ -24,6 +24,7 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **Capture The Flag**: Purchase upgrades from anywhere
 - **Tag**: Purchase upgrades from anywhere
 - **Snowbrawl**: Purchase shield cans/medpacks from anywhere
+- **One Way Out**: Purchase shield cans/medpacks from anywhere
 - **Farmchain**: Adds options to automatically harvest/plant crops from anywhere
 
 and more to come!

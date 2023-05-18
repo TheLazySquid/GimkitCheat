@@ -3295,6 +3295,22 @@
               reusable: true
           }
       ],
+      "One Way Out": [
+          {
+              displayName: "Med Pack",
+              selector: {
+                  grantedItemId: "medpack"
+              },
+              reusable: true
+          },
+          {
+              displayName: "Shield Can",
+              selector: {
+                  grantedItemId: "shield-can"
+              },
+              reusable: true
+          }
+      ],
       "Farmchain": {
           "Seeds": [
               {
@@ -3453,7 +3469,7 @@
 
   class InstapurchasersClass {
       constructor() {
-          this.name = "Instapurchasers";
+          this.name = "Purchasers";
       }
       init(cheat) {
           cheat.addEventListener("gameLoaded", () => {
@@ -3504,8 +3520,15 @@
                   text: buttonText
               });
               button.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                  var _h, _j, _k, _l;
-                  (_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction();
+                  var _h, _j, _k, _l, _m, _o, _p;
+                  if (!((_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction)) {
+                      // this happened to me a few times and I don't know why, just re-get the devices
+                      purchaseDevices = purchaseDevices.map((device) => {
+                          return devices.find((d) => d.id == device.id);
+                      });
+                      return;
+                  }
+                  (_m = (_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.interactiveZones) === null || _l === void 0 ? void 0 : _l.onInteraction) === null || _m === void 0 ? void 0 : _m.call(_l);
                   if (reusable)
                       return;
                   // check whether it was successfully purchased
@@ -3519,7 +3542,7 @@
                       return;
                   }
                   // update the button text
-                  buttonText = `Purchase ${displayName} (${(_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.options) === null || _l === void 0 ? void 0 : _l.amountOfRequiredItem})`;
+                  buttonText = `Purchase ${displayName} (${(_p = (_o = purchaseDevices[0]) === null || _o === void 0 ? void 0 : _o.options) === null || _p === void 0 ? void 0 : _p.amountOfRequiredItem})`;
                   button.text = buttonText;
               }));
           }
@@ -3692,33 +3715,19 @@
           this.waitForLoad();
       }
       waitForLoad() {
-          let loadTimeout = null;
-          let hasLoaded = false;
-          this.socketHandler.addEventListener("recieveMessage", (e) => {
-              var _a, _b, _c, _d;
-              let data = e.detail;
-              if (typeof data != "object")
-                  return;
-              if ('devices' in data) { // colyseus exclusive
-                  let devices = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices;
-                  let nativeAddDevice = devices.addDevice;
-                  // modify addDevice so that once devices stop being added, we mark the game as loaded
-                  devices.addDevice = (device) => {
-                      nativeAddDevice.call(devices, device);
-                      if (hasLoaded)
-                          return;
-                      // wait a bit to see if any more devices are added
-                      if (loadTimeout)
-                          clearTimeout(loadTimeout);
-                      loadTimeout = setTimeout(() => {
-                          hasLoaded = true;
-                          this.log("Game Loaded");
-                          this.dispatchEvent(new CustomEvent("gameLoaded"));
-                      }, 1000);
-                  };
+          // colyseus exclusive
+          let loadInterval = setInterval(() => {
+              var _a;
+              let loadedData = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.loading;
+              let loaded = (loadedData === null || loadedData === void 0 ? void 0 : loadedData.percentageAssetsLoaded) >= 100 && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.completedInitialLoad)
+                  && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.loadedInitialDevices) && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.loadedInitialTerrain);
+              if (loaded) {
+                  clearInterval(loadInterval);
+                  this.log("Game Loaded");
+                  this.dispatchEvent(new CustomEvent("gameLoaded"));
               }
-              // TODO: Add a version for blueboat
-          });
+          }, 1000 / 60);
+          // TODO: Add blueboat load detection
       }
       initScripts() {
           for (let script of this.scripts) {

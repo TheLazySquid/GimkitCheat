@@ -3,7 +3,7 @@ import { Purchase, PurchaseMenu } from "../../interfaces";
 import purchases from "./purchaseList";
 
 class InstapurchasersClass {
-    name = "Instapurchasers";
+    name = "Purchasers";
 
     init(cheat: any) {
         cheat.addEventListener("gameLoaded", () => {
@@ -60,7 +60,15 @@ class InstapurchasersClass {
             })
 
             button.addEventListener('click', async () => {
-                purchaseDevices[0]?.interactiveZones?.onInteraction()
+                if(!purchaseDevices[0]?.interactiveZones?.onInteraction) {
+                    // this happened to me a few times and I don't know why, just re-get the devices
+                    purchaseDevices = purchaseDevices.map((device: any) => {
+                        return devices.find((d: any) => d.id == device.id)
+                    })
+                    return
+                }
+
+                purchaseDevices[0]?.interactiveZones?.onInteraction?.()
 
                 if(reusable) return
 

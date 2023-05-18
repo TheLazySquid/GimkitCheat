@@ -3708,33 +3708,18 @@
           this.waitForLoad();
       }
       waitForLoad() {
-          let loadTimeout = null;
-          let hasLoaded = false;
-          this.socketHandler.addEventListener("recieveMessage", (e) => {
-              var _a, _b, _c, _d;
-              let data = e.detail;
-              if (typeof data != "object")
-                  return;
-              if ('devices' in data) { // colyseus exclusive
-                  let devices = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices;
-                  let nativeAddDevice = devices.addDevice;
-                  // modify addDevice so that once devices stop being added, we mark the game as loaded
-                  devices.addDevice = (device) => {
-                      nativeAddDevice.call(devices, device);
-                      if (hasLoaded)
-                          return;
-                      // wait a bit to see if any more devices are added
-                      if (loadTimeout)
-                          clearTimeout(loadTimeout);
-                      loadTimeout = setTimeout(() => {
-                          hasLoaded = true;
-                          this.log("Game Loaded");
-                          this.dispatchEvent(new CustomEvent("gameLoaded"));
-                      }, 1000);
-                  };
+          // colyseus exclusive
+          let loadInterval = setInterval(() => {
+              var _a;
+              let loadedData = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.loading;
+              let loaded = (loadedData === null || loadedData === void 0 ? void 0 : loadedData.percentageAssetsLoaded) >= 100;
+              if (loaded) {
+                  clearInterval(loadInterval);
+                  this.log("Game Loaded");
+                  this.dispatchEvent(new CustomEvent("gameLoaded"));
               }
-              // TODO: Add a version for blueboat
           });
+          // TODO: Add blueboat load detection
       }
       initScripts() {
           for (let script of this.scripts) {

@@ -77,6 +77,22 @@ const purchases: PurchaseMenu = {
             reusable: true
         }
     ],
+    "One Way Out": [
+        {
+            displayName: "Med Pack",
+            selector: {
+                grantedItemId: "medpack"
+            },
+            reusable: true
+        },
+        {
+            displayName: "Shield Can",
+            selector: {
+                grantedItemId: "shield-can"
+            },
+            reusable: true
+        }
+    ],
     "Farmchain": {
         "Seeds": [
             {

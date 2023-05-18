@@ -62,34 +62,20 @@ class Cheat extends EventTarget {
     }
 
     waitForLoad() {
-        let loadTimeout: NodeJS.Timeout | null = null;
-        let hasLoaded = false;
+        // colyseus exclusive
+        let loadInterval = setInterval(() => {
+            let loadedData = (unsafeWindow as any)?.stores?.loading
+            let loaded = loadedData?.percentageAssetsLoaded >= 100 && loadedData?.completedInitialLoad
+                && loadedData?.loadedInitialDevices && loadedData?.loadedInitialTerrain
 
-        this.socketHandler.addEventListener("recieveMessage", (e) => {
-            let data = (e as CustomEvent).detail;
-            if(typeof data != "object") return;
-            if('devices' in data) { // colyseus exclusive
-                let devices = (unsafeWindow as any)?.stores?.phaser?.scene?.worldManager?.devices
-                let nativeAddDevice = devices.addDevice;
-
-                // modify addDevice so that once devices stop being added, we mark the game as loaded
-                devices.addDevice = (device: any) => {
-                    nativeAddDevice.call(devices, device);
-
-                    if(hasLoaded) return;
-
-                    // wait a bit to see if any more devices are added
-                    if(loadTimeout) clearTimeout(loadTimeout)
-                    loadTimeout = setTimeout(() => {
-                        hasLoaded = true;
-                        this.log("Game Loaded")
-                        this.dispatchEvent(new CustomEvent("gameLoaded"))
-                    }, 1000)
-                }
+            if(loaded) {
+                clearInterval(loadInterval)
+                this.log("Game Loaded")
+                this.dispatchEvent(new CustomEvent("gameLoaded"))
             }
+        }, 1000 / 60)
 
-            // TODO: Add a version for blueboat
-        })
+        // TODO: Add blueboat load detection
     }
 
     initScripts() {

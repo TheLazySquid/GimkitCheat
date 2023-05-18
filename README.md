@@ -2,7 +2,7 @@
 
 This version of Gimkit Cheat was inspired by Gimkit Utility by [UndercoverGoose](https://github.com/UndercoverGoose), which was sadly taken down. The main things that were carried over from the other script are using Typescript, Rollup and Tampermonkey, which makes it easier to develop and use. If you do want to try out the older versions, check out [v1 here](/v1) or [v2 here](/v2).
 
-Install it by clicking on [this link](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js) while having [Tampermonkey](https://www.tampermonkey.net/) installed on your browser.
+Install/Update it by clicking on [this link](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js) while having [Tampermonkey](https://www.tampermonkey.net/) installed on your browser.
 
 ## Features
 
@@ -24,5 +24,6 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **Capture The Flag**: Purchase upgrades from anywhere
 - **Tag**: Purchase upgrades from anywhere
 - **Snowbrawl**: Purchase shield cans/medpacks from anywhere
+- **Farmchain**: Adds options to automatically harvest/plant crops from anywhere
 
 and more to come!

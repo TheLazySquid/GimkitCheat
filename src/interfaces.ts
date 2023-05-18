@@ -157,8 +157,12 @@ export interface BotInfo {
 	type: string;
 }
 
+export interface PurchaseMenu {
+	[index: string]: Purchase[] | PurchaseMenu
+}
+
 export interface Purchase {
 	displayName: string;
-	id: string;
+	selector: { [index: string]: string }
 	reusable: boolean
 }

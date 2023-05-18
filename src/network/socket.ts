@@ -3,6 +3,7 @@ import { GCSocket } from "../interfaces";
 import colyseus from "./colyseus"
 // @ts-ignore
 import blueboat from "./blueboat"
+import { parseChangePacket } from "../utils";
 
 class SocketHandler extends EventTarget {
 	socket: GCSocket | null = null;
@@ -73,6 +74,12 @@ class SocketHandler extends EventTarget {
 			if(!decoded) return;
 
 			handlerThis.dispatchEvent(new CustomEvent("recieveMessage", { detail: decoded }));
+			
+			if(typeof decoded != "object") return;
+			if('changes' in decoded) {
+				let parsed = parseChangePacket(decoded);
+				handlerThis.dispatchEvent(new CustomEvent("recieveChanges", { detail: parsed }));
+			}
 		})
 	}
 

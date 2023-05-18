@@ -1019,6 +1019,33 @@
       decode
   };
 
+  function HexAlphaToRGBA(hex, alpha) {
+      let r = parseInt(hex.slice(1, 3), 16);
+      let g = parseInt(hex.slice(3, 5), 16);
+      let b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  function RGBAtoHexAlpha(rgba) {
+      let [r, g, b, a] = rgba.slice(5, -1).split(",").map(x => parseFloat(x.trim()));
+      let hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+      return [hex, a];
+  }
+  function parseChangePacket(packet) {
+      let returnVar = [];
+      for (let change of packet.changes) {
+          let data = {};
+          let keys = change[1].map((index) => packet.values[index]);
+          for (let i = 0; i < keys.length; i++) {
+              data[keys[i]] = change[2][i];
+          }
+          returnVar.push({
+              id: change[0],
+              data
+          });
+      }
+      return returnVar;
+  }
+
   // @ts-ignore (can't be bothered to figure out how to import this)
   class SocketHandler extends EventTarget {
       constructor(cheat) {
@@ -1088,6 +1115,12 @@
               if (!decoded)
                   return;
               handlerThis.dispatchEvent(new CustomEvent("recieveMessage", { detail: decoded }));
+              if (typeof decoded != "object")
+                  return;
+              if ('changes' in decoded) {
+                  let parsed = parseChangePacket(decoded);
+                  handlerThis.dispatchEvent(new CustomEvent("recieveChanges", { detail: parsed }));
+              }
           });
       }
       sendData(channel, data) {
@@ -1213,33 +1246,6 @@
       get text() {
           return this.element.innerText;
       }
-  }
-
-  function HexAlphaToRGBA(hex, alpha) {
-      let r = parseInt(hex.slice(1, 3), 16);
-      let g = parseInt(hex.slice(3, 5), 16);
-      let b = parseInt(hex.slice(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
-  function RGBAtoHexAlpha(rgba) {
-      let [r, g, b, a] = rgba.slice(5, -1).split(",").map(x => parseFloat(x.trim()));
-      let hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
-      return [hex, a];
-  }
-  function parseChangePacket(packet) {
-      let returnVar = [];
-      for (let change of packet.changes) {
-          let data = {};
-          let keys = change[1].map((index) => packet.values[index]);
-          for (let i = 0; i < keys.length; i++) {
-              data[keys[i]] = change[2][i];
-          }
-          returnVar.push({
-              id: change[0],
-              data
-          });
-      }
-      return returnVar;
   }
 
   class ColorPicker extends HudElement {
@@ -2365,7 +2371,7 @@
       }
   }
 
-  const hudAddition$6 = {
+  const hudAddition$7 = {
       menus: [
           {
               name: "Devtools",
@@ -2393,7 +2399,7 @@
   class DevtoolsClass {
       constructor() {
           this.name = "Gimkit Cheat Devtools";
-          this.hudAddition = hudAddition$6;
+          this.hudAddition = hudAddition$7;
           this.loggingIncomingMessages = false;
           this.funcs = new Map([
               ["logIncomingMessages", (enabled) => {
@@ -2433,7 +2439,7 @@
       return new DevtoolsClass();
   }
 
-  const hudAddition$5 = {
+  const hudAddition$6 = {
       menus: [
           {
               name: "General Cheats",
@@ -2456,7 +2462,7 @@
   class AutoanswerClass {
       constructor() {
           this.name = "Autoanswer";
-          this.hudAddition = hudAddition$5;
+          this.hudAddition = hudAddition$6;
           this.autoAnswering = false;
           this.funcs = new Map([
               ["setAutoAnswer", (enabled) => {
@@ -2472,42 +2478,41 @@
       }
       init(cheat) {
           cheat.socketHandler.addEventListener("recieveMessage", (e) => {
-              var _a, _b, _c, _d, _e;
-              if (cheat.socketHandler.transportType == "colyseus") {
-                  if (!((_a = e.detail) === null || _a === void 0 ? void 0 : _a.changes))
-                      return;
-                  let changes = parseChangePacket(e.detail);
-                  for (let change of changes) {
-                      // try to get the device ID of the answer device
-                      for (let [key, value] of Object.entries(change.data)) {
-                          if (key != "GLOBAL_questions")
-                              continue;
-                          this.questions = JSON.parse(value);
-                          this.answerDeviceId = change.id;
-                      }
-                      // check whether it includes the new question ID
-                      for (let [key, value] of Object.entries(change.data)) {
-                          if (key.includes("currentQuestionId") && key.includes((_d = (_c = (_b = unsafeWindow.stores) === null || _b === void 0 ? void 0 : _b.phaser) === null || _c === void 0 ? void 0 : _c.mainCharacter) === null || _d === void 0 ? void 0 : _d.id)) {
-                              this.currentQuestionId = value;
-                          }
-                      }
-                  }
+              var _a;
+              if (cheat.socketHandler.transportType == "colyseus")
+                  return;
+              // get the questions and question list
+              if (((_a = e.detail) === null || _a === void 0 ? void 0 : _a.key) != "STATE_UPDATE")
+                  return;
+              switch (e.detail.data.type) {
+                  case "GAME_QUESTIONS":
+                      this.questions = e.detail.data.value;
+                      break;
+                  case "PLAYER_QUESTION_LIST":
+                      this.questionIdList = e.detail.data.value.questionList;
+                      this.currentQuestionIndex = e.detail.data.value.questionIndex;
+                      break;
+                  case "PLAYER_QUESTION_LIST_INDEX":
+                      this.currentQuestionIndex = e.detail.data.value;
+                      break;
               }
-              else {
-                  // get the questions and question list
-                  if (((_e = e.detail) === null || _e === void 0 ? void 0 : _e.key) != "STATE_UPDATE")
-                      return;
-                  switch (e.detail.data.type) {
-                      case "GAME_QUESTIONS":
-                          this.questions = e.detail.data.value;
-                          break;
-                      case "PLAYER_QUESTION_LIST":
-                          this.questionIdList = e.detail.data.value.questionList;
-                          this.currentQuestionIndex = e.detail.data.value.questionIndex;
-                          break;
-                      case "PLAYER_QUESTION_LIST_INDEX":
-                          this.currentQuestionIndex = e.detail.data.value;
-                          break;
+          });
+          cheat.socketHandler.addEventListener("recieveChanges", (e) => {
+              var _a, _b, _c;
+              let changes = e.detail;
+              for (let change of changes) {
+                  // try to get the device ID of the answer device
+                  for (let [key, value] of Object.entries(change.data)) {
+                      if (key != "GLOBAL_questions")
+                          continue;
+                      this.questions = JSON.parse(value);
+                      this.answerDeviceId = change.id;
+                  }
+                  // check whether it includes the new question ID
+                  for (let [key, value] of Object.entries(change.data)) {
+                      if (key.includes("currentQuestionId") && key.includes((_c = (_b = (_a = unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.mainCharacter) === null || _c === void 0 ? void 0 : _c.id)) {
+                          this.currentQuestionId = value;
+                      }
                   }
               }
           });
@@ -2550,7 +2555,7 @@
   let trails = ["None", "origin_token"];
   skins = skins.sort();
   trails = trails.sort();
-  const hudAddition$4 = {
+  const hudAddition$5 = {
       menus: [
           {
               name: "General Cheats",
@@ -2591,7 +2596,7 @@
   class CosmeticpickerClass {
       constructor() {
           this.name = "Cosmetic Picker";
-          this.hudAddition = hudAddition$4;
+          this.hudAddition = hudAddition$5;
           this.funcs = new Map([
               ["setSkin", (skin) => {
                       this.setSkin(skin);
@@ -2666,7 +2671,7 @@
       return new CosmeticpickerClass();
   }
 
-  const hudAddition$3 = {
+  const hudAddition$4 = {
       menus: [
           {
               name: "General Cheats",
@@ -2713,7 +2718,7 @@
   class PlayerhighlighterClass {
       constructor() {
           this.name = "Player Highlighter";
-          this.hudAddition = hudAddition$3;
+          this.hudAddition = hudAddition$4;
           this.funcs = new Map([
               ["highlightTeammates", (value) => {
                       this.highlightingTeammates = value;
@@ -2796,6 +2801,7 @@
           this.freeCamPos = { x: 0, y: 0 };
           this.toggleFreecam = null;
           this.spectateMenu = null;
+          this.keys = new Set();
       }
       init(cheat) {
           let camGroup = cheat.hud.createMenu("General Cheats").createGroup("Freecam");
@@ -2822,18 +2828,24 @@
           });
           this.toggleFreecam = toggleFreecam;
           this.spectateMenu = dropdown;
-          let loadCheck = setInterval(() => {
-              var _a, _b, _c;
-              // wait until the camera has loaded
-              if (!((_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.cameraHelper))
-                  return;
+          cheat.addEventListener('gameLoaded', () => {
               this.camHelper = unsafeWindow.stores.phaser.scene.cameraHelper;
               // add in the update loop
               setInterval(() => {
                   this.update();
               }, 1000 / 60);
-              clearInterval(loadCheck);
-          }, 100);
+          });
+          window.addEventListener("keydown", (e) => {
+              if (!this.freecamming)
+                  return;
+              if (!e.key.includes("Arrow"))
+                  return;
+              e.stopImmediatePropagation();
+              this.keys.add(e.key);
+          });
+          window.addEventListener("keyup", (e) => {
+              this.keys.delete(e.key);
+          });
       }
       enableFreecam(value) {
           let phaser = unsafeWindow.stores.phaser;
@@ -2869,14 +2881,13 @@
           if (!this.freecamming)
               return;
           // move the camera
-          let keys = window.cheat.keybindManager.keys;
-          if (keys.has("u"))
+          if (this.keys.has("ArrowUp"))
               this.freeCamPos.y -= 20;
-          if (keys.has("h"))
-              this.freeCamPos.x -= 20;
-          if (keys.has("j"))
+          if (this.keys.has("ArrowDown"))
               this.freeCamPos.y += 20;
-          if (keys.has("k"))
+          if (this.keys.has("ArrowLeft"))
+              this.freeCamPos.x -= 20;
+          if (this.keys.has("ArrowRight"))
               this.freeCamPos.x += 20;
           this.camHelper.goTo(this.freeCamPos);
       }
@@ -2904,7 +2915,7 @@
       UpgradeType["Multiplier"] = "multiplier";
       UpgradeType["Streak Bonus"] = "streakBonus";
   })(UpgradeType || (UpgradeType = {}));
-  const hudAddition$2 = {
+  const hudAddition$3 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -2939,7 +2950,7 @@
               multiplier: 1,
               streakBonus: 1
           };
-          this.hudAddition = hudAddition$2;
+          this.hudAddition = hudAddition$3;
           this.autoPurchasing = false;
           this.funcs = new Map([
               ["setAutoPurchasingClassic", (enabled) => {
@@ -3021,7 +3032,7 @@
       return new ClassicClass();
   }
 
-  const hudAddition$1 = {
+  const hudAddition$2 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3050,7 +3061,7 @@
       constructor() {
           super(...arguments);
           this.name = "Rich Mode Script";
-          this.hudAddition = hudAddition$1;
+          this.hudAddition = hudAddition$2;
           this.funcs = new Map([
               ["setAutoPurchasingRichMode", (enabled) => {
                       this.autoPurchasing = enabled;
@@ -3115,7 +3126,7 @@
       return new TrustNoOneClass();
   }
 
-  const hudAddition = {
+  const hudAddition$1 = {
       menus: [
           {
               name: "General Cheats",
@@ -3138,7 +3149,7 @@
   class InstantuseClass {
       constructor() {
           this.name = "Instantuse";
-          this.hudAddition = hudAddition;
+          this.hudAddition = hudAddition$1;
           this.instantUseEnabled = true;
           this.funcs = new Map([
               ["setInstantUse", (enabled) => {
@@ -3211,60 +3222,235 @@
       "Capture The Flag": [
           {
               displayName: "Speed Upgrade",
-              id: "Speed Upgrade",
+              selector: {
+                  grantedItemName: "Speed Upgrade",
+              },
               reusable: false
           },
           {
               displayName: "Efficiency Upgrade",
-              id: "Efficiency Upgrade",
+              selector: {
+                  grantedItemName: "Efficiency Upgrade",
+              },
               reusable: false
           },
           {
               displayName: "Energy Per Question Upgrade",
-              id: "Energy Per Question Upgrade",
+              selector: {
+                  grantedItemName: "Energy Per Question Upgrade",
+              },
               reusable: false
           },
           {
               displayName: "InvisaBits",
-              id: "silver-ore",
+              selector: {
+                  grantedItemId: "silver-ore"
+              },
               reusable: true
           }
       ],
       "Tag": [
           {
               displayName: "Speed Upgrade",
-              id: "Speed Upgrade",
+              selector: {
+                  grantedItemName: "Speed Upgrade"
+              },
               reusable: false
           },
           {
               displayName: "Efficiency Upgrade",
-              id: "Efficiency Upgrade",
+              selector: {
+                  grantedItemName: "Efficiency Upgrade"
+              },
               reusable: false
           },
           {
               displayName: "Energy Per Question Upgrade",
-              id: "Energy Per Question Upgrade",
+              selector: {
+                  grantedItemName: "Energy Per Question Upgrade"
+              },
               reusable: false
           },
           {
               displayName: "Endurance Upgrade",
-              id: "Endurance Upgrade",
+              selector: {
+                  grantedItemName: "Endurance Upgrade"
+              },
               reusable: false
           }
       ],
       "Snowbrawl": [
           {
               displayName: "Med Pack",
-              id: "medpack",
+              selector: {
+                  grantedItemId: "medpack"
+              },
               reusable: true
           },
           {
               displayName: "Shield Can",
-              id: "shield-can",
+              selector: {
+                  grantedItemId: "shield-can"
+              },
               reusable: true
           }
-      ]
+      ],
+      "Farmchain": {
+          "Seeds": [
+              {
+                  displayName: "Corn Seed",
+                  selector: {
+                      grantedItemId: "yellow-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Wheat Seed",
+                  selector: {
+                      grantedItemId: "tan-seed",
+                      grantAction: "Grant Item"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Potato Seed",
+                  selector: {
+                      grantedItemId: "brown-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Grape Seed",
+                  selector: {
+                      grantedItemId: "purple-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Raspberry Seed",
+                  selector: {
+                      grantedItemId: "magenta-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Watermelon Seed",
+                  selector: {
+                      grantedItemId: "green-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Coffee Bean",
+                  selector: {
+                      grantedItemId: "bronze-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Orange Seed",
+                  selector: {
+                      grantedItemId: "orange-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Gimberry Seed",
+                  selector: {
+                      grantedItemId: "gold-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Cash Berry Seed",
+                  selector: {
+                      grantedItemId: "dark-green-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Pepper Seed",
+                  selector: {
+                      grantedItemId: "red-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Energy Bar Seed",
+                  selector: {
+                      grantedItemId: "blue-seed"
+                  },
+                  reusable: true
+              },
+              {
+                  displayName: "Lottery Ticket Seed",
+                  selector: {
+                      grantedItemId: "teal-seed"
+                  },
+                  reusable: true
+              }
+          ],
+          "Seed Unlocks": [
+              {
+                  displayName: "Wheat Seed Unlock",
+                  selector: {
+                      grantedItemName: "Wheat Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Potato Seed Unlock",
+                  selector: {
+                      grantedItemName: "Potato Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Grape Seed Unlock",
+                  selector: {
+                      grantedItemName: "Grape Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Raspberry Seed Unlock",
+                  selector: {
+                      grantedItemName: "Raspberry Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Watermelon Seed Unlock",
+                  selector: {
+                      grantedItemName: "Watermelon Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Coffee Bean Seed Unlock",
+                  selector: {
+                      grantedItemName: "Coffee Bean Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Orange Seed Unlock",
+                  selector: {
+                      grantedItemName: "Orange Seed Unlock"
+                  },
+                  reusable: false
+              },
+              {
+                  displayName: "Gimberry Seed Unlock",
+                  selector: {
+                      grantedItemName: "Gimberry Seed Unlock"
+                  },
+                  reusable: false
+              }
+          ]
+      }
   };
+
   class InstapurchasersClass {
       constructor() {
           this.name = "Instapurchasers";
@@ -3275,54 +3461,201 @@
           });
       }
       createButtons(cheat) {
-          var _a, _b, _c, _d, _e, _f, _g;
+          var _a, _b, _c, _d, _e;
           let devices = (_e = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices) === null || _e === void 0 ? void 0 : _e.allDevices;
           if (!devices) {
               setTimeout(() => this.createButtons(cheat), 1000); // try again in case something went wrong
               return;
           }
           for (let gamemode in purchases) {
-              let group = cheat.hud.createMenu("Cheats for gamemodes").createGroup(gamemode);
-              for (let purchase of purchases[gamemode]) {
-                  let { id, displayName, reusable } = purchase;
-                  let purchaseDevices = devices.filter((device) => {
-                      var _a, _b;
-                      return ((_a = device === null || device === void 0 ? void 0 : device.options) === null || _a === void 0 ? void 0 : _a.grantedItemName) == id ||
-                          ((_b = device === null || device === void 0 ? void 0 : device.options) === null || _b === void 0 ? void 0 : _b.grantedItemId) == id;
-                  });
-                  if (purchaseDevices.length == 0)
-                      continue;
-                  // sort them by price
-                  purchaseDevices.sort((a, b) => { var _a, _b; return ((_a = a === null || a === void 0 ? void 0 : a.options) === null || _a === void 0 ? void 0 : _a.amountOfRequiredItem) - ((_b = b === null || b === void 0 ? void 0 : b.options) === null || _b === void 0 ? void 0 : _b.amountOfRequiredItem); });
-                  let buttonText = `Purchase ${displayName} (${(_g = (_f = purchaseDevices[0]) === null || _f === void 0 ? void 0 : _f.options) === null || _g === void 0 ? void 0 : _g.amountOfRequiredItem})`;
-                  let button = group.addElement('button', {
-                      text: buttonText
-                  });
-                  button.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                      var _h, _j, _k, _l;
-                      (_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction();
-                      if (reusable)
-                          return;
-                      // check whether it was successfully purchased
-                      // wait 500ms for the purchase to go through
-                      yield new Promise((resolve) => setTimeout(resolve, 500));
-                      if (purchaseDevices[0].state.active)
-                          return; // it wasn't purchased
-                      purchaseDevices.shift();
-                      if (purchaseDevices.length == 0) {
-                          button.remove();
-                          return;
-                      }
-                      // update the button text
-                      buttonText = `Purchase ${displayName} (${(_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.options) === null || _l === void 0 ? void 0 : _l.amountOfRequiredItem})`;
-                      button.text = buttonText;
-                  }));
+              this.createGamemodeButtons(gamemode, purchases[gamemode], cheat.hud.createMenu("Cheats for gamemodes"));
+          }
+      }
+      createGamemodeButtons(gamemode, content, rootGroup) {
+          var _a, _b, _c, _d, _e, _f, _g;
+          let devices = (_e = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices) === null || _e === void 0 ? void 0 : _e.allDevices;
+          let group = rootGroup.createGroup(gamemode);
+          if (!Array.isArray(content)) {
+              for (let [name, menu] of Object.entries(content)) {
+                  this.createGamemodeButtons(name, menu, group);
               }
+              return;
+          }
+          for (let purchase of content) {
+              let { selector, displayName, reusable } = purchase;
+              // filter devices by selector
+              let purchaseDevices = devices.filter((device) => {
+                  var _a;
+                  let matches = true;
+                  for (let [key, value] of Object.entries(selector)) {
+                      if (((_a = device.options) === null || _a === void 0 ? void 0 : _a[key]) != value) {
+                          matches = false;
+                          break;
+                      }
+                  }
+                  return matches;
+              });
+              if (purchaseDevices.length == 0)
+                  continue;
+              // sort them by price
+              purchaseDevices.sort((a, b) => { var _a, _b; return ((_a = a === null || a === void 0 ? void 0 : a.options) === null || _a === void 0 ? void 0 : _a.amountOfRequiredItem) - ((_b = b === null || b === void 0 ? void 0 : b.options) === null || _b === void 0 ? void 0 : _b.amountOfRequiredItem); });
+              let buttonText = `Purchase ${displayName} (${(_g = (_f = purchaseDevices[0]) === null || _f === void 0 ? void 0 : _f.options) === null || _g === void 0 ? void 0 : _g.amountOfRequiredItem})`;
+              let button = group.addElement('button', {
+                  text: buttonText
+              });
+              button.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+                  var _h, _j, _k, _l;
+                  (_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction();
+                  if (reusable)
+                      return;
+                  // check whether it was successfully purchased
+                  // wait 500ms for the purchase to go through
+                  yield new Promise((resolve) => setTimeout(resolve, 500));
+                  if (purchaseDevices[0].state.active)
+                      return; // it wasn't purchased
+                  purchaseDevices.shift();
+                  if (purchaseDevices.length == 0) {
+                      button.remove();
+                      return;
+                  }
+                  // update the button text
+                  buttonText = `Purchase ${displayName} (${(_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.options) === null || _l === void 0 ? void 0 : _l.amountOfRequiredItem})`;
+                  button.text = buttonText;
+              }));
           }
       }
   }
   function Instapurchasers() {
       return new InstapurchasersClass();
+  }
+
+  const hudAddition = {
+      menus: [
+          {
+              name: "Cheats for gamemodes",
+              groups: [
+                  {
+                      name: "Farmchain",
+                      elements: [
+                          {
+                              type: "toggle",
+                              options: {
+                                  textEnabled: "Stop auto harvesting",
+                                  textDisabled: "Start auto harvesting",
+                                  keybind: true,
+                                  keybindId: "autoHarvesting",
+                                  default: true,
+                                  runFunction: "setAutoHarvest"
+                              }
+                          },
+                          {
+                              type: "toggle",
+                              options: {
+                                  textEnabled: "Stop auto planting",
+                                  textDisabled: "Start auto planting",
+                                  keybind: true,
+                                  keybindId: "autoPlanting",
+                                  default: false,
+                                  runFunction: "setAutoPlant"
+                              }
+                          }
+                      ]
+                  }
+              ]
+          }
+      ]
+  };
+  const seedRanking = [
+      'yellow-seed',
+      'tan-seed',
+      'brown-seed',
+      'purple-seed',
+      'magenta-seed',
+      'green-seed',
+      'bronze-seed',
+      'orange-seed',
+      'gold-seed',
+      'dark-green-seed',
+      'red-seed',
+      'blue-seed',
+      'teal-seed'
+  ];
+  class FarmchainClass {
+      constructor() {
+          this.name = "Farmchain";
+          this.hudAddition = hudAddition;
+          this.autoHarvesting = true;
+          this.autoPlanting = false;
+          this.funcs = new Map([
+              ["setAutoHarvest", (enabled) => {
+                      this.autoHarvesting = enabled;
+                  }],
+              ["setAutoPlant", (enabled) => {
+                      this.autoPlanting = enabled;
+                  }]
+          ]);
+      }
+      init(cheat) {
+          // set up auto harvest
+          cheat.socketHandler.addEventListener("recieveChanges", (e) => {
+              let changes = e.detail;
+              for (let change of changes) {
+                  for (let key in change.data) {
+                      if (!key.endsWith("status") || change.data[key] != "availableForCollection")
+                          continue;
+                      // harvest it
+                      let packet = {
+                          key: "collect",
+                          deviceId: change.id,
+                          data: undefined
+                      };
+                      cheat.socketHandler.sendData("MESSAGE_FOR_DEVICE", packet);
+                  }
+              }
+          });
+          cheat.addEventListener("gameLoaded", () => {
+              var _a, _b, _c, _d, _e, _f, _g;
+              let devices = (_e = (_d = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.phaser) === null || _b === void 0 ? void 0 : _b.scene) === null || _c === void 0 ? void 0 : _c.worldManager) === null || _d === void 0 ? void 0 : _d.devices) === null || _e === void 0 ? void 0 : _e.allDevices;
+              let plots = devices.filter((device) => device.options.style == "plant");
+              let recipieDevices = {};
+              for (let device of devices) {
+                  if (!seedRanking.includes((_f = device.options) === null || _f === void 0 ? void 0 : _f.ingredient1Item))
+                      continue;
+                  recipieDevices[(_g = device.options) === null || _g === void 0 ? void 0 : _g.ingredient1Item] = device;
+              }
+              // set up auto plant
+              setInterval(() => {
+                  var _a, _b, _c;
+                  if (!this.autoPlanting)
+                      return;
+                  let inventory = (_c = (_b = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.me) === null || _b === void 0 ? void 0 : _b.inventory) === null || _c === void 0 ? void 0 : _c.slots;
+                  if (!inventory)
+                      return;
+                  // find the most valuable seed in the inventory
+                  let mostValuableSeed = undefined;
+                  for (let seed of seedRanking) {
+                      if (inventory.has(seed)) {
+                          mostValuableSeed = seed;
+                          break;
+                      }
+                  }
+                  if (!mostValuableSeed)
+                      return;
+                  // plant the seed in the last idle plot
+                  let plantPlot = plots.findLast((plot) => plot.state.status == "idle");
+                  cheat.socketHandler.sendData("MESSAGE_FOR_DEVICE", {
+                      key: "craft",
+                      deviceId: plantPlot.id,
+                      data: {
+                          recipe: recipieDevices[mostValuableSeed].id
+                      }
+                  });
+              }, 50);
+          });
+      }
+  }
+  function Farmchain() {
+      return new FarmchainClass();
   }
 
   // import { BotCreator } from './scripts/general/botcreator';
@@ -3351,6 +3684,7 @@
               Classic(),
               RichMode(),
               TrustNoOne(),
+              Farmchain(),
               Instapurchasers()
               // BotCreator()
           ];

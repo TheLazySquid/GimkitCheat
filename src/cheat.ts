@@ -13,6 +13,7 @@ import { RichMode } from './scripts/gamemodes/superrichmode';
 import { TrustNoOne } from './scripts/gamemodes/trustnoone';
 import { Instantuse } from './scripts/general/instantuse';
 import { Instapurchasers } from './scripts/gamemodes/purchasers';
+import { Farmchain } from './scripts/gamemodes/farmchain';
 // import { BotCreator } from './scripts/general/botcreator';
 
 class Cheat extends EventTarget {
@@ -50,6 +51,7 @@ class Cheat extends EventTarget {
             Classic(),
             RichMode(),
             TrustNoOne(),
+            Farmchain(),
             Instapurchasers()
 
             // BotCreator()

@@ -9,6 +9,7 @@ class FreecamClass {
 	freeCamPos = {x: 0, y: 0};
 	toggleFreecam: Toggle | null = null;
 	spectateMenu: Dropdown | null = null;
+	keys: Set<string> = new Set();
 
 	init(cheat: any) {
 		let camGroup = cheat.hud.createMenu("General Cheats").createGroup("Freecam")
@@ -41,18 +42,26 @@ class FreecamClass {
 		this.toggleFreecam = toggleFreecam
 		this.spectateMenu = dropdown
 
-		let loadCheck = setInterval(() => {
-			// wait until the camera has loaded
-			if(!(unsafeWindow as any)?.stores?.phaser?.scene?.cameraHelper) return
-
+		cheat.addEventListener('gameLoaded', () => {
 			this.camHelper = (unsafeWindow as any).stores.phaser.scene.cameraHelper
 
 			// add in the update loop
 			setInterval(() => {
 				this.update()
 			}, 1000 / 60)
-			clearInterval(loadCheck)
-		}, 100)
+		})
+
+		window.addEventListener("keydown", (e) => {	
+			if(!this.freecamming) return;
+			if(!e.key.includes("Arrow")) return
+			e.stopImmediatePropagation()
+
+			this.keys.add(e.key)
+		})
+
+		window.addEventListener("keyup", (e) => {
+			this.keys.delete(e.key)
+		})
 	}
 
 	enableFreecam(value: boolean) {
@@ -94,12 +103,12 @@ class FreecamClass {
 		this.updateSpectatablePlayers()
 
 		if(!this.freecamming) return;
+
 		// move the camera
-		let keys = (window as any).cheat.keybindManager.keys
-		if(keys.has("u")) this.freeCamPos.y -= 20
-		if(keys.has("h")) this.freeCamPos.x -= 20
-		if(keys.has("j")) this.freeCamPos.y += 20
-		if(keys.has("k")) this.freeCamPos.x += 20
+		if(this.keys.has("ArrowUp")) this.freeCamPos.y -= 20
+		if(this.keys.has("ArrowDown")) this.freeCamPos.y += 20
+		if(this.keys.has("ArrowLeft")) this.freeCamPos.x -= 20
+		if(this.keys.has("ArrowRight")) this.freeCamPos.x += 20
 
 		this.camHelper.goTo(this.freeCamPos)
 	}

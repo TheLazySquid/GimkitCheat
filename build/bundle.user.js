@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
-// @version     0.3.4
+// @version     0.3.5
 // @license     ISC
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
 
-  var version = "0.3.4";
+  var version = "0.3.5";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -2567,7 +2567,7 @@
       return new AutoanswerClass();
   }
 
-  let skins = ["Unchanged", "default_browngreen", "default_cyan", "default_darkblue", "default_darkgreen", "default_darkpurple", "default_gray", "default_grayblue", "default_graybrown", "default_hotpink", "default_lightbrown", "default_lightgreen", "default_lightpink", "default_lightpurple", "default_lightyellow", "default_lime", "default_maroon", "default_orange", "default_pink", "default_red", "default_yellow", "sunny", "glassHalfFull", "stripeDoubleGreen", "sprinklesRed", "dayOne", "vortexAgent", "echoAgent", "grayGradient", "mustache", "clown", "redNinja", "redDeliciousApple", "polkaDotBlueAndYellow", "fadedBlueGradient", "whiteAndBlueVerticalStripes", "volcanoCracks", "pinkPaste", "yellowCracksPurple", "glyphsYellowBrown", "camoBlue", "glyphsOrangeBlue", "purplePaste", "mustacheBrown", "mustachePink", "polkaDotWhiteAndRed", "camoTan", "camoGreen", "stripeDoublePurple", "stripeDoubleRed", "stripeDoubleYellow", "sprinklesChocolate", "coolRedBlueGradient", "mountainAndSun", "redDinoCostume", "pencilPack", "corn", "luchador", "fox", "burger", "galaxy", "cellBlue", "cellGold", "rockyWest", "puzzleRedGreen", "puzzleOrangeBlue", "puzzleGrayWhite", "puzzleGreenBlue", "puzzleYellowPurple", "pumpkin", "ghostCostume", "mummy", "fifthBirthday", "pumpkinPie", "feast", "frostBuddy", "festiveOnesieTan", "festiveOnesieRed", "festiveOnesieGreen", "festiveOnesieBlue", "hotChocolate", "snowglobe", "polkaDotFestive", "polkaDotFestiveReverse", "mustacheSanta", "firework", "gift", "snowman", "detective", "yinYang", "astroHelmet", "hamster", "pirate", "rockstar", "circuitGray", "circuitBlue", "circuitGreen", "roses", "heart", "zebra", "constellationBlackWhite", "constellationBlackGreen", "constellationPurpleYellow", "constellationPinkGreen", "constellationYellowPink", "squiggles", "frozenMummy", "leprechaun", "evilPlantGreen", "evilPlantPink", "fisher", "rainbowWave", "sketch", "sketchBlue", "bananaSplit", "eightBit", "gamerGreen", "gamerPink", "gamerPurple", "gamerYellow", "graduate", "graduateBlue", "arcticFox"];
+  let skins = ["Unchanged", "default_browngreen", "default_cyan", "default_darkblue", "default_darkgreen", "default_darkpurple", "default_gray", "default_grayblue", "default_graybrown", "default_hotpink", "default_lightbrown", "default_lightgreen", "default_lightpink", "default_lightpurple", "default_lightyellow", "default_lime", "default_maroon", "default_orange", "default_pink", "default_red", "default_yellow", "sunny", "glassHalfFull", "stripeDoubleGreen", "sprinklesRed", "dayOne", "vortexAgent", "echoAgent", "grayGradient", "mustache", "clown", "redNinja", "redDeliciousApple", "polkaDotBlueAndYellow", "fadedBlueGradient", "whiteAndBlueVerticalStripes", "volcanoCracks", "pinkPaste", "yellowCracksPurple", "glyphsYellowBrown", "camoBlue", "glyphsOrangeBlue", "purplePaste", "mustacheBrown", "mustachePink", "polkaDotWhiteAndRed", "camoTan", "camoGreen", "stripeDoublePurple", "stripeDoubleRed", "stripeDoubleYellow", "sprinklesChocolate", "coolRedBlueGradient", "mountainAndSun", "redDinoCostume", "pencilPack", "corn", "luchador", "fox", "burger", "galaxy", "cellBlue", "cellGold", "rockyWest", "puzzleRedGreen", "puzzleOrangeBlue", "puzzleGrayWhite", "puzzleGreenBlue", "puzzleYellowPurple", "pumpkin", "ghostCostume", "mummy", "fifthBirthday", "pumpkinPie", "feast", "frostBuddy", "festiveOnesieTan", "festiveOnesieRed", "festiveOnesieGreen", "festiveOnesieBlue", "hotChocolate", "snowglobe", "polkaDotFestive", "polkaDotFestiveReverse", "mustacheSanta", "firework", "gift", "snowman", "detective", "yinYang", "astroHelmet", "hamster", "pirate", "rockstar", "circuitGray", "circuitBlue", "circuitGreen", "roses", "heart", "zebra", "constellationBlackWhite", "constellationBlackGreen", "constellationPurpleYellow", "constellationPinkGreen", "constellationYellowPink", "squiggles", "frozenMummy", "leprechaun", "evilPlantGreen", "evilPlantPink", "fisher", "rainbowWave", "sketch", "sketchBlue", "bananaSplit", "eightBit", "gamerGreen", "gamerPink", "gamerPurple", "gamerYellow", "graduate", "graduateBlue", "arcticFox", "coffee", "partyPineapple", "sentryRobot", "construction", "clock", "crashTestDummy"];
   let trails = ["None", "origin_token"];
   skins = skins.sort();
   trails = trails.sort();
@@ -3311,6 +3311,22 @@
               reusable: true
           }
       ],
+      "One Way Out": [
+          {
+              displayName: "Med Pack",
+              selector: {
+                  grantedItemId: "medpack"
+              },
+              reusable: true
+          },
+          {
+              displayName: "Shield Can",
+              selector: {
+                  grantedItemId: "shield-can"
+              },
+              reusable: true
+          }
+      ],
       "Farmchain": {
           "Seeds": [
               {
@@ -3469,7 +3485,7 @@
 
   class InstapurchasersClass {
       constructor() {
-          this.name = "Instapurchasers";
+          this.name = "Purchasers";
       }
       init(cheat) {
           cheat.addEventListener("gameLoaded", () => {
@@ -3520,8 +3536,15 @@
                   text: buttonText
               });
               button.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                  var _h, _j, _k, _l;
-                  (_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction();
+                  var _h, _j, _k, _l, _m, _o, _p;
+                  if (!((_j = (_h = purchaseDevices[0]) === null || _h === void 0 ? void 0 : _h.interactiveZones) === null || _j === void 0 ? void 0 : _j.onInteraction)) {
+                      // this happened to me a few times and I don't know why, just re-get the devices
+                      purchaseDevices = purchaseDevices.map((device) => {
+                          return devices.find((d) => d.id == device.id);
+                      });
+                      return;
+                  }
+                  (_m = (_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.interactiveZones) === null || _l === void 0 ? void 0 : _l.onInteraction) === null || _m === void 0 ? void 0 : _m.call(_l);
                   if (reusable)
                       return;
                   // check whether it was successfully purchased
@@ -3535,7 +3558,7 @@
                       return;
                   }
                   // update the button text
-                  buttonText = `Purchase ${displayName} (${(_l = (_k = purchaseDevices[0]) === null || _k === void 0 ? void 0 : _k.options) === null || _l === void 0 ? void 0 : _l.amountOfRequiredItem})`;
+                  buttonText = `Purchase ${displayName} (${(_p = (_o = purchaseDevices[0]) === null || _o === void 0 ? void 0 : _o.options) === null || _p === void 0 ? void 0 : _p.amountOfRequiredItem})`;
                   button.text = buttonText;
               }));
           }
@@ -3712,13 +3735,14 @@
           let loadInterval = setInterval(() => {
               var _a;
               let loadedData = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.loading;
-              let loaded = (loadedData === null || loadedData === void 0 ? void 0 : loadedData.percentageAssetsLoaded) >= 100;
+              let loaded = (loadedData === null || loadedData === void 0 ? void 0 : loadedData.percentageAssetsLoaded) >= 100 && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.completedInitialLoad)
+                  && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.loadedInitialDevices) && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.loadedInitialTerrain);
               if (loaded) {
                   clearInterval(loadInterval);
                   this.log("Game Loaded");
                   this.dispatchEvent(new CustomEvent("gameLoaded"));
               }
-          });
+          }, 1000 / 60);
           // TODO: Add blueboat load detection
       }
       initScripts() {

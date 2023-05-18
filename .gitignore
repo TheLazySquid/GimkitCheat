@@ -1,6 +1,7 @@
 node_modules
 package-lock.json
 test
+dev
 
 # Coming soon I swear
 bot

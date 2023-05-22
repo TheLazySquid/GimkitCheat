@@ -68,11 +68,15 @@ class Cheat extends EventTarget {
             let loaded = loadedData?.percentageAssetsLoaded >= 100 && loadedData?.completedInitialLoad
                 && loadedData?.loadedInitialDevices && loadedData?.loadedInitialTerrain
 
-            if(loaded) {
-                clearInterval(loadInterval)
-                this.log("Game Loaded")
-                this.dispatchEvent(new CustomEvent("gameLoaded"))
-            }
+            if(!loaded) return;
+            // check whether we've been assigned to a team
+            let team = (unsafeWindow as any)?.stores?.phaser?.mainCharacter?.teamId
+
+            if(team == "__NO_TEAM_ID") return
+
+            clearInterval(loadInterval)
+            this.log("Game Loaded")
+            this.dispatchEvent(new CustomEvent("gameLoaded"))
         }, 1000 / 60)
 
         // TODO: Add blueboat load detection

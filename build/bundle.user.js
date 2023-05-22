@@ -3733,15 +3733,19 @@
       waitForLoad() {
           // colyseus exclusive
           let loadInterval = setInterval(() => {
-              var _a;
+              var _a, _b, _c, _d;
               let loadedData = (_a = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _a === void 0 ? void 0 : _a.loading;
               let loaded = (loadedData === null || loadedData === void 0 ? void 0 : loadedData.percentageAssetsLoaded) >= 100 && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.completedInitialLoad)
                   && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.loadedInitialDevices) && (loadedData === null || loadedData === void 0 ? void 0 : loadedData.loadedInitialTerrain);
-              if (loaded) {
-                  clearInterval(loadInterval);
-                  this.log("Game Loaded");
-                  this.dispatchEvent(new CustomEvent("gameLoaded"));
-              }
+              if (!loaded)
+                  return;
+              // check whether we've been assigned to a team
+              let team = (_d = (_c = (_b = unsafeWindow === null || unsafeWindow === void 0 ? void 0 : unsafeWindow.stores) === null || _b === void 0 ? void 0 : _b.phaser) === null || _c === void 0 ? void 0 : _c.mainCharacter) === null || _d === void 0 ? void 0 : _d.teamId;
+              if (team == "__NO_TEAM_ID")
+                  return;
+              clearInterval(loadInterval);
+              this.log("Game Loaded");
+              this.dispatchEvent(new CustomEvent("gameLoaded"));
           }, 1000 / 60);
           // TODO: Add blueboat load detection
       }

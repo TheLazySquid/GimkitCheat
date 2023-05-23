@@ -6,7 +6,7 @@ Install/Update it by clicking on [this link](https://raw.githubusercontent.com/T
 
 ## Features
 
-Gimkit Cheat provides a nice, unified way to use different cheats. To open/close the hud, press "\" (backslash) on your keyboard while on Gimkit. It will show various menus, which should be fairly self explanatory. While it might look like a lot is missing, this script includes all still-working features from the old one. Which is to say, not a lot, since Gimkit patched almost everything out.
+Gimkit Cheat provides a nice, unified way to use different cheats. To open/close the hud, press "\\" (backslash) on your keyboard while on Gimkit. It will show various menus, which should be fairly self explanatory. If you find any issues, please open a new [issue](https://github.com/TheLazySquid/GimkitCheat/issues/new) on this repository.
 
 ### General Cheats
 

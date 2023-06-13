@@ -6,6 +6,7 @@ export default class ColorPicker extends HudElement {
     opacitySlider: HTMLInputElement | null = null;
     colorPicker: HTMLInputElement | null = null;
     preview: HTMLElement | null = null;
+    type: string = "colorpicker";
 
     constructor(group: any, options: ColorPickerOptions) {
         super(group, options);

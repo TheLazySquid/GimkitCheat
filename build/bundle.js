@@ -1197,6 +1197,7 @@
           this.group = null;
           this.options = null;
           this.element = null;
+          this.type = 'element';
           this.group = group;
           this.options = options;
       }
@@ -1210,6 +1211,7 @@
   class Text extends HudElement {
       constructor(group, options) {
           super(group, options);
+          this.type = "text";
           this.element = document.createElement("div");
           this.element.classList.add("text");
           this.element.innerText = this.options.text;
@@ -1225,6 +1227,7 @@
   class GroupOpener extends HudElement {
       constructor(group, options) {
           super(group, options);
+          this.type = "groupOpener";
           this.element = document.createElement("button");
           this.element.classList.add("group_opener");
           this.element.innerText = this.options.text;
@@ -1255,6 +1258,7 @@
           this.opacitySlider = null;
           this.colorPicker = null;
           this.preview = null;
+          this.type = "colorpicker";
           // create the element
           let element = document.createElement("div");
           element.innerHTML = `
@@ -1320,6 +1324,7 @@
           this.capturing = false;
           this.keys = new Set();
           this.actionState = "start";
+          this.type = "keybindEditor";
           this.options = options;
           this.keybindOpener = keyboard();
           this.keybindOpener.classList.add("keybind_opener");
@@ -1458,6 +1463,7 @@
       constructor(group, options) {
           var _a, _b;
           super(group, options);
+          this.type = "button";
           let element = document.createElement("div");
           element.classList.add("button_wrapper");
           element.innerHTML = `
@@ -1496,6 +1502,7 @@
           var _a;
           super(group, options);
           this.input = null;
+          this.type = "textInput";
           let element = document.createElement("div");
           element.innerHTML = `
             <div class="text">${this.options.text}</div>
@@ -1522,6 +1529,7 @@
       constructor(group, options) {
           var _a, _b, _c;
           super(group, options);
+          this.type = "toggle";
           // create the element
           let element = document.createElement("div");
           element.innerHTML = `
@@ -1595,6 +1603,7 @@
   class Dropdown extends HudElement {
       constructor(group, options) {
           super(group, options);
+          this.type = "dropdown";
           // create the element
           this.element = document.createElement("div");
           this.element.classList.add("dropdown_wrapper");
@@ -1654,6 +1663,7 @@
       constructor(group, options) {
           var _a;
           super(group, options);
+          this.type = "slider";
           let element = document.createElement("div");
           element.classList.add("slider_wrapper");
           element.innerHTML = `
@@ -1750,6 +1760,7 @@
           if (!element)
               return null;
           (_a = this.element) === null || _a === void 0 ? void 0 : _a.appendChild(element.element);
+          this.elements.push(element);
           return element;
       }
       slide(mode, direction) {
@@ -1792,10 +1803,13 @@
           this.menu.groups.splice(this.menu.groups.indexOf(this), 1);
       }
       clearElements() {
-          this.elements = [];
-          if (!this.element)
-              return;
-          this.element.innerHTML = "";
+          for (let i = 0; i < this.elements.length; i++) {
+              let element = this.elements[i];
+              if (element.type == "groupOpener")
+                  continue;
+              element.remove();
+              i--;
+          }
       }
       loadFromObject(object) {
           const loadGroups = () => {
@@ -2802,6 +2816,7 @@
           this.toggleFreecam = null;
           this.spectateMenu = null;
           this.keys = new Set();
+          this.lastPlayers = [];
       }
       init(cheat) {
           let camGroup = cheat.hud.createMenu("General Cheats").createGroup("Freecam");
@@ -2854,18 +2869,20 @@
               this.camHelper.stopFollow();
               this.freeCamPos.x = camera.midPoint.x;
               this.freeCamPos.y = camera.midPoint.y;
+              camera.useBounds = false;
           }
           else {
               let charObj = phaser.scene.characterManager.characters.get(phaser.mainCharacter.id).body;
               this.camHelper.startFollowingObject({ object: charObj });
+              camera.useBounds = true;
           }
           this.freecamming = value;
       }
       spectatePlayer(name) {
-          if (name == "None") {
-              this.enableFreecam(false);
+          // prevent freecamming if we already are
+          this.enableFreecam(false);
+          if (name == "None")
               return;
-          }
           this.toggleFreecam.value = true;
           let phaser = unsafeWindow.stores.phaser;
           let players = phaser.scene.characterManager.characters;
@@ -2901,6 +2918,21 @@
                   continue;
               options.push(player.nametag.name);
           }
+          // make sure the list of players has changed
+          let same = true;
+          if (this.lastPlayers.length != options.length)
+              same = false;
+          else {
+              for (let i = 0; i < this.lastPlayers.length; i++) {
+                  if (this.lastPlayers[i] != options[i]) {
+                      same = false;
+                      break;
+                  }
+              }
+          }
+          if (same)
+              return;
+          this.lastPlayers = options;
           (_a = this.spectateMenu) === null || _a === void 0 ? void 0 : _a.setOptions(options);
       }
   }
@@ -3708,7 +3740,7 @@
               RichMode(),
               TrustNoOne(),
               Farmchain(),
-              Instapurchasers()
+              Instapurchasers(),
               // BotCreator()
           ];
           this.initScripts();

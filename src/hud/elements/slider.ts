@@ -2,7 +2,8 @@ import { SliderOptions } from "../../interfaces";
 import HudElement from "./element";
 
 export default class Slider extends HudElement {
-	slider: HTMLInputElement
+	slider: HTMLInputElement;
+	type: string = "slider";
 
     constructor(group: any, options: SliderOptions) {
         super(group, options);

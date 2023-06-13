@@ -2,6 +2,8 @@ import HudElement from "./element";
 import { GroupOpenerOptions } from "../../interfaces";
 
 export default class GroupOpener extends HudElement {
+	type: string = "groupOpener";
+
 	constructor(group: any, options: GroupOpenerOptions) {
 		super(group, options);
 

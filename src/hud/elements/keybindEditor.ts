@@ -10,6 +10,7 @@ export default class KeybindEditor {
 	actionState: string = "start";
 	bind: Keybind;
 	options: KeybindEditorOptions;
+	type: string = "keybindEditor";
 
 	constructor(options: KeybindEditorOptions) {
 		this.options = options;

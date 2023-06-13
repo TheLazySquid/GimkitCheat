@@ -7,6 +7,7 @@ import Toggle from "./elements/toggle";
 import Dropdown from "./elements/dropdown";
 import Slider from "./elements/slider";
 import { GroupObject } from "../interfaces";
+import HudElement from "./elements/element";
 
 export default class Group {
 	name: string = "";
@@ -15,7 +16,7 @@ export default class Group {
 	isRoot: boolean = false;
 	groups: Group[] = [];
 	parentGroup: Group | null = null;
-	elements: Element[] = [];
+	elements: HudElement[] = [];
 	menu: any = null;
 
 	constructor(menu: any, parentGroup: Group | null, name: string, isRoot: boolean = false) {
@@ -78,7 +79,7 @@ export default class Group {
 
 		if(!element) return null;
 		this.element?.appendChild(element.element!)
-
+		this.elements.push(element)
 
 		return element;
 	}
@@ -127,9 +128,13 @@ export default class Group {
 	}
 
 	clearElements() {
-		this.elements = [];
-		if(!this.element) return;
-		this.element.innerHTML = "";
+		for(let i = 0; i < this.elements.length; i++) {
+			let element = this.elements[i];
+
+			if(element.type == "groupOpener") continue
+			element.remove();
+			i--;
+		}
 	}
 
 	loadFromObject(object: GroupObject) {

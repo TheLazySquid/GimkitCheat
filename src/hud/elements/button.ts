@@ -4,6 +4,7 @@ import KeybindEditor from "./keybindEditor";
 
 export default class Button extends HudElement {
     button: HTMLButtonElement;
+    type: string = "button";
 
     constructor(group: any, options: ButtonOptions) {
         super(group, options);

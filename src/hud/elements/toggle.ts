@@ -7,6 +7,7 @@ export default class Toggle extends HudElement {
 	button: HTMLButtonElement;
 	_textEnabled: string;
 	_textDisabled: string;
+	type: string = "toggle";
 
 	constructor(group: any, options: ToggleOptions) {
 		super(group, options);

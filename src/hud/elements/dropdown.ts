@@ -3,6 +3,7 @@ import { DropdownOptions } from "../../interfaces";
 
 export default class Dropdown extends HudElement {
 	select: HTMLSelectElement;
+	type: string = "dropdown";
 
 	constructor(group: any, options: DropdownOptions) {
 		super(group, options);

@@ -10,6 +10,7 @@ class FreecamClass {
 	toggleFreecam: Toggle | null = null;
 	spectateMenu: Dropdown | null = null;
 	keys: Set<string> = new Set();
+	lastPlayers: string[] = [];
 
 	init(cheat: any) {
 		let camGroup = cheat.hud.createMenu("General Cheats").createGroup("Freecam")
@@ -72,19 +73,21 @@ class FreecamClass {
 			this.camHelper.stopFollow()
 			this.freeCamPos.x = camera.midPoint.x
 			this.freeCamPos.y = camera.midPoint.y
+			camera.useBounds = false
 		} else {
 			let charObj = phaser.scene.characterManager.characters.get(phaser.mainCharacter.id).body
 			this.camHelper.startFollowingObject({object: charObj})
+			camera.useBounds = true
 		}
 
 		this.freecamming = value
 	}
 
 	spectatePlayer(name: string) {
-		if(name == "None") {
-			this.enableFreecam(false)
-			return
-		}
+		// prevent freecamming if we already are
+		this.enableFreecam(false)
+		
+		if(name == "None") return
 
 		this.toggleFreecam!.value = true
 
@@ -123,6 +126,22 @@ class FreecamClass {
 
 			options.push(player.nametag.name)
 		}
+
+		// make sure the list of players has changed
+		let same = true
+		if(this.lastPlayers.length != options.length) same = false;
+		else {
+			for(let i = 0; i < this.lastPlayers.length; i++) {
+				if(this.lastPlayers[i] != options[i]) {
+					same = false
+					break
+				}
+			}
+		}
+
+		if(same) return
+
+		this.lastPlayers = options
 
 		this.spectateMenu?.setOptions(options)
 	}

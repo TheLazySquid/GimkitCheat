@@ -3,6 +3,7 @@ import { TextInputOptions } from "../../interfaces";
 
 export default class TextInput extends HudElement {
     input: HTMLInputElement | null = null;
+    type: string = "textInput";
 
     constructor(group: any, options: TextInputOptions) {
         super(group, options);

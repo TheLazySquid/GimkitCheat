@@ -2,6 +2,8 @@ import HudElement from "./element";
 import { TextOptions } from "../../interfaces";
 
 export default class Text extends HudElement {
+	type: string = "text";
+
 	constructor(group: any, options: TextOptions) {
 		super(group, options);
 

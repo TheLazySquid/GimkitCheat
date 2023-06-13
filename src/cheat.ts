@@ -52,7 +52,7 @@ class Cheat extends EventTarget {
             RichMode(),
             TrustNoOne(),
             Farmchain(),
-            Instapurchasers()
+            Instapurchasers(),
 
             // BotCreator()
         ]

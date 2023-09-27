@@ -12,6 +12,9 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 
 - **Auto Answer**: Automatically answers questions for you.
 - **Cosmetic Picker**: Allows you to use any cosmetic you want, even unused ones. These are only visible to you.
+
+**Note**: The list of cosmetics is unmaintained. There is an input that allows you to use equip cosmetics with a custom id, but it requires the internal id of the cosmetic, which is often misleading.
+
 - **Freecam**: Allows you to move your camera wherever you want, or even spectate other players. Once in freecam, use the arrow keys to move the camera.
 - **Player Highlighter**: Marks on your screen where teammates or enemies are in relation to you.
 - **Instant Use**: Tired of waiting for painfully slow bars to fill up just to purchase something minor? This allows you to use the nearest thing instantly by hitting enter.
@@ -27,4 +30,4 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **One Way Out**: Purchase shield cans/medpacks from anywhere
 - **Farmchain**: Adds options to automatically harvest/plant crops from anywhere
 
-and more to come!
+As of late, I'm not super happy with the way I made this, especially the HUD. It's going to be a massive pain to make any major changes. Maybe i'll do an overhaul sometime, but for now there are no plans to.

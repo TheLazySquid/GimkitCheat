@@ -1,6 +1,6 @@
 {
   "name": "gimkitcheat",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "A userscript that allows you to cheat across various gimkit games",
   "main": "rollup.config.js",
   "type": "module",

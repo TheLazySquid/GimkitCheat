@@ -5,7 +5,6 @@ let trails = ["None", "origin_token"]
 skins = skins.sort();
 trails = trails.sort();
 
-
 const hudAddition: HudObject = {
     menus: [
         {
@@ -58,6 +57,38 @@ class CosmeticpickerClass {
     ]);
     skinWaiting: boolean = false;
     trailWaiting: boolean = false;
+
+    customSkin: string = "Unchaged";
+
+    init(cheat: any) {
+        // create the custom skin input
+        let customSkinInput = cheat.hud.menu("General Cheats")?.group("Cosmetic Picker")?.addElement("textinput", {
+            text: "Other skin input"
+        });
+        customSkinInput.addEventListener("input", (e: any) => {
+            this.customSkin = e.detail;
+        })
+        let applyButton = cheat.hud.menu("General Cheats")?.group("Cosmetic Picker")?.addElement("button", {
+            text: "Apply Other Skin",
+        });
+        applyButton.addEventListener("click", () => {
+            this.setSkin(this.customSkin);
+        })
+
+        // create the custom trail input
+        let customTrailInput = cheat.hud.menu("General Cheats")?.group("Cosmetic Picker")?.addElement("textinput", {
+            text: "Other trail input"
+        });
+        customTrailInput.addEventListener("input", (e: any) => {
+            this.customSkin = e.detail;
+        })
+        let applyTrailButton = cheat.hud.menu("General Cheats")?.group("Cosmetic Picker")?.addElement("button", {
+            text: "Apply Other Trail",
+        });
+        applyTrailButton.addEventListener("click", () => {
+            this.setTrail(this.customSkin);
+        })
+    }
 
     setSkin(skin: string) {
         if(skin == "Unchanged") return

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var version = "0.3.5";
+  var version = "0.3.6";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -2621,6 +2621,36 @@
           ]);
           this.skinWaiting = false;
           this.trailWaiting = false;
+          this.customSkin = "Unchaged";
+      }
+      init(cheat) {
+          var _a, _b, _c, _d, _e, _f, _g, _h;
+          // create the custom skin input
+          let customSkinInput = (_b = (_a = cheat.hud.menu("General Cheats")) === null || _a === void 0 ? void 0 : _a.group("Cosmetic Picker")) === null || _b === void 0 ? void 0 : _b.addElement("textinput", {
+              text: "Other skin input"
+          });
+          customSkinInput.addEventListener("input", (e) => {
+              this.customSkin = e.detail;
+          });
+          let applyButton = (_d = (_c = cheat.hud.menu("General Cheats")) === null || _c === void 0 ? void 0 : _c.group("Cosmetic Picker")) === null || _d === void 0 ? void 0 : _d.addElement("button", {
+              text: "Apply Other Skin",
+          });
+          applyButton.addEventListener("click", () => {
+              this.setSkin(this.customSkin);
+          });
+          // create the custom trail input
+          let customTrailInput = (_f = (_e = cheat.hud.menu("General Cheats")) === null || _e === void 0 ? void 0 : _e.group("Cosmetic Picker")) === null || _f === void 0 ? void 0 : _f.addElement("textinput", {
+              text: "Other trail input"
+          });
+          customTrailInput.addEventListener("input", (e) => {
+              this.customSkin = e.detail;
+          });
+          let applyTrailButton = (_h = (_g = cheat.hud.menu("General Cheats")) === null || _g === void 0 ? void 0 : _g.group("Cosmetic Picker")) === null || _h === void 0 ? void 0 : _h.addElement("button", {
+              text: "Apply Other Trail",
+          });
+          applyTrailButton.addEventListener("click", () => {
+              this.setTrail(this.customSkin);
+          });
       }
       setSkin(skin) {
           var _a, _b, _c, _d, _e, _f;

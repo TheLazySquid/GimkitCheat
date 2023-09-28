@@ -91,23 +91,34 @@ class AutoanswerClass {
                 let correctQuestion = this.questions?.find(q => q._id == this.currentQuestionId)
                 if(!correctQuestion) return;
 
-                let correctAnswerId = correctQuestion.answers.find((a: any) => a.correct)._id
-
-                let packet = {
+                let packet: any = {
                     key: 'answered',
                     deviceId: this.answerDeviceId,
-                    data: {
-                        answer: correctAnswerId
-                    }
+                    data: {}
+                }
+                if(correctQuestion.type == 'text') {
+                    packet.data.answer = correctQuestion.answers[0].text;
+                } else {
+                    let correctAnswerId = correctQuestion.answers.find((a: any) => a.correct)._id
+                    packet.data.answer = correctAnswerId
                 }
 
                 cheat.socketHandler.sendData("MESSAGE_FOR_DEVICE", packet)
             } else {
                 let questionId = this.questionIdList[this.currentQuestionIndex]
-                let answerId = this.questions.find(q => q._id == questionId).answers.find((a: any) => a.correct)._id
+                
+                let question = this.questions.find(q => q._id == questionId)
+                if(!question) return;
+                
+                let answer;
+                if(question.type == 'mc') {
+                    answer = question.answers.find((a: any) => a.correct)._id
+                } else {
+                    answer = question.answers[0].text
+                }
 
                 cheat.socketHandler.sendData("QUESTION_ANSWERED", {
-                    answer: answerId,
+                    answer,
                     questionId: questionId
                 })
             }

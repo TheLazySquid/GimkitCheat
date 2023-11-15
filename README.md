@@ -18,6 +18,7 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **Freecam**: Allows you to move your camera wherever you want, or even spectate other players. Once in freecam, use the arrow keys to move the camera.
 - **Player Highlighter**: Marks on your screen where teammates or enemies are in relation to you.
 - **Instant Use**: Tired of waiting for painfully slow bars to fill up just to purchase something minor? This allows you to use the nearest thing instantly by hitting enter.
+- **Spawning Dummy Accounts**: Allows you to spawn dummy accounts to flood a game with. This is not currently included with Gimkit Cheat, but it can be found here [here](https://github.com/TheLazySquid/GimkitSpawner).
 
 ### Gamemode Specific Cheats
 

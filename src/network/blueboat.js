@@ -4,18 +4,32 @@ function n(t, e, n) {
 }
 
 function encode(t, e, s) {
-    const o = {
-        type: 2,
-        data: ["blueboat_SEND_MESSAGE", {
-            room: s,
-            key: t,
-            data: e
-        }],
-        options: {
-            compress: !0
-        },
-        nsp: "/"
-    };
+    let o;
+
+    if(Array.isArray(t)) {
+        o = {
+            type: 2,
+            data: t,
+            options: {
+                compress: !0
+            },
+            nsp: "/"
+        };
+    } else {
+        o = {
+            type: 2,
+            data: ["blueboat_SEND_MESSAGE", {
+                room: s,
+                key: t,
+                data: e
+            }],
+            options: {
+                compress: !0
+            },
+            nsp: "/"
+        };
+    }
+
     return function(t) {
         var e = [],
             i = [],

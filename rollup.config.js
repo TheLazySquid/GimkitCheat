@@ -6,6 +6,8 @@ import typescript from '@rollup/plugin-typescript';
 import { string } from "rollup-plugin-string"
 import svg from 'rollup-plugin-svg-import';
 import resolve from '@rollup/plugin-node-resolve';
+import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
 
 import pkg from './package.json' assert { type: 'json' }
 import commonjs from '@rollup/plugin-commonjs';
@@ -45,6 +47,7 @@ export default {
 	plugins: [
 		json(),
 		typescript(),
+		commonjs(),
 		string({
 			include: "**/*.css"
 		}),
@@ -52,6 +55,9 @@ export default {
 		resolve({
 			browser: true
 		}),
-		commonjs()
+		builtins(),
+		globals({
+			include: 'node_modules/**'
+		})
 	]
 };

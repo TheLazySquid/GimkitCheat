@@ -15,6 +15,7 @@ import { Instantuse } from './scripts/general/instantuse';
 import { Instapurchasers } from './scripts/gamemodes/purchasers';
 import { Farmchain } from './scripts/gamemodes/farmchain';
 import { HideEnergy } from './scripts/general/hideenergy';
+import { Spawner } from './scripts/general/spawner';
 // import { BotCreator } from './scripts/general/botcreator';
 
 class Cheat extends EventTarget {
@@ -23,6 +24,7 @@ class Cheat extends EventTarget {
     hud: Hud;
     funcs: Map<string, Function> = new Map();
     scripts: Script[] = [];
+    gameId: string = "";
 
     constructor() {
         super();
@@ -49,6 +51,7 @@ class Cheat extends EventTarget {
             Playerhighlighter(),
             Freecam(),
             HideEnergy(),
+            Spawner(),
             
             Classic(),
             RichMode(),
@@ -60,6 +63,7 @@ class Cheat extends EventTarget {
         ]
 
         this.initScripts();
+        this.setupCodeExtraction();
         this.waitForLoad();
     }
 
@@ -131,6 +135,23 @@ class Cheat extends EventTarget {
 
     log(...args: any[]) {
         console.log("[GC]", ...args);
+    }
+
+    setupCodeExtraction() {
+        let nativeSend = XMLHttpRequest.prototype.send;
+        let cheat = this;
+
+        XMLHttpRequest.prototype.send = function(...params: any[]) {
+            this.addEventListener("load", () => {
+                if(this.responseURL.endsWith('/find-info-from-code')) {
+                    cheat.gameId = JSON.parse(params[0]).code;
+                    cheat.log("Game ID:", cheat.gameId);
+                }
+            }, { once: true })
+
+            // @ts-ignore can't be bothered to fix this
+            nativeSend.apply(this, params);
+        }
     }
 
     getScript(name: string) {

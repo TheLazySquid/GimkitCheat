@@ -18,7 +18,8 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **Freecam**: Allows you to move your camera wherever you want, or even spectate other players. Once in freecam, use the arrow keys to move the camera.
 - **Player Highlighter**: Marks on your screen where teammates or enemies are in relation to you.
 - **Instant Use**: Tired of waiting for painfully slow bars to fill up just to purchase something minor? This allows you to use the nearest thing instantly by hitting enter.
-- **Spawning Dummy Accounts**: Allows you to spawn dummy accounts to flood a game with. This is not currently included with Gimkit Cheat, but it can be found here [here](https://github.com/TheLazySquid/GimkitSpawner).
+- **Hide Energy Popup**: QOL feature that hides the energy popup that appears when you get energy.
+- **Spawning Dummy Accounts**: Allows you to spawn dummy accounts to flood a game with. These accounts do nothing once spawned.
 
 ### Gamemode Specific Cheats
 
@@ -31,4 +32,4 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **One Way Out**: Purchase shield cans/medpacks from anywhere
 - **Farmchain**: Adds options to automatically harvest/plant crops from anywhere
 
-As of late, I'm not super happy with the way I made this, especially the HUD. It's going to be a massive pain to make any major changes. Maybe i'll do an overhaul sometime, but for now there are no plans to.
+As of late, I'm not super happy with the way I made this, especially the HUD. It's going to be a massive pain to make any major changes. Maybe i'll do an overhaul sometime, but for now there are no plans to. There's also a circular dependency somewhere inside one of the packages that I'm using, and I don't know how to hide the warning. Whatever.

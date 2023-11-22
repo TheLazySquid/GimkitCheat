@@ -2401,7 +2401,7 @@
       }
   }
 
-  const hudAddition$7 = {
+  const hudAddition$8 = {
       menus: [
           {
               name: "Devtools",
@@ -2429,7 +2429,7 @@
   class DevtoolsClass {
       constructor() {
           this.name = "Gimkit Cheat Devtools";
-          this.hudAddition = hudAddition$7;
+          this.hudAddition = hudAddition$8;
           this.loggingIncomingMessages = false;
           this.funcs = new Map([
               ["logIncomingMessages", (enabled) => {
@@ -2469,7 +2469,7 @@
       return new DevtoolsClass();
   }
 
-  const hudAddition$6 = {
+  const hudAddition$7 = {
       menus: [
           {
               name: "General Cheats",
@@ -2492,7 +2492,7 @@
   class AutoanswerClass {
       constructor() {
           this.name = "Autoanswer";
-          this.hudAddition = hudAddition$6;
+          this.hudAddition = hudAddition$7;
           this.autoAnswering = false;
           this.funcs = new Map([
               ["setAutoAnswer", (enabled) => {
@@ -2598,7 +2598,7 @@
   let trails = ["None", "origin_token"];
   skins = skins.sort();
   trails = trails.sort();
-  const hudAddition$5 = {
+  const hudAddition$6 = {
       menus: [
           {
               name: "General Cheats",
@@ -2639,7 +2639,7 @@
   class CosmeticpickerClass {
       constructor() {
           this.name = "Cosmetic Picker";
-          this.hudAddition = hudAddition$5;
+          this.hudAddition = hudAddition$6;
           this.funcs = new Map([
               ["setSkin", (skin) => {
                       this.setSkin(skin);
@@ -2744,7 +2744,7 @@
       return new CosmeticpickerClass();
   }
 
-  const hudAddition$4 = {
+  const hudAddition$5 = {
       menus: [
           {
               name: "General Cheats",
@@ -2791,7 +2791,7 @@
   class PlayerhighlighterClass {
       constructor() {
           this.name = "Player Highlighter";
-          this.hudAddition = hudAddition$4;
+          this.hudAddition = hudAddition$5;
           this.funcs = new Map([
               ["highlightTeammates", (value) => {
                       this.highlightingTeammates = value;
@@ -3006,7 +3006,7 @@
       UpgradeType["Multiplier"] = "multiplier";
       UpgradeType["Streak Bonus"] = "streakBonus";
   })(UpgradeType || (UpgradeType = {}));
-  const hudAddition$3 = {
+  const hudAddition$4 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3041,7 +3041,7 @@
               multiplier: 1,
               streakBonus: 1
           };
-          this.hudAddition = hudAddition$3;
+          this.hudAddition = hudAddition$4;
           this.autoPurchasing = false;
           this.funcs = new Map([
               ["setAutoPurchasingClassic", (enabled) => {
@@ -3123,7 +3123,7 @@
       return new ClassicClass();
   }
 
-  const hudAddition$2 = {
+  const hudAddition$3 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3152,7 +3152,7 @@
       constructor() {
           super(...arguments);
           this.name = "Rich Mode Script";
-          this.hudAddition = hudAddition$2;
+          this.hudAddition = hudAddition$3;
           this.funcs = new Map([
               ["setAutoPurchasingRichMode", (enabled) => {
                       this.autoPurchasing = enabled;
@@ -3217,7 +3217,7 @@
       return new TrustNoOneClass();
   }
 
-  const hudAddition$1 = {
+  const hudAddition$2 = {
       menus: [
           {
               name: "General Cheats",
@@ -3240,7 +3240,7 @@
   class InstantuseClass {
       constructor() {
           this.name = "Instantuse";
-          this.hudAddition = hudAddition$1;
+          this.hudAddition = hudAddition$2;
           this.instantUseEnabled = true;
           this.funcs = new Map([
               ["setInstantUse", (enabled) => {
@@ -3284,7 +3284,7 @@
       return new InstantuseClass();
   }
 
-  /******************************************************************************
+  /*! *****************************************************************************
   Copyright (c) Microsoft Corporation.
 
   Permission to use, copy, modify, and/or distribute this software for any
@@ -3643,7 +3643,7 @@
       return new InstapurchasersClass();
   }
 
-  const hudAddition = {
+  const hudAddition$1 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3697,7 +3697,7 @@
   class FarmchainClass {
       constructor() {
           this.name = "Farmchain";
-          this.hudAddition = hudAddition;
+          this.hudAddition = hudAddition$1;
           this.autoHarvesting = true;
           this.autoPlanting = false;
           this.funcs = new Map([
@@ -3772,6 +3772,73 @@
       return new FarmchainClass();
   }
 
+  const hudAddition = {
+      menus: [
+          {
+              name: "General Cheats",
+              elements: [
+                  {
+                      type: "toggle",
+                      options: {
+                          textEnabled: "Show Energy Popup",
+                          textDisabled: "Hide Energy Popup",
+                          runFunction: "toggleEnergyPopup"
+                      }
+                  }
+              ]
+          }
+      ]
+  };
+  class HideEnergyClass {
+      constructor() {
+          this.name = "Hide Energy";
+          this.hudAddition = hudAddition;
+          this.enabled = false;
+          this.funcs = new Map([
+              ["toggleEnergyPopup", (event) => {
+                      this.enabled = event;
+                      console.log(this.popupElement, this.enabled);
+                      if (!this.popupElement)
+                          return;
+                      if (this.enabled) {
+                          this.popupElement.style.display = "none";
+                      }
+                      else {
+                          this.popupElement.style.display = "";
+                      }
+                  }]
+          ]);
+      }
+      init() {
+          let observer = new MutationObserver((mutations) => {
+              for (let mutation of mutations) {
+                  for (let node of mutation.addedNodes) {
+                      if (node.nodeType != Node.ELEMENT_NODE)
+                          continue;
+                      // check that the element is the energy popup
+                      if (node.matches(".maxAll.flex.hc") &&
+                          node.querySelector("img[src='/assets/map/inventory/resources/energy.png']")) {
+                          this.popupElement = node;
+                          if (!this.enabled)
+                              return;
+                          // hide the popup
+                          this.popupElement.style.display = "none";
+                      }
+                  }
+              }
+          });
+          window.addEventListener("load", () => {
+              observer.observe(document.body, {
+                  childList: true,
+                  subtree: true
+              });
+          });
+      }
+  }
+  function HideEnergy() {
+      return new HideEnergyClass();
+  }
+
   // import { BotCreator } from './scripts/general/botcreator';
   class Cheat extends EventTarget {
       constructor() {
@@ -3795,6 +3862,7 @@
               Cosmeticpicker(),
               Playerhighlighter(),
               Freecam(),
+              HideEnergy(),
               Classic(),
               RichMode(),
               TrustNoOne(),

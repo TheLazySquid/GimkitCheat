@@ -14,6 +14,7 @@ import { TrustNoOne } from './scripts/gamemodes/trustnoone';
 import { Instantuse } from './scripts/general/instantuse';
 import { Instapurchasers } from './scripts/gamemodes/purchasers';
 import { Farmchain } from './scripts/gamemodes/farmchain';
+import { HideEnergy } from './scripts/general/hideenergy';
 // import { BotCreator } from './scripts/general/botcreator';
 
 class Cheat extends EventTarget {
@@ -47,6 +48,7 @@ class Cheat extends EventTarget {
             Cosmeticpicker(),
             Playerhighlighter(),
             Freecam(),
+            HideEnergy(),
             
             Classic(),
             RichMode(),

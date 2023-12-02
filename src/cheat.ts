@@ -16,6 +16,7 @@ import { Instapurchasers } from './scripts/gamemodes/purchasers';
 import { Farmchain } from './scripts/gamemodes/farmchain';
 import { HideEnergy } from './scripts/general/hideenergy';
 import { Spawner } from './scripts/general/spawner';
+import { Lava } from './scripts/gamemodes/floorislava';
 // import { BotCreator } from './scripts/general/botcreator';
 
 class Cheat extends EventTarget {
@@ -58,6 +59,7 @@ class Cheat extends EventTarget {
             TrustNoOne(),
             Farmchain(),
             Instapurchasers(),
+            Lava()
 
             // BotCreator()
         ]

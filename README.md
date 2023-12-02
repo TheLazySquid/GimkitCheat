@@ -31,5 +31,6 @@ Gimkit Cheat provides a nice, unified way to use different cheats. To open/close
 - **Snowbrawl**: Purchase shield cans/medpacks from anywhere
 - **One Way Out**: Purchase shield cans/medpacks from anywhere
 - **Farmchain**: Adds options to automatically harvest/plant crops from anywhere
+- **The Floor is Lava**: Lets you automatically purchase structures and hide the popups from doing so
 
 As of late, I'm not super happy with the way I made this, especially the HUD. It's going to be a massive pain to make any major changes. Maybe i'll do an overhaul sometime, but for now there are no plans to. There's also a circular dependency somewhere inside one of the packages that I'm using, and I don't know how to hide the warning. Whatever.

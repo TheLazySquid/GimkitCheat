@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var version$1 = "0.3.6";
+  var version$1 = "0.3.8";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -2399,7 +2399,7 @@
       }
   }
 
-  const hudAddition$9 = {
+  const hudAddition$a = {
       menus: [
           {
               name: "Devtools",
@@ -2427,7 +2427,7 @@
   class DevtoolsClass {
       constructor() {
           this.name = "Gimkit Cheat Devtools";
-          this.hudAddition = hudAddition$9;
+          this.hudAddition = hudAddition$a;
           this.loggingIncomingMessages = false;
           this.funcs = new Map([
               ["logIncomingMessages", (enabled) => {
@@ -2467,7 +2467,7 @@
       return new DevtoolsClass();
   }
 
-  const hudAddition$8 = {
+  const hudAddition$9 = {
       menus: [
           {
               name: "General Cheats",
@@ -2490,7 +2490,7 @@
   class AutoanswerClass {
       constructor() {
           this.name = "Autoanswer";
-          this.hudAddition = hudAddition$8;
+          this.hudAddition = hudAddition$9;
           this.autoAnswering = false;
           this.funcs = new Map([
               ["setAutoAnswer", (enabled) => {
@@ -2596,7 +2596,7 @@
   let trails = ["None", "origin_token"];
   skins = skins.sort();
   trails = trails.sort();
-  const hudAddition$7 = {
+  const hudAddition$8 = {
       menus: [
           {
               name: "General Cheats",
@@ -2637,7 +2637,7 @@
   class CosmeticpickerClass {
       constructor() {
           this.name = "Cosmetic Picker";
-          this.hudAddition = hudAddition$7;
+          this.hudAddition = hudAddition$8;
           this.funcs = new Map([
               ["setSkin", (skin) => {
                       this.setSkin(skin);
@@ -2742,7 +2742,7 @@
       return new CosmeticpickerClass();
   }
 
-  const hudAddition$6 = {
+  const hudAddition$7 = {
       menus: [
           {
               name: "General Cheats",
@@ -2789,7 +2789,7 @@
   class PlayerhighlighterClass {
       constructor() {
           this.name = "Player Highlighter";
-          this.hudAddition = hudAddition$6;
+          this.hudAddition = hudAddition$7;
           this.funcs = new Map([
               ["highlightTeammates", (value) => {
                       this.highlightingTeammates = value;
@@ -3004,7 +3004,7 @@
       UpgradeType["Multiplier"] = "multiplier";
       UpgradeType["Streak Bonus"] = "streakBonus";
   })(UpgradeType || (UpgradeType = {}));
-  const hudAddition$5 = {
+  const hudAddition$6 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3039,7 +3039,7 @@
               multiplier: 1,
               streakBonus: 1
           };
-          this.hudAddition = hudAddition$5;
+          this.hudAddition = hudAddition$6;
           this.autoPurchasing = false;
           this.funcs = new Map([
               ["setAutoPurchasingClassic", (enabled) => {
@@ -3121,7 +3121,7 @@
       return new ClassicClass();
   }
 
-  const hudAddition$4 = {
+  const hudAddition$5 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3150,7 +3150,7 @@
       constructor() {
           super(...arguments);
           this.name = "Rich Mode Script";
-          this.hudAddition = hudAddition$4;
+          this.hudAddition = hudAddition$5;
           this.funcs = new Map([
               ["setAutoPurchasingRichMode", (enabled) => {
                       this.autoPurchasing = enabled;
@@ -3215,7 +3215,7 @@
       return new TrustNoOneClass();
   }
 
-  const hudAddition$3 = {
+  const hudAddition$4 = {
       menus: [
           {
               name: "General Cheats",
@@ -3238,7 +3238,7 @@
   class InstantuseClass {
       constructor() {
           this.name = "Instantuse";
-          this.hudAddition = hudAddition$3;
+          this.hudAddition = hudAddition$4;
           this.instantUseEnabled = true;
           this.funcs = new Map([
               ["setInstantUse", (enabled) => {
@@ -3296,6 +3296,8 @@
   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
   PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
+  /* global Reflect, Promise */
+
 
   function __awaiter(thisArg, _arguments, P, generator) {
       function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -3641,7 +3643,7 @@
       return new InstapurchasersClass();
   }
 
-  const hudAddition$2 = {
+  const hudAddition$3 = {
       menus: [
           {
               name: "Cheats for gamemodes",
@@ -3695,7 +3697,7 @@
   class FarmchainClass {
       constructor() {
           this.name = "Farmchain";
-          this.hudAddition = hudAddition$2;
+          this.hudAddition = hudAddition$3;
           this.autoHarvesting = true;
           this.autoPlanting = false;
           this.funcs = new Map([
@@ -3770,7 +3772,7 @@
       return new FarmchainClass();
   }
 
-  const hudAddition$1 = {
+  const hudAddition$2 = {
       menus: [
           {
               name: "General Cheats",
@@ -3790,7 +3792,7 @@
   class HideEnergyClass {
       constructor() {
           this.name = "Hide Energy";
-          this.hudAddition = hudAddition$1;
+          this.hudAddition = hudAddition$2;
           this.enabled = false;
           this.funcs = new Map([
               ["toggleEnergyPopup", (event) => {
@@ -19018,6 +19020,26 @@
   };
 
   // Copyright Joyent, Inc. and other Node contributors.
+  //
+  // Permission is hereby granted, free of charge, to any person obtaining a
+  // copy of this software and associated documentation files (the
+  // "Software"), to deal in the Software without restriction, including
+  // without limitation the rights to use, copy, modify, merge, publish,
+  // distribute, sublicense, and/or sell copies of the Software, and to permit
+  // persons to whom the Software is furnished to do so, subject to the
+  // following conditions:
+  //
+  // The above copyright notice and this permission notice shall be included
+  // in all copies or substantial portions of the Software.
+  //
+  // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  // OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+  // NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+  // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+  // USE OR OTHER DEALINGS IN THE SOFTWARE.
+
   var isBufferEncoding = Buffer$u.isEncoding
     || function(encoding) {
          switch (encoding && encoding.toLowerCase()) {
@@ -20109,6 +20131,9 @@
   }
 
   // A bit simpler than readable streams.
+  // Implement an async ._write(chunk, encoding, cb), and it'll handle all
+  // the drain event emission and buffering.
+
   Writable.WritableState = WritableState;
   inherits$l(Writable, EventEmitter);
 
@@ -20620,6 +20645,47 @@
   }
 
   // a transform stream is a readable/writable stream where you do
+  // something with the data.  Sometimes it's called a "filter",
+  // but that's not a great name for it, since that implies a thing where
+  // some bits pass through, and others are simply ignored.  (That would
+  // be a valid example of a transform, of course.)
+  //
+  // While the output is causally related to the input, it's not a
+  // necessarily symmetric or synchronous transformation.  For example,
+  // a zlib stream might take multiple plain-text writes(), and then
+  // emit a single compressed chunk some time in the future.
+  //
+  // Here's how this works:
+  //
+  // The Transform stream has all the aspects of the readable and writable
+  // stream classes.  When you write(chunk), that calls _write(chunk,cb)
+  // internally, and returns false if there's a lot of pending writes
+  // buffered up.  When you call read(), that calls _read(n) until
+  // there's enough pending readable data buffered up.
+  //
+  // In a transform stream, the written data is placed in a buffer.  When
+  // _read(n) is called, it transforms the queued up data, calling the
+  // buffered _write cb's as it consumes chunks.  If consuming a single
+  // written chunk would result in multiple output chunks, then the first
+  // outputted bit calls the readcb, and subsequent chunks just go into
+  // the read buffer, and will cause it to emit 'readable' if necessary.
+  //
+  // This way, back-pressure is actually determined by the reading side,
+  // since _read has to be called to start processing a new chunk.  However,
+  // a pathological inflate type of transform can cause excessive buffering
+  // here.  For example, imagine a stream where every byte of input is
+  // interpreted as an integer from 0-255, and then results in that many
+  // bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
+  // 1kb of data being output.  In this case, you could write a very small
+  // amount of input, and end up with a very large amount of output.  In
+  // such a pathological inflating mechanism, there'd be no way to tell
+  // the system to stop doing the transform.  A single 4MB write could
+  // cause the system to run out of memory.
+  //
+  // However, even in such a pathological case, only a single written chunk
+  // would be consumed, and then the rest would wait (un-transformed) until
+  // the results of the previous transformed chunk were consumed.
+
   inherits$l(Transform$6, Duplex);
 
   function TransformState(stream) {
@@ -30086,7 +30152,7 @@
           });
       }
   }
-  const hudAddition = {
+  const hudAddition$1 = {
       menus: [
           {
               name: "General Cheats",
@@ -30116,7 +30182,7 @@
   class SpawnerClass {
       constructor() {
           this.name = "Account Spawner";
-          this.hudAddition = hudAddition;
+          this.hudAddition = hudAddition$1;
           this.accountName = "My Epic Bot";
           this.funcs = new Map([
               ["disconnect", () => {
@@ -30161,6 +30227,122 @@
       return new SpawnerClass();
   }
 
+  const hudAddition = {
+      menus: [
+          {
+              name: "Cheats for gamemodes",
+              groups: [
+                  {
+                      name: "The Floor is Lava",
+                      elements: [
+                          {
+                              type: "toggle",
+                              options: {
+                                  textEnabled: "Stop Auto Building",
+                                  textDisabled: "Start Auto Building",
+                                  default: false,
+                                  runFunction: "setAutoBuilding",
+                                  keybind: true,
+                                  keybindId: "autoBuilding"
+                              }
+                          },
+                          {
+                              type: "toggle",
+                              options: {
+                                  textEnabled: "Stop Hiding Popups",
+                                  textDisabled: "Start Hiding Popups",
+                                  default: false,
+                                  runFunction: "setHidingPopups",
+                                  keybind: true,
+                                  keybindId: "hidingPopups"
+                              }
+                          }
+                      ]
+                  }
+              ]
+          }
+      ]
+  };
+  class LavaClass {
+      constructor() {
+          this.name = "Floor is Lava";
+          this.hudAddition = hudAddition;
+          this.money = 0;
+          this.autoPurchasing = false;
+          this.hidingPopups = false;
+          this.funcs = new Map([
+              ["setAutoBuilding", (enabled) => {
+                      this.autoPurchasing = enabled;
+                      if (this.autoPurchasing)
+                          this.checkAutoBuy();
+                  }], ["setHidingPopups", (enabled) => {
+                      this.hidingPopups = enabled;
+                      if (enabled)
+                          document.querySelectorAll(".Toastify__toast").forEach((e) => e.remove());
+                  }]
+          ]);
+          this.structures = [
+              ["spaceElevator", 5e7],
+              ["mountain", 5e6],
+              ["skyscaper", 5e5],
+              ["shoppingMall", 5e4],
+              ["house", 5e3],
+              ["wall", 5e2],
+              ["brick", 50],
+              ["plank", 5]
+          ];
+      }
+      init(cheat) {
+          this.cheat = cheat;
+          // get the amount of money
+          this.cheat.socketHandler.addEventListener("recieveMessage", (e) => {
+              var _a;
+              if (this.cheat.socketHandler.transportType != "blueboat")
+                  return;
+              if (((_a = e.detail.data) === null || _a === void 0 ? void 0 : _a.type) == "BALANCE") {
+                  this.money = e.detail.data.value;
+                  this.checkAutoBuy();
+              }
+          });
+          let observer = new MutationObserver((mutations) => {
+              if (!this.hidingPopups)
+                  return;
+              for (let mutation of mutations) {
+                  for (let node of mutation.addedNodes) {
+                      if (!(node instanceof HTMLElement))
+                          continue;
+                      if (node.matches(".Toastify__toast"))
+                          node.remove();
+                  }
+              }
+          });
+          window.addEventListener("load", () => {
+              observer.observe(document.body, {
+                  childList: true,
+                  subtree: true
+              });
+          });
+      }
+      checkAutoBuy() {
+          if (!this.autoPurchasing)
+              return;
+          for (let structure of this.structures) {
+              if (this.money >= structure[1]) {
+                  this.buyStructure(structure[0]);
+                  break;
+              }
+          }
+      }
+      buyStructure(type) {
+          this.cheat.socketHandler.sendData("LAVA_PURCHASE_PIECE", {
+              type
+          });
+      }
+  }
+  function Lava() {
+      return new LavaClass();
+  }
+
   // import { BotCreator } from './scripts/general/botcreator';
   class Cheat extends EventTarget {
       constructor() {
@@ -30192,6 +30374,7 @@
               TrustNoOne(),
               Farmchain(),
               Instapurchasers(),
+              Lava()
               // BotCreator()
           ];
           this.initScripts();

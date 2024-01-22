@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var version$1 = "0.3.8";
+  var version$1 = "0.4.0";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;

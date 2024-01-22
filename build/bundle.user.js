@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
-// @version     0.3.8
+// @version     0.4.0
 // @license     ISC
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
 
-  var version$1 = "0.3.8";
+  var version$1 = "0.4.0";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;

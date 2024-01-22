@@ -1114,7 +1114,7 @@
           this.hasFired = true;
           this.dispatchEvent(new CustomEvent("socket", { detail: socket }));
           // detect the transport type
-          if ("stores" in unsafeWindow)
+          if ("Phaser" in unsafeWindow)
               this.transportType = "colyseus";
           else
               this.transportType = "blueboat";
@@ -1582,6 +1582,7 @@
           this.button.classList.toggle("enabled", this.enabled);
       }
       toggle() {
+          console.trace("toggling");
           this.enabled = !this.enabled;
           this.updateButton();
           if (this.options.runFunction)
@@ -2867,7 +2868,7 @@
 
   class FreecamClass {
       constructor() {
-          this.name = "Cosmetic Picker";
+          this.name = "Freecam";
           this.freecamming = false;
           this.freeCamPos = { x: 0, y: 0 };
           this.toggleFreecam = null;
@@ -2901,6 +2902,7 @@
           this.toggleFreecam = toggleFreecam;
           this.spectateMenu = dropdown;
           cheat.addEventListener('gameLoaded', () => {
+              console.log("game loaded amiright");
               this.camHelper = unsafeWindow.stores.phaser.scene.cameraHelper;
               // add in the update loop
               setInterval(() => {
@@ -2920,6 +2922,7 @@
           });
       }
       enableFreecam(value) {
+          console.log(value);
           let phaser = unsafeWindow.stores.phaser;
           let camera = phaser.scene.cameras.cameras[0];
           if (value) {
@@ -3296,8 +3299,6 @@
   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
   PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
-  /* global Reflect, Promise */
-
 
   function __awaiter(thisArg, _arguments, P, generator) {
       function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -19020,26 +19021,6 @@
   };
 
   // Copyright Joyent, Inc. and other Node contributors.
-  //
-  // Permission is hereby granted, free of charge, to any person obtaining a
-  // copy of this software and associated documentation files (the
-  // "Software"), to deal in the Software without restriction, including
-  // without limitation the rights to use, copy, modify, merge, publish,
-  // distribute, sublicense, and/or sell copies of the Software, and to permit
-  // persons to whom the Software is furnished to do so, subject to the
-  // following conditions:
-  //
-  // The above copyright notice and this permission notice shall be included
-  // in all copies or substantial portions of the Software.
-  //
-  // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-  // OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-  // NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-  // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-  // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-  // USE OR OTHER DEALINGS IN THE SOFTWARE.
-
   var isBufferEncoding = Buffer$u.isEncoding
     || function(encoding) {
          switch (encoding && encoding.toLowerCase()) {
@@ -20131,9 +20112,6 @@
   }
 
   // A bit simpler than readable streams.
-  // Implement an async ._write(chunk, encoding, cb), and it'll handle all
-  // the drain event emission and buffering.
-
   Writable.WritableState = WritableState;
   inherits$l(Writable, EventEmitter);
 
@@ -20645,47 +20623,6 @@
   }
 
   // a transform stream is a readable/writable stream where you do
-  // something with the data.  Sometimes it's called a "filter",
-  // but that's not a great name for it, since that implies a thing where
-  // some bits pass through, and others are simply ignored.  (That would
-  // be a valid example of a transform, of course.)
-  //
-  // While the output is causally related to the input, it's not a
-  // necessarily symmetric or synchronous transformation.  For example,
-  // a zlib stream might take multiple plain-text writes(), and then
-  // emit a single compressed chunk some time in the future.
-  //
-  // Here's how this works:
-  //
-  // The Transform stream has all the aspects of the readable and writable
-  // stream classes.  When you write(chunk), that calls _write(chunk,cb)
-  // internally, and returns false if there's a lot of pending writes
-  // buffered up.  When you call read(), that calls _read(n) until
-  // there's enough pending readable data buffered up.
-  //
-  // In a transform stream, the written data is placed in a buffer.  When
-  // _read(n) is called, it transforms the queued up data, calling the
-  // buffered _write cb's as it consumes chunks.  If consuming a single
-  // written chunk would result in multiple output chunks, then the first
-  // outputted bit calls the readcb, and subsequent chunks just go into
-  // the read buffer, and will cause it to emit 'readable' if necessary.
-  //
-  // This way, back-pressure is actually determined by the reading side,
-  // since _read has to be called to start processing a new chunk.  However,
-  // a pathological inflate type of transform can cause excessive buffering
-  // here.  For example, imagine a stream where every byte of input is
-  // interpreted as an integer from 0-255, and then results in that many
-  // bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
-  // 1kb of data being output.  In this case, you could write a very small
-  // amount of input, and end up with a very large amount of output.  In
-  // such a pathological inflating mechanism, there'd be no way to tell
-  // the system to stop doing the transform.  A single 4MB write could
-  // cause the system to run out of memory.
-  //
-  // However, even in such a pathological case, only a single written chunk
-  // would be consumed, and then the rest would wait (un-transformed) until
-  // the results of the previous transformed chunk were consumed.
-
   inherits$l(Transform$6, Duplex);
 
   function TransformState(stream) {

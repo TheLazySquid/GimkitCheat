@@ -60,7 +60,7 @@ class SocketHandler extends EventTarget {
 		this.dispatchEvent(new CustomEvent("socket", { detail: socket }));
 		
 		// detect the transport type
-		if("stores" in unsafeWindow) this.transportType = "colyseus";
+		if("Phaser" in unsafeWindow) this.transportType = "colyseus";
 		else this.transportType = "blueboat";
 
 		let handlerThis = this;

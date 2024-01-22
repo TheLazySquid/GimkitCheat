@@ -35,7 +35,7 @@ export default {
 					override: {
 						name: pkg.name,
 						version: pkg.version,
-						description: pkg.description,
+						descrwiption: pkg.description,
 						homepage: pkg.homepage,
 						author: pkg.author,
 						license: pkg.license

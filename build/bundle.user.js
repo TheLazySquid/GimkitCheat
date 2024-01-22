@@ -1598,7 +1598,6 @@
           this.button.classList.toggle("enabled", this.enabled);
       }
       toggle() {
-          console.trace("toggling");
           this.enabled = !this.enabled;
           this.updateButton();
           if (this.options.runFunction)
@@ -2918,7 +2917,6 @@
           this.toggleFreecam = toggleFreecam;
           this.spectateMenu = dropdown;
           cheat.addEventListener('gameLoaded', () => {
-              console.log("game loaded amiright");
               this.camHelper = unsafeWindow.stores.phaser.scene.cameraHelper;
               // add in the update loop
               setInterval(() => {
@@ -2938,7 +2936,6 @@
           });
       }
       enableFreecam(value) {
-          console.log(value);
           let phaser = unsafeWindow.stores.phaser;
           let camera = phaser.scene.cameras.cameras[0];
           if (value) {
@@ -30422,6 +30419,86 @@
   }
   const cheat = new Cheat();
 
+  function addModifiedScript(src) {
+      // we want to manually fetch the script so we can modify it
+      fetch(src)
+          .then(response => response.text())
+          .then(text => {
+          text = text.replace('import("./"+i("cMWv8").resolve("5CPH7"))', `new Promise(async (resolve) => {
+    const src = "./"+i("cMWv8").resolve("5CPH7")
+    console.log(src)
+    const res = await fetch(src)
+    let text = await res.text()
+    text = text.replace('assignment:new(0,p.default)}', 'assignment:new(0,p.default)};window.stores=D;')
+    const blob = new Blob([text], { type: 'text/javascript' })
+    const url = URL.createObjectURL(blob)
+    const script = document.createElement("script")
+    script.src = url;
+    script.addEventListener('load', resolve)
+    document.head.appendChild(script);
+})`);
+          // replace all instances of ./ with /
+          text = text.replace(/"\.\/"/g, '"https://www.gimkit.com/"');
+          // create a new blob with the modified text
+          const blob = new Blob([text], { type: 'text/javascript' });
+          const url = URL.createObjectURL(blob);
+          // create a new script element with the modified url
+          const script = document.createElement('script');
+          script.src = url;
+          script.type = "module";
+          // append the script element to the document
+          document.head.appendChild(script);
+      });
+  }
+
+  function setup$1() {
+      const observer = new MutationObserver(function (mutations) {
+          mutations.forEach(function (mutation) {
+              // Check if a new script element was added
+              if (mutation.type !== 'childList')
+                  return;
+              const addedNodes = Array.from(mutation.addedNodes);
+              for (let node of addedNodes) {
+                  if (!(node instanceof HTMLScriptElement))
+                      continue;
+                  if (!node.src.includes("index.8f9b20a8.js"))
+                      continue;
+                  // get rid of the element so it doesn't get executed
+                  node.remove();
+                  addModifiedScript(node.src);
+              }
+          });
+      });
+      observer.observe(document.documentElement, {
+          childList: true,
+          subtree: true
+      });
+  }
+
+  function setup() {
+      function interceptScript(e) {
+          // this is bad bad very bad
+          if (!e.srcElement)
+              return;
+          if (!(e.srcElement instanceof HTMLScriptElement))
+              return;
+          let src = e.srcElement.src;
+          if (!src.includes("index.8f9b20a8.js"))
+              return;
+          e.preventDefault();
+          addModifiedScript(src);
+          window.removeEventListener('beforescriptexecute', interceptScript);
+      }
+      // @ts-ignore beforescriptexecute is non-standard and only works on firefox. Fortunately, it's just firefox that need to run this script, so we're good.
+      window.addEventListener('beforescriptexecute', interceptScript);
+  }
+
+  if (navigator.userAgent.includes("Firefox")) {
+      setup();
+  }
+  else {
+      setup$1();
+  }
   cheat.log("Loaded Gimkit Cheat version: " + version$1);
   cheat.antifreeze();
   // make sure the cheat is running

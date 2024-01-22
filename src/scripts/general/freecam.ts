@@ -1,9 +1,8 @@
 import Dropdown from "../../hud/elements/dropdown";
 import Toggle from "../../hud/elements/toggle";
-import { HudObject } from "../../interfaces";
 
 class FreecamClass {
-    name: string = "Cosmetic Picker";
+    name: string = "Freecam";
 	freecamming: boolean = false;
 	camHelper: any;
 	freeCamPos = {x: 0, y: 0};

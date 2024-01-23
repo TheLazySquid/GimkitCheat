@@ -1,4 +1,11 @@
+const existingScript = document.querySelector('script[src*="index.8f9b20a8.js"]') as HTMLScriptElement
+if(existingScript) {
+    addModifiedScript(existingScript.src)
+}
+
 export default function addModifiedScript(src: string) {
+    console.log(src)
+
     // we want to manually fetch the script so we can modify it
     fetch(src)
         .then(response => response.text())
@@ -20,6 +27,9 @@ export default function addModifiedScript(src: string) {
     }
     setTimeout(resolve, 0)
 })`)
+
+            // replace all "./" with "/"
+            text = text.replace(/"\.\/"/g, '"/"')
 
             // create a new script element with the modified url
             const script = document.createElement('script');

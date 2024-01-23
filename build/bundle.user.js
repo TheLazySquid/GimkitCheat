@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
-// @version     0.4.2
+// @version     0.4.4
 // @license     ISC
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
 
-  var version$1 = "0.4.2";
+  var version$1 = "0.4.4";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -30419,7 +30419,12 @@
   }
   const cheat = new Cheat();
 
+  const existingScript = document.querySelector('script[src*="index.8f9b20a8.js"]');
+  if (existingScript) {
+      addModifiedScript(existingScript.src);
+  }
   function addModifiedScript(src) {
+      console.log(src);
       // we want to manually fetch the script so we can modify it
       fetch(src)
           .then(response => response.text())
@@ -30441,6 +30446,8 @@
     }
     setTimeout(resolve, 0)
 })`);
+          // replace all "./" with "/"
+          text = text.replace(/"\.\/"/g, '"/"');
           // create a new script element with the modified url
           const script = document.createElement('script');
           script.type = "module";
@@ -30502,9 +30509,6 @@
   }
   else {
       setup$1();
-  }
-  if (document.querySelector('script[src*="index.8f9b20a8.js"')) {
-      alert("Something went wrong when intercepting a script. GimkitCheat is currently experiencing issues, so it may not work. Try refreshing the page, but this may persist.");
   }
   cheat.log("Loaded Gimkit Cheat version: " + version$1);
   cheat.antifreeze();

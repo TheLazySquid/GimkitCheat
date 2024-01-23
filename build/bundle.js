@@ -30414,24 +30414,28 @@
     const res = await fetch(src)
     let text = await res.text()
     text = text.replace('assignment:new(0,p.default)}', 'assignment:new(0,p.default)};window.stores=D;')
-    const blob = new Blob([text], { type: 'text/javascript' })
-    const url = URL.createObjectURL(blob)
-    const script = document.createElement("script")
-    script.src = url;
-    script.addEventListener('load', resolve)
-    document.head.appendChild(script);
+
+    const script = document.createElement('script');
+    try {
+        script.appendChild(document.createTextNode(text));
+        document.head.appendChild(script);
+    } catch(e) { 
+        script.text = text;
+        document.head.appendChild(script);
+    }
+    setTimeout(resolve, 0)
 })`);
-          // replace all instances of ./ with /
-          text = text.replace(/"\.\/"/g, '"https://www.gimkit.com/"');
-          // create a new blob with the modified text
-          const blob = new Blob([text], { type: 'text/javascript' });
-          const url = URL.createObjectURL(blob);
           // create a new script element with the modified url
           const script = document.createElement('script');
-          script.src = url;
           script.type = "module";
-          // append the script element to the document
-          document.head.appendChild(script);
+          try {
+              script.appendChild(document.createTextNode(text));
+              document.head.appendChild(script);
+          }
+          catch (e) {
+              script.text = text;
+              document.head.appendChild(script);
+          }
       });
   }
 

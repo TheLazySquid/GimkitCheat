@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var version$1 = "0.4.1";
+  var version$1 = "0.4.2";
 
   function utf8Read$1(bytes, offset, length) {
   	var string = '', chr = 0;
@@ -30486,6 +30486,9 @@
   }
   else {
       setup$1();
+  }
+  if (document.querySelector('script[src*="index.8f9b20a8.js"')) {
+      alert("Something went wrong when intercepting a script. GimkitCheat is currently experiencing issues, so it may not work. Try refreshing the page, but this may persist.");
   }
   cheat.log("Loaded Gimkit Cheat version: " + version$1);
   cheat.antifreeze();

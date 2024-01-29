@@ -1,14 +1,8 @@
 import { version } from '../package.json';
 import cheat from './cheat';
-import setupMutation from "./interceptors/mutationObserver";
-import setupBeforeScriptExecute from "./interceptors/beforeScriptExecute";
+import setup from './interceptors/addModifiedScript';
 
-if(navigator.userAgent.includes("Firefox")) {
-	setupBeforeScriptExecute();
-} else {
-	setupMutation();
-}
-
+setup()
 cheat.log("Loaded Gimkit Cheat version: " + version)
 cheat.antifreeze();
 

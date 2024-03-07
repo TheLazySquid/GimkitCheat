@@ -8,6 +8,8 @@ Install/Update it by clicking on [this link](https://raw.githubusercontent.com/T
 
 Gimkit Cheat provides a nice, unified way to use different cheats. To open/close the hud, press "\\" (backslash) on your keyboard while on Gimkit. It will show various menus, which should be fairly self explanatory. If you find any issues, please open a new [issue](https://github.com/TheLazySquid/GimkitCheat/issues/new) on this repository.
 
+#### Warning: This may not work on assignments. I have no good way to test assignments, so I can't guarantee wheter this script works on them or not.
+
 ### General Cheats
 
 - **Auto Answer**: Automatically answers questions for you.

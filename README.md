@@ -1,6 +1,6 @@
 # Gimkit Cheat
 
-This is a new, experimental of Gimkit Cheat. This features a nicer UI made using Svelte, and several new cheats/quality of life features not present in the older version. Additionally, it is able to be used as both a bookmarklet and a script you can paste into the console. I decided not to port over the dummy account spawner, as it massively increased the bundle size, caused a lot of issues when compiling and was generally not very useful. There is still a working standalone version of the account spawner [here](https://github.com/TheLazySquid/GimkitSpawner).
+This is a new version of GimkitCheat. If you want to use the older version, it can be found [here](https://github.com/TheLazySquid/GimkitCheat/tree/a19d802eca25893e6f262b9d6e74f1278dbebd2f). This version features a nicer UI made using Svelte, and several new cheats/quality of life features not present in the older version. Additionally, it is able to be used as both a bookmarklet and a script you can paste into the console. I decided not to port over the dummy account spawner, as it massively increased the bundle size, caused a lot of issues when compiling and was generally not very useful. There is still a working standalone version of the account spawner [here](https://github.com/TheLazySquid/GimkitSpawner).
 
 ## Usage
 

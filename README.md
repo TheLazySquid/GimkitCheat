@@ -1,38 +1,56 @@
 # Gimkit Cheat
 
-This version of Gimkit Cheat was inspired by Gimkit Utility by [UndercoverGoose](https://github.com/UndercoverGoose), which was sadly taken down. The main things that were carried over from the other script are using Typescript, Rollup and Tampermonkey, which makes it easier to develop and use. If you do want to try out the older versions, check out [v1 here](/v1) or [v2 here](/v2).
+This is a new, experimental of Gimkit Cheat. This features a nicer UI made using Svelte, and several new cheats/quality of life features not present in the older version. Additionally, it is able to be used as both a bookmarklet and a script you can paste into the console. I decided not to port over the dummy account spawner, as it massively increased the bundle size, caused a lot of issues when compiling and was generally not very useful. There is still a working standalone version of the account spawner [here](https://github.com/TheLazySquid/GimkitSpawner).
 
-Install/Update it by clicking on [this link](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js) while having [Tampermonkey](https://www.tampermonkey.net/) installed on your browser.
+## Usage
+
+#### Tampermonkey (recommended)
+
+1. Install the [Tampermonkey](https://www.tampermonkey.net/) extension for your browser.
+2. Click [here](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/v4/build/bundle.user.js) to install the script.
+
+#### Copy/Paste
+
+1. Copy the script from [here](/build/bundle.user.js).
+2. Open up the Gimkit join page. **Do not join the game yet.**
+3. Open up the developer console (usually F12 or Ctrl+Shift+I).
+4. Paste the script into the console and press enter.
+
+#### Bookmarklet
+
+This does not work on Firefox, due to it's 32kb limit on bookmarklets.
+
+1. Copy the script from [here](/build/bundle.bookmarklet.txt).
+2. Create a new bookmark in your browser.
+3. Paste the script into the URL field.
+4. Open up the Gimkit join page. **Do not join the game yet.**
+5. Click the bookmark to run the script.
 
 ## Features
 
-Gimkit Cheat provides a nice, unified way to use different cheats. To open/close the hud, press "\\" (backslash) on your keyboard while on Gimkit. It will show various menus, which should be fairly self explanatory. If you find any issues, please open a new [issue](https://github.com/TheLazySquid/GimkitCheat/issues/new) on this repository.
+Hitting backslash (\\) at any point will hide the overlay. Hitting it again will cause it to reappear.
 
-#### Warning: This may not work on assignments. I have no good way to test assignments, so I can't guarantee wheter this script works on them or not.
+#### General
 
-### General Cheats
+- **Auto Answer**: Automatically answers questions in all gamemodes.
+- **Freecam**: Allows you to move your camera around the map freely, or spectate other players.
+- **Player Highlighter**: Draws arrows pointing towards teammates/enemies, allowing you to easily find them.
+- **Instant Use**: Will instantly use any interactible object rather than needing to hold down enter for a few seconds.
 
-- **Auto Answer**: Automatically answers questions for you.
-- **Cosmetic Picker**: Allows you to use any cosmetic you want, even unused ones. These are only visible to you.
+#### Gamemode Specific
 
-**Note**: The list of cosmetics is unmaintained. There is an input that allows you to use equip cosmetics with a custom id, but it requires the internal id of the cosmetic, which is often misleading.
+- **Auto Purchase**: Automatically purchases upgrades for you. Works for classic and similar gamemodes.
+- **Super Rich Mode**: Identical to Auto Purchase, but with adjusted values for Super Rich mode.
+- **Trust No One**: Shows you who the imposters are in Trust No One mode. This does not work if you join mid-game.
+- **Capture the Flag**: Allows you to purchase upgrades and build walls anywhere.
+- **Tag**: Allows you to purchase upgrades anywhere.
+- **Snowbrawl**: Allows you to purchase medkits and shield cans anywhere.
+- **One Way Out**: Allows you to purchase medkits and shield cans anywhere.
+- **Farmchain**: Allows you to automatically plant seeds (assuming you have enough water and energy) and automatically harvest the plants once they grow. This will actually plant the seeds in plots that are supposed to be inaccessible until later in the game; the only thing stopping you from using them is the box on top that the script ignores. So while you might not see your plants growing, they are still being grown. Additionally, this script lets you purchase/unlock seeds anywhere.
+- **The Floor is Lava**: Lets you automatically build structures when you have enough money. Also allows you to hide the "You purchased/built x" popups. Leaving this off may cause them to pile up and lag your game.
 
-- **Freecam**: Allows you to move your camera wherever you want, or even spectate other players. Once in freecam, use the arrow keys to move the camera.
-- **Player Highlighter**: Marks on your screen where teammates or enemies are in relation to you.
-- **Instant Use**: Tired of waiting for painfully slow bars to fill up just to purchase something minor? This allows you to use the nearest thing instantly by hitting enter.
-- **Hide Energy Popup**: QOL feature that hides the energy popup that appears when you get energy.
-- **Spawning Dummy Accounts**: Allows you to spawn dummy accounts to flood a game with. These accounts do nothing once spawned.
+#### Cosmetic
 
-### Gamemode Specific Cheats
-
-- **Classic**: Automatically purchases upgrades for you. Best used with Auto Answer.
-- **Super Rich Mode**: Identical to Classic, with adjusted values.
-- **Trust No One**: Tells you who the imposters are. Doesn't work if you join mid-game.
-- **Capture The Flag**: Purchase upgrades from anywhere
-- **Tag**: Purchase upgrades from anywhere
-- **Snowbrawl**: Purchase shield cans/medpacks from anywhere
-- **One Way Out**: Purchase shield cans/medpacks from anywhere
-- **Farmchain**: Adds options to automatically harvest/plant crops from anywhere
-- **The Floor is Lava**: Lets you automatically purchase structures and hide the popups from doing so
-
-As of late, I'm not super happy with the way I made this, especially the HUD. It's going to be a massive pain to make any major changes. Maybe i'll do an overhaul sometime, but for now there are no plans to. There's also a circular dependency somewhere inside one of the packages that I'm using, and I don't know how to hide the warning. Whatever.
+- **Hud Customization**: The hud is easily customizable, allowing you to change the color of buttons, menus, groups and text.
+- **Cosmetic Picker**: Allows you to pick any skin or trail to use. This will only be visible to you; no one else will see it. To equip a cosmetic you need to know it's internal id. This is usually listed on the [Gimkit Wiki](https://gimkit.fandom.com/wiki/Cosmetics).
+- **Custom Theme**: Allows you to create a custom theme, or use any built-in theme. This works in all gamemodes, even ones that don't normally allow you to change your theme.

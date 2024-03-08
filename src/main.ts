@@ -1,12 +1,14 @@
-import { version } from '../package.json';
-import cheat from './cheat';
-import setup from './interceptors/addModifiedScript';
+import createHud from "./hud/core";
+import socketManager from './network/socketManager'
+import modifyScripts from './modifyScripts'
 
-setup()
-cheat.log("Loaded Gimkit Cheat version: " + version)
-cheat.antifreeze();
+// confirm that no amplitude.com script exists
+let gameLoaded = document.querySelector('script[src*="amplitude.com"]') !== null;
 
-// make sure the cheat is running
-if(Object.isFrozen(WebSocket)) {
-	alert("WebSocket object is still frozen. Please try refreshing the page. If this persists, open an issue on GitHub.")
+if(gameLoaded) {
+    alert("This script can only be run before you join the game. Please reload the page and try again.")
+} else {
+    modifyScripts();
+    socketManager.setup();
+    createHud();
 }

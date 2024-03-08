@@ -1,33 +1,38 @@
 {
   "name": "gimkitcheat",
-  "version": "0.4.5",
-  "description": "A userscript that allows you to cheat across various gimkit games",
-  "main": "rollup.config.js",
+  "version": "1.0.0",
+  "description": "A script to cheat in various Gimkit gamemodes",
+  "main": "build/bundle.js",
   "type": "module",
   "scripts": {
-    "build": "rollup --config"
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "fullbuild": "rollup -c -w full"
   },
+  "repository": {
+    "type": "git",
+    "url": "github.com/TheLazySquid/GimkitCheat"
+  },
+  "keywords": [
+    "Gimkit"
+  ],
   "author": "TheLazySquid",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.1.0",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-terser": "^0.4.1",
-    "@rollup/plugin-typescript": "^11.1.0",
-    "@types/stegcloak": "^1.0.2",
-    "rollup": "^3.21.2",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
-    "rollup-plugin-string": "^3.0.0",
-    "rollup-plugin-svg": "^2.0.0",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/tampermonkey": "^5.0.2",
+    "rollup": "^4.9.6",
+    "rollup-plugin-svelte": "^7.1.6",
     "rollup-plugin-userscript-metablock": "^0.3.3",
-    "typescript": "^5.0.4"
+    "sass": "^1.70.0",
+    "svelte-preprocess": "^5.1.3"
   },
   "dependencies": {
-    "@rollup/plugin-node-resolve": "^15.0.2",
-    "@types/tampermonkey": "^4.0.10",
-    "rollup-plugin-svg-import": "^2.0.0",
-    "socket.io-client": "^4.6.1",
-    "stegcloak": "^1.1.1"
+    "colyseus.js": "^0.15.17",
+    "debounce": "^2.0.0",
+    "svelte-material-icons": "^3.0.5"
   }
 }

@@ -1,56 +1,38 @@
-import { Keybind } from "./interfaces";
-
-export default class KeybindManager {
-    keys: Set<string> = new Set();
-    binds: Keybind[] = [];
-
+class KeybindManager {
+    keysPressed = new Set<string>();
+    keybinds = new Map<Set<string>, () => void>();
+    
     constructor() {
-        this.addListeners()
-    }
+        window.addEventListener('keydown', (e) => {
+            this.keysPressed.add(e.key.toLowerCase());
 
-    addListeners() {
-        window.addEventListener("keydown", (e) => {
-            this.keys.add(e.key.toLowerCase())
-            this.checkBinds(e)
-        })
-
-        window.addEventListener("keyup", (e) => {
-            this.keys.delete(e.key.toLowerCase())
-        })
-
-        window.addEventListener("blur", () => {
-            this.keys.clear()
-        })
-    }
-
-    checkBinds(e: KeyboardEvent) {
-        if(e.repeat) return
-
-        for(let bind of this.binds) {
-            if(!bind.keys.has(e.key.toLowerCase())) continue
-            if(bind.keys.size == 0) continue
-
-            // if the bind is exclusive, make sure no other keys are pressed
-            if(bind.exclusive && bind.keys.size != this.keys.size) continue
-
-            // check whether the keys in the bind are pressed
-            if(Array.from(bind.keys).every(key => this.keys.has(key))) {
-                bind.callback?.()   
+            // check if any keybinds are pressed
+            checkKeybinds: for(const [keys, callback] of this.keybinds) {
+                if(keys.size == 0) continue;
+    
+                for(const key of keys) {
+                    if(!this.keysPressed.has(key)) {
+                        continue checkKeybinds;
+                    }
+                }
+    
+                callback();
             }
-        }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            this.keysPressed.delete(e.key.toLowerCase());
+        });
     }
 
-    registerBind(bind: Keybind) {
-        if(this.binds.includes(bind)) return
-        this.binds.push(bind)
+    addKeybind(keys: Set<string>, callback: () => void) {
+        this.keybinds.set(keys, callback);
     }
 
-    removeBind(bind: Keybind) {
-        if(!this.binds.includes(bind)) return
-        this.binds.splice(this.binds.indexOf(bind), 1)
-    }
-
-    clearBinds() {
-        this.binds = []
+    removeKeybind(keys: Set<string>) {
+        this.keybinds.delete(keys);
     }
 }
+
+const keybindManager = new KeybindManager();
+export default keybindManager;

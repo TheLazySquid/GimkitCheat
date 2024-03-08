@@ -1,23 +1,50 @@
-import { ChangePacket } from "./interfaces";
+import { ChangePacket, IDeviceChange, IGimkitWindow } from "./types"
 
-export function HexAlphaToRGBA(hex: string, alpha: number): string {
-    let r = parseInt(hex.slice(1, 3), 16);
-    let g = parseInt(hex.slice(3, 5), 16);
-    let b = parseInt(hex.slice(5, 7), 16);
-
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+export function findMatchingParent(node: Element, selector: string) {
+    if (node.matches(selector)) {
+        return node
+    }
+    if (node.parentElement) {
+        return findMatchingParent(node.parentElement, selector)
+    }
+    return null
 }
 
-export function RGBAtoHexAlpha(rgba: string): [string, number] {
-    let [r, g, b, a] = rgba.slice(5, -1).split(",").map(x => parseFloat(x.trim()));
+export function parseRGBA(string: string) {
+    let [r, g, b, a] = string
+        .replace('rgba(', '')
+        .replace(')', '')
+        .split(',')
+        .map(value => parseFloat(value.trim()))
+    return { r, g, b, a }
+}
 
-    let hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+export function parseHex(string: string) {
+    let [r, g, b] = string
+        .replace('#', '')
+        .match(/.{1,2}/g)!
+        .map(value => parseInt(value, 16))
+    return { r, g, b }
+}
 
-    return [hex, a];
+export function rgbToHex(r: number, g: number, b: number) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+}
+
+function componentToHex(c: number) {
+    var hex = Math.round(c).toString(16)
+    return hex.length == 1 ? "0" + hex : hex
+}
+
+export function getUnsafeWindow(): IGimkitWindow {
+    if (typeof unsafeWindow === 'undefined') {
+        return window as unknown as IGimkitWindow
+    }
+    return unsafeWindow as unknown as IGimkitWindow
 }
 
 export function parseChangePacket(packet: ChangePacket) {
-    let returnVar = []
+    let returnVar: IDeviceChange[] = []
 
     for(let change of packet.changes) {
         let data: { [index: string]: any } = {}

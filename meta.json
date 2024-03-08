@@ -1,6 +1,6 @@
 {
-	"name": "gimkitcheat",
-	"namespace": "https://www.github.com/TheLazySquid/GimkitCheat",
+	"name": "Gimkit Cheat",
+	"namespace": "https://www.github.com/TheLazySquid/GimkitCheat/tree/v4",
 	"match": [
 		"https://www.gimkit.com/join*"
 	],
@@ -13,6 +13,6 @@
 		"GM_setValue",
 		"GM_deleteValue"
 	],
-	"updateURL": "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js",
-	"downloadURL": "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js"
+	"updateURL": "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/v4/build/bundle.user.js",
+	"downloadURL": "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/v4/build/bundle.user.js"
 }

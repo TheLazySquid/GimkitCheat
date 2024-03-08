@@ -1,63 +1,72 @@
-// rollup.config.js
-import json from '@rollup/plugin-json';
-import terser from '@rollup/plugin-terser';
-import metablock from 'rollup-plugin-userscript-metablock';
 import typescript from '@rollup/plugin-typescript';
-import { string } from "rollup-plugin-string"
-import svg from 'rollup-plugin-svg-import';
+import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
-import builtins from 'rollup-plugin-node-builtins';
-import globals from 'rollup-plugin-node-globals';
-
-import pkg from './package.json' assert { type: 'json' }
+import sveltePreprocess from 'svelte-preprocess';
 import commonjs from '@rollup/plugin-commonjs';
+import metablock from 'rollup-plugin-userscript-metablock';
+import fs from 'fs';
+import terser from '@rollup/plugin-terser';
+import makeBookmarklet from './makeBookmarket.js';
+
+const pkg = JSON.parse(fs.readFileSync('./package.json'));
+const full = process.argv.includes('full');
+
+let output = [
+    {
+        file: 'build/bundle.js',
+        format: 'iife'
+    }
+]
+
+let otherOutputs = [
+    {
+        file: 'build/bundle.user.js',
+        format: 'iife',
+        plugins: [
+            metablock({
+                file: './meta.json',
+                override: {
+                    version: pkg.version
+                }
+            })
+        ]
+    },
+    {
+        file: 'build/bundle.bookmarklet.txt',
+        format: 'iife',
+        plugins: [
+            terser(),
+            makeBookmarklet()
+        ]
+    }
+];
+
+// If we're doing a full build, also create a userscript and bookmarklet
+if (full) {
+    output = output.concat(otherOutputs);
+}
 
 export default {
-	input: 'src/main.ts',
-	output: [
-		{
-			file: 'build/bundle.js',
-			format: 'iife'
-		},
-		{
-			file: 'build/bundle.min.js',
-			format: 'iife',
-			name: 'gc',
-			plugins: [ terser() ]
-		},
-		{
-			file: 'build/bundle.user.js',
-			format: 'iife',
-			name: 'gc',
-			plugins: [
-				metablock({
-					file: './meta.json',
-					override: {
-						name: pkg.name,
-						version: pkg.version,
-						descrwiption: pkg.description,
-						homepage: pkg.homepage,
-						author: pkg.author,
-						license: pkg.license
-					}
-				})
-			]
-		}
-	],
-	plugins: [
-		json(),
-		typescript(),
-		commonjs(),
-		string({
-			include: "**/*.css"
-		}),
-		svg(),
-		resolve({
-			browser: true
-		}),
-		builtins(),
-		globals({
-			include: 'node_modules/**'
-		})
-	]
-};
+    input: 'src/main.ts',
+    output,
+    plugins: [
+        typescript({
+            compilerOptions: {
+                target: "es6"
+            }
+        }),
+        commonjs(),
+        svelte({
+            emitCss: false,
+            compilerOptions: {
+                css: 'injected'
+            },
+            preprocess: sveltePreprocess()
+        }),
+        resolve({
+            browser: true,
+            exportConditions: ['svelte'],
+            extensions: ['.svelte', '.js', '.ts', '.json']
+        })
+    ]
+}

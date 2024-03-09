@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/v4/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/v4/build/bundle.user.js
-// @version     1.0.0
+// @version     1.0.1
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_deleteValue
@@ -11398,7 +11398,7 @@
     	append_styles(target, "svelte-4jfbq8", ".menu.svelte-4jfbq8{position:absolute;background-color:var(--menuBackgroundColor);resize:both;overflow:hidden;min-width:150px;border-radius:5px;user-select:none;pointer-events:all;outline-width:3px;outline-style:solid;outline-color:var(--menuOutlineColor)}.children.svelte-4jfbq8{position:relative;height:calc(100% - 21px);overflow-x:hidden;overflow-y:auto}.groupContent{position:absolute;top:0;left:0;display:flex;flex-direction:column;width:100%}.groupContent.svelte-4jfbq8{transform:translateX(0);opacity:1;pointer-events:all}.menu.minimized.svelte-4jfbq8{overflow:hidden;resize:horizontal;height:21px !important}.header.svelte-4jfbq8{background-color:var(--menuHeaderBackgroundColor);position:relative;color:var(--menuHeaderTextColor);width:100%;text-align:center;font-size:14px;height:21px}.minimize.svelte-4jfbq8{background-color:transparent;border:none;align-items:center;position:absolute;right:5px;top:0;cursor:pointer}");
     }
 
-    function create_fragment$z(ctx) {
+    function create_fragment$A(ctx) {
     	let div3;
     	let div0;
     	let t0;
@@ -11519,7 +11519,7 @@
     	};
     }
 
-    function instance$u($$self, $$props, $$invalidate) {
+    function instance$v($$self, $$props, $$invalidate) {
     	let $coordSpring;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	var _a, _b, _c, _d, _e;
@@ -11723,7 +11723,7 @@
     class Menu extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$u, create_fragment$z, safe_not_equal, { name: 0 }, add_css$e, [-1, -1]);
+    		init(this, options, instance$v, create_fragment$A, safe_not_equal, { name: 0 }, add_css$e, [-1, -1]);
     	}
     }
 
@@ -11778,7 +11778,7 @@
     	};
     }
 
-    function create_fragment$y(ctx) {
+    function create_fragment$z(ctx) {
     	let svg;
     	let if_block0_anchor;
     	let path;
@@ -11876,7 +11876,7 @@
     	};
     }
 
-    function instance$t($$self, $$props, $$invalidate) {
+    function instance$u($$self, $$props, $$invalidate) {
     	let { size = "1em" } = $$props;
     	let { width = size } = $$props;
     	let { height = size } = $$props;
@@ -11919,7 +11919,7 @@
     	constructor(options) {
     		super();
 
-    		init(this, options, instance$t, create_fragment$y, safe_not_equal, {
+    		init(this, options, instance$u, create_fragment$z, safe_not_equal, {
     			size: 9,
     			width: 0,
     			height: 1,
@@ -12131,7 +12131,7 @@
     	};
     }
 
-    function create_fragment$x(ctx) {
+    function create_fragment$y(ctx) {
     	let dialog_1;
     	let h2;
     	let t1;
@@ -12267,7 +12267,7 @@
 
     const func = key => key === ' ' ? 'Space' : key;
 
-    function instance$s($$self, $$props, $$invalidate) {
+    function instance$t($$self, $$props, $$invalidate) {
     	let { keys = new Set() } = $$props;
     	let keysDeref = new Set(keys);
 
@@ -12351,7 +12351,7 @@
     class KeybindCreator extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$s, create_fragment$x, safe_not_equal, { keys: 7 }, add_css$d);
+    		init(this, options, instance$t, create_fragment$y, safe_not_equal, { keys: 7 }, add_css$d);
     	}
     }
 
@@ -12392,7 +12392,7 @@
     	};
     }
 
-    function create_fragment$w(ctx) {
+    function create_fragment$x(ctx) {
     	let t;
     	let button;
     	let keyboardoutline;
@@ -12471,7 +12471,7 @@
     	};
     }
 
-    function instance$r($$self, $$props, $$invalidate) {
+    function instance$s($$self, $$props, $$invalidate) {
     	var _a;
     	let { hotkeyId } = $$props;
     	let dispatch = createEventDispatcher();
@@ -12513,7 +12513,7 @@
     class Hotkey extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$r, create_fragment$w, safe_not_equal, { hotkeyId: 3 }, add_css$c);
+    		init(this, options, instance$s, create_fragment$x, safe_not_equal, { hotkeyId: 3 }, add_css$c);
     	}
     }
 
@@ -12558,7 +12558,7 @@
     	};
     }
 
-    function create_fragment$v(ctx) {
+    function create_fragment$w(ctx) {
     	let div;
     	let button_1;
     	let button_1_disabled_value;
@@ -12682,7 +12682,7 @@
     	};
     }
 
-    function instance$q($$self, $$props, $$invalidate) {
+    function instance$r($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	let { disabled = null } = $$props;
     	let { disabledMsg = undefined } = $$props;
@@ -12737,7 +12737,7 @@
     class Button extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$q, create_fragment$v, safe_not_equal, { disabled: 0, disabledMsg: 1, hotkeyId: 2 }, add_css$b);
+    		init(this, options, instance$r, create_fragment$w, safe_not_equal, { disabled: 0, disabledMsg: 1, hotkeyId: 2 }, add_css$b);
     	}
     }
 
@@ -12788,7 +12788,7 @@
     	};
     }
 
-    function create_fragment$u(ctx) {
+    function create_fragment$v(ctx) {
     	let button0;
     	let t0;
     	let div;
@@ -12916,7 +12916,7 @@
     	}
     }
 
-    function instance$p($$self, $$props, $$invalidate) {
+    function instance$q($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	let { name } = $$props;
     	let groupEl;
@@ -12961,7 +12961,7 @@
     class Group extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$p, create_fragment$u, safe_not_equal, { name: 0 }, add_css$a);
+    		init(this, options, instance$q, create_fragment$v, safe_not_equal, { name: 0 }, add_css$a);
     	}
     }
 
@@ -13032,7 +13032,7 @@
     	};
     }
 
-    function create_fragment$t(ctx) {
+    function create_fragment$u(ctx) {
     	let div3;
     	let div0;
     	let t0;
@@ -13126,7 +13126,7 @@
     	};
     }
 
-    function instance$o($$self, $$props, $$invalidate) {
+    function instance$p($$self, $$props, $$invalidate) {
     	var _a;
     	let { text } = $$props;
     	let { color = undefined } = $$props;
@@ -13214,8 +13214,8 @@
     		init(
     			this,
     			options,
-    			instance$o,
-    			create_fragment$t,
+    			instance$p,
+    			create_fragment$u,
     			safe_not_equal,
     			{
     				text: 0,
@@ -13249,7 +13249,7 @@
     	};
     }
 
-    function create_fragment$s(ctx) {
+    function create_fragment$t(ctx) {
     	let button;
     	let current;
 
@@ -13294,7 +13294,7 @@
     	};
     }
 
-    function instance$n($$self) {
+    function instance$o($$self) {
     	function resetStyles() {
     		let res = confirm("Are you sure you want to reset all styles?");
     		if (!res) return;
@@ -13312,7 +13312,7 @@
     class ResetStyles extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$n, create_fragment$s, safe_not_equal, {});
+    		init(this, options, instance$o, create_fragment$t, safe_not_equal, {});
     	}
     }
 
@@ -13405,7 +13405,7 @@
     	};
     }
 
-    function create_fragment$r(ctx) {
+    function create_fragment$s(ctx) {
     	let button;
     	let current;
 
@@ -13456,7 +13456,7 @@
     	};
     }
 
-    function instance$m($$self, $$props, $$invalidate) {
+    function instance$n($$self, $$props, $$invalidate) {
     	let { onText } = $$props;
     	let { offText } = $$props;
     	let { enabled = false } = $$props;
@@ -13486,7 +13486,7 @@
     	constructor(options) {
     		super();
 
-    		init(this, options, instance$m, create_fragment$r, safe_not_equal, {
+    		init(this, options, instance$n, create_fragment$s, safe_not_equal, {
     			onText: 1,
     			offText: 2,
     			enabled: 0,
@@ -13499,7 +13499,7 @@
 
     /* src\scripts\AutoAnswer.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$q(ctx) {
+    function create_fragment$r(ctx) {
     	let togglebutton;
     	let current;
 
@@ -13544,7 +13544,7 @@
     	};
     }
 
-    function instance$l($$self, $$props, $$invalidate) {
+    function instance$m($$self, $$props, $$invalidate) {
     	let enabled;
     	let $playerId;
     	let $transportType;
@@ -13668,13 +13668,13 @@
     class AutoAnswer extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$l, create_fragment$q, safe_not_equal, {});
+    		init(this, options, instance$m, create_fragment$r, safe_not_equal, {});
     	}
     }
 
     /* src\scripts\2d\InstantUse.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$p(ctx) {
+    function create_fragment$q(ctx) {
     	let togglebutton;
     	let updating_enabled;
     	let current;
@@ -13730,7 +13730,7 @@
     	};
     }
 
-    function instance$k($$self, $$props, $$invalidate) {
+    function instance$l($$self, $$props, $$invalidate) {
     	let enabled = true;
     	keybindManager.addKeybind(new Set(["enter"]), useNearest);
 
@@ -13796,7 +13796,7 @@
     class InstantUse extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$k, create_fragment$p, safe_not_equal, {});
+    		init(this, options, instance$l, create_fragment$q, safe_not_equal, {});
     	}
     }
 
@@ -13806,7 +13806,7 @@
     	append_styles(target, "svelte-1nus7od", ".wrap.svelte-1nus7od{display:flex;flex-direction:column;align-items:center}input.svelte-1nus7od{color:black;width:90%;border:none;border-radius:5px}");
     }
 
-    function create_fragment$o(ctx) {
+    function create_fragment$p(ctx) {
     	let div1;
     	let div0;
     	let t0;
@@ -13865,7 +13865,7 @@
     	};
     }
 
-    function instance$j($$self, $$props, $$invalidate) {
+    function instance$k($$self, $$props, $$invalidate) {
     	let { name } = $$props;
     	let { value = "" } = $$props;
     	const dispatch = createEventDispatcher();
@@ -13894,7 +13894,7 @@
     class Input extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$j, create_fragment$o, safe_not_equal, { name: 1, value: 0 }, add_css$8);
+    		init(this, options, instance$k, create_fragment$p, safe_not_equal, { name: 1, value: 0 }, add_css$8);
     	}
     }
 
@@ -14051,7 +14051,7 @@
     	};
     }
 
-    function create_fragment$n(ctx) {
+    function create_fragment$o(ctx) {
     	let group;
     	let current;
 
@@ -14095,7 +14095,7 @@
     	};
     }
 
-    function instance$i($$self, $$props, $$invalidate) {
+    function instance$j($$self, $$props, $$invalidate) {
     	let $playerId;
     	component_subscribe($$self, playerId, $$value => $$invalidate(6, $playerId = $$value));
     	let skinId = '';
@@ -14167,7 +14167,7 @@
     class CosmeticPicker extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$i, create_fragment$n, safe_not_equal, {}, add_css$7);
+    		init(this, options, instance$j, create_fragment$o, safe_not_equal, {}, add_css$7);
     	}
     }
 
@@ -14465,7 +14465,7 @@
     	};
     }
 
-    function create_fragment$m(ctx) {
+    function create_fragment$n(ctx) {
     	let svg;
     	let if_block0_anchor;
     	let path;
@@ -14563,7 +14563,7 @@
     	};
     }
 
-    function instance$h($$self, $$props, $$invalidate) {
+    function instance$i($$self, $$props, $$invalidate) {
     	let { size = "1em" } = $$props;
     	let { width = size } = $$props;
     	let { height = size } = $$props;
@@ -14606,7 +14606,7 @@
     	constructor(options) {
     		super();
 
-    		init(this, options, instance$h, create_fragment$m, safe_not_equal, {
+    		init(this, options, instance$i, create_fragment$n, safe_not_equal, {
     			size: 9,
     			width: 0,
     			height: 1,
@@ -14672,7 +14672,7 @@
     	};
     }
 
-    function create_fragment$l(ctx) {
+    function create_fragment$m(ctx) {
     	let svg;
     	let if_block0_anchor;
     	let path;
@@ -14770,7 +14770,7 @@
     	};
     }
 
-    function instance$g($$self, $$props, $$invalidate) {
+    function instance$h($$self, $$props, $$invalidate) {
     	let { size = "1em" } = $$props;
     	let { width = size } = $$props;
     	let { height = size } = $$props;
@@ -14813,7 +14813,7 @@
     	constructor(options) {
     		super();
 
-    		init(this, options, instance$g, create_fragment$l, safe_not_equal, {
+    		init(this, options, instance$h, create_fragment$m, safe_not_equal, {
     			size: 9,
     			width: 0,
     			height: 1,
@@ -14879,7 +14879,7 @@
     	};
     }
 
-    function create_fragment$k(ctx) {
+    function create_fragment$l(ctx) {
     	let dialog_1;
     	let div0;
     	let colorpicker0;
@@ -15371,7 +15371,7 @@
     	};
     }
 
-    function instance$f($$self, $$props, $$invalidate) {
+    function instance$g($$self, $$props, $$invalidate) {
     	let dialog;
     	let theme = structuredClone(Object.assign(Object.assign({}, defaultThemes[0]), { custom: true }));
     	let dispatch = createEventDispatcher();
@@ -15488,7 +15488,7 @@
     class CreateTheme extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$f, create_fragment$k, safe_not_equal, {}, add_css$6);
+    		init(this, options, instance$g, create_fragment$l, safe_not_equal, {}, add_css$6);
     	}
     }
 
@@ -15989,7 +15989,7 @@
     	};
     }
 
-    function create_fragment$j(ctx) {
+    function create_fragment$k(ctx) {
     	let t;
     	let group;
     	let current;
@@ -16071,7 +16071,7 @@
 
     const selector$1 = '[style^="opacity:"][style*="transform: translateY(0%)"]';
 
-    function instance$e($$self, $$props, $$invalidate) {
+    function instance$f($$self, $$props, $$invalidate) {
     	let $transportType;
     	let { transportType } = socketManager;
     	component_subscribe($$self, transportType, value => $$invalidate(14, $transportType = value));
@@ -16221,7 +16221,7 @@
     class CustomTheme extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$e, create_fragment$j, safe_not_equal, {}, add_css$5);
+    		init(this, options, instance$f, create_fragment$k, safe_not_equal, {}, add_css$5);
     	}
     }
 
@@ -16332,7 +16332,7 @@
     	};
     }
 
-    function create_fragment$i(ctx) {
+    function create_fragment$j(ctx) {
     	let canvas_1;
     	let t;
     	let group;
@@ -16401,7 +16401,7 @@
     	};
     }
 
-    function instance$d($$self, $$props, $$invalidate) {
+    function instance$e($$self, $$props, $$invalidate) {
     	let ctx;
     	let $playerId;
     	component_subscribe($$self, playerId, $$value => $$invalidate(9, $playerId = $$value));
@@ -16527,7 +16527,7 @@
     class PlayerHighlighter extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$d, create_fragment$i, safe_not_equal, {}, add_css$4);
+    		init(this, options, instance$e, create_fragment$j, safe_not_equal, {}, add_css$4);
     	}
     }
 
@@ -16537,7 +16537,7 @@
     	append_styles(target, "svelte-vkb13i", ".sliderWrap.svelte-vkb13i{display:flex;flex-direction:column;align-items:center;margin:5px 10px}.sliderWrap.disabled.svelte-vkb13i{opacity:0.5}input.svelte-vkb13i{flex-grow:1;width:100%}input[disabled].svelte-vkb13i{cursor:not-allowed}");
     }
 
-    function create_fragment$h(ctx) {
+    function create_fragment$i(ctx) {
     	let div1;
     	let div0;
     	let t0;
@@ -16631,7 +16631,7 @@
     	};
     }
 
-    function instance$c($$self, $$props, $$invalidate) {
+    function instance$d($$self, $$props, $$invalidate) {
     	let { title } = $$props;
     	let { min } = $$props;
     	let { max } = $$props;
@@ -16700,8 +16700,8 @@
     		init(
     			this,
     			options,
-    			instance$c,
-    			create_fragment$h,
+    			instance$d,
+    			create_fragment$i,
     			safe_not_equal,
     			{
     				title: 1,
@@ -17025,7 +17025,7 @@
     	};
     }
 
-    function create_fragment$g(ctx) {
+    function create_fragment$h(ctx) {
     	let group;
     	let current;
     	let mounted;
@@ -17082,7 +17082,7 @@
     	};
     }
 
-    function instance$b($$self, $$props, $$invalidate) {
+    function instance$c($$self, $$props, $$invalidate) {
     	let $playerId;
     	let $storesLoaded;
     	component_subscribe($$self, playerId, $$value => $$invalidate(15, $playerId = $$value));
@@ -17263,13 +17263,13 @@
     class Freecam extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$b, create_fragment$g, safe_not_equal, {}, add_css$2);
+    		init(this, options, instance$c, create_fragment$h, safe_not_equal, {}, add_css$2);
     	}
     }
 
     /* src\scripts\2d\HideEnergyPopup.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$f(ctx) {
+    function create_fragment$g(ctx) {
     	let togglebutton;
     	let current;
 
@@ -17307,7 +17307,7 @@
     	};
     }
 
-    function instance$a($$self) {
+    function instance$b($$self) {
     	let popupEl;
     	let hiding = false;
 
@@ -17343,7 +17343,7 @@
     class HideEnergyPopup extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$a, create_fragment$f, safe_not_equal, {});
+    		init(this, options, instance$b, create_fragment$g, safe_not_equal, {});
     	}
     }
 
@@ -17393,7 +17393,7 @@
     	};
     }
 
-    function create_fragment$e(ctx) {
+    function create_fragment$f(ctx) {
     	let group;
     	let current;
 
@@ -17437,7 +17437,7 @@
     	};
     }
 
-    function instance$9($$self, $$props, $$invalidate) {
+    function instance$a($$self, $$props, $$invalidate) {
     	const upgradesToGet = [
     		["Streak Bonus", 2, 20],
     		["Money Per Question", 3, 100],
@@ -17535,7 +17535,7 @@
     let AutoPurchase$1 = class AutoPurchase extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$9, create_fragment$e, safe_not_equal, {});
+    		init(this, options, instance$a, create_fragment$f, safe_not_equal, {});
     	}
     };
 
@@ -17585,7 +17585,7 @@
     	};
     }
 
-    function create_fragment$d(ctx) {
+    function create_fragment$e(ctx) {
     	let group;
     	let current;
 
@@ -17629,7 +17629,7 @@
     	};
     }
 
-    function instance$8($$self, $$props, $$invalidate) {
+    function instance$9($$self, $$props, $$invalidate) {
     	const upgradesToGet = [
     		["Streak Bonus", 2, 1e4],
     		["Money Per Question", 3, 5e3],
@@ -17727,7 +17727,7 @@
     class AutoPurchase extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$8, create_fragment$d, safe_not_equal, {});
+    		init(this, options, instance$9, create_fragment$e, safe_not_equal, {});
     	}
     }
 
@@ -17777,7 +17777,7 @@
     	};
     }
 
-    function create_fragment$c(ctx) {
+    function create_fragment$d(ctx) {
     	let group;
     	let current;
 
@@ -17821,7 +17821,7 @@
     	};
     }
 
-    function instance$7($$self, $$props, $$invalidate) {
+    function instance$8($$self, $$props, $$invalidate) {
     	let imposterNames = [];
 
     	socketManager.addEventListener("blueboatMessage", e => {
@@ -17837,7 +17837,7 @@
     class ShowImposters extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$7, create_fragment$c, safe_not_equal, {}, add_css$1);
+    		init(this, options, instance$8, create_fragment$d, safe_not_equal, {}, add_css$1);
     	}
     }
 
@@ -17925,7 +17925,7 @@
     	};
     }
 
-    function create_fragment$b(ctx) {
+    function create_fragment$c(ctx) {
     	let button;
     	let current;
 
@@ -17979,7 +17979,7 @@
     	};
     }
 
-    function instance$6($$self, $$props, $$invalidate) {
+    function instance$7($$self, $$props, $$invalidate) {
     	let $devicesLoaded;
     	component_subscribe($$self, devicesLoaded, $$value => $$invalidate(3, $devicesLoaded = $$value));
 
@@ -18172,7 +18172,7 @@
     	constructor(options) {
     		super();
 
-    		init(this, options, instance$6, create_fragment$b, safe_not_equal, {
+    		init(this, options, instance$7, create_fragment$c, safe_not_equal, {
     			selector: 5,
     			displayText: 0,
     			reusable: 6,
@@ -18327,7 +18327,7 @@
     	};
     }
 
-    function create_fragment$a(ctx) {
+    function create_fragment$b(ctx) {
     	let group;
     	let current;
 
@@ -18371,7 +18371,7 @@
     	};
     }
 
-    function instance$5($$self) {
+    function instance$6($$self) {
     	const func = () => getUnsafeWindow()?.stores?.phaser?.mainCharacter?.teamId;
     	const func_1 = () => getUnsafeWindow()?.stores?.phaser?.mainCharacter?.teamId;
     	return [func, func_1];
@@ -18380,7 +18380,7 @@
     class Ctf extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$5, create_fragment$a, safe_not_equal, {});
+    		init(this, options, instance$6, create_fragment$b, safe_not_equal, {});
     	}
     }
 
@@ -18485,7 +18485,7 @@
     	};
     }
 
-    function create_fragment$9(ctx) {
+    function create_fragment$a(ctx) {
     	let group;
     	let current;
 
@@ -18532,7 +18532,7 @@
     class Tag extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, null, create_fragment$9, safe_not_equal, {});
+    		init(this, options, null, create_fragment$a, safe_not_equal, {});
     	}
     }
 
@@ -18595,7 +18595,7 @@
     	};
     }
 
-    function create_fragment$8(ctx) {
+    function create_fragment$9(ctx) {
     	let group;
     	let current;
 
@@ -18642,7 +18642,7 @@
     class OneWayOut extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, null, create_fragment$8, safe_not_equal, {});
+    		init(this, options, null, create_fragment$9, safe_not_equal, {});
     	}
     }
 
@@ -18705,7 +18705,7 @@
     	};
     }
 
-    function create_fragment$7(ctx) {
+    function create_fragment$8(ctx) {
     	let group;
     	let current;
 
@@ -18752,13 +18752,13 @@
     class Snowbrawl extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, null, create_fragment$7, safe_not_equal, {});
+    		init(this, options, null, create_fragment$8, safe_not_equal, {});
     	}
     }
 
     /* src\scripts\floorIsLava\AutoBuild.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$6(ctx) {
+    function create_fragment$7(ctx) {
     	let togglebutton;
     	let updating_enabled;
     	let current;
@@ -18815,7 +18815,7 @@
     	};
     }
 
-    function instance$4($$self, $$props, $$invalidate) {
+    function instance$5($$self, $$props, $$invalidate) {
     	const structures = [
     		["spaceElevator", 5e7],
     		["mountain", 5e6],
@@ -18886,13 +18886,13 @@
     class AutoBuild extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$4, create_fragment$6, safe_not_equal, {});
+    		init(this, options, instance$5, create_fragment$7, safe_not_equal, {});
     	}
     }
 
     /* src\scripts\floorIsLava\HidePopups.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$5(ctx) {
+    function create_fragment$6(ctx) {
     	let togglebutton;
     	let updating_enabled;
     	let current;
@@ -18962,7 +18962,7 @@
     	});
     }
 
-    function instance$3($$self, $$props, $$invalidate) {
+    function instance$4($$self, $$props, $$invalidate) {
     	let hidingPopups = false;
 
     	let observer = new MutationObserver(mutations => {
@@ -19005,7 +19005,7 @@
     class HidePopups extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$3, create_fragment$5, safe_not_equal, {});
+    		init(this, options, instance$4, create_fragment$6, safe_not_equal, {});
     	}
     }
 
@@ -19053,7 +19053,7 @@
     	};
     }
 
-    function create_fragment$4(ctx) {
+    function create_fragment$5(ctx) {
     	let group;
     	let current;
 
@@ -19100,13 +19100,13 @@
     class FloorIsLava extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, null, create_fragment$4, safe_not_equal, {});
+    		init(this, options, null, create_fragment$5, safe_not_equal, {});
     	}
     }
 
     /* src\scripts\farmchain\AutoPlant.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$3(ctx) {
+    function create_fragment$4(ctx) {
     	let togglebutton;
     	let current;
 
@@ -19150,7 +19150,7 @@
     	};
     }
 
-    function instance$2($$self, $$props, $$invalidate) {
+    function instance$3($$self, $$props, $$invalidate) {
     	let $devicesLoaded;
     	component_subscribe($$self, devicesLoaded, $$value => $$invalidate(0, $devicesLoaded = $$value));
 
@@ -19277,13 +19277,13 @@
     class AutoPlant extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$2, create_fragment$3, safe_not_equal, {});
+    		init(this, options, instance$3, create_fragment$4, safe_not_equal, {});
     	}
     }
 
     /* src\scripts\farmchain\AutoHarvest.svelte generated by Svelte v4.2.9 */
 
-    function create_fragment$2(ctx) {
+    function create_fragment$3(ctx) {
     	let togglebutton;
     	let updating_enabled;
     	let current;
@@ -19339,7 +19339,7 @@
     	};
     }
 
-    function instance$1($$self, $$props, $$invalidate) {
+    function instance$2($$self, $$props, $$invalidate) {
     	let autoHarvesting = false;
 
     	socketManager.addEventListener('deviceChanges', e => {
@@ -19369,7 +19369,7 @@
     class AutoHarvest extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$1, create_fragment$2, safe_not_equal, {});
+    		init(this, options, instance$2, create_fragment$3, safe_not_equal, {});
     	}
     }
 
@@ -19915,7 +19915,7 @@
     	};
     }
 
-    function create_fragment$1(ctx) {
+    function create_fragment$2(ctx) {
     	let group;
     	let current;
 
@@ -19962,7 +19962,136 @@
     class Farmchain extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, null, create_fragment$1, safe_not_equal, {});
+    		init(this, options, null, create_fragment$2, safe_not_equal, {});
+    	}
+    }
+
+    /* src\scripts\2d\Speedup.svelte generated by Svelte v4.2.9 */
+
+    function create_fragment$1(ctx) {
+    	let togglebutton;
+    	let updating_enabled;
+    	let current;
+
+    	function togglebutton_enabled_binding(value) {
+    		/*togglebutton_enabled_binding*/ ctx[3](value);
+    	}
+
+    	let togglebutton_props = {
+    		disabled: !/*$storesLoaded*/ ctx[1],
+    		onText: "Speedup: On",
+    		offText: "Speedup: Off",
+    		hotkeyId: "speedup"
+    	};
+
+    	if (/*speedupEnabled*/ ctx[0] !== void 0) {
+    		togglebutton_props.enabled = /*speedupEnabled*/ ctx[0];
+    	}
+
+    	togglebutton = new ToggleButton({ props: togglebutton_props });
+    	binding_callbacks.push(() => bind(togglebutton, 'enabled', togglebutton_enabled_binding));
+    	togglebutton.$on("click", /*click_handler*/ ctx[4]);
+
+    	return {
+    		c() {
+    			create_component(togglebutton.$$.fragment);
+    		},
+    		m(target, anchor) {
+    			mount_component(togglebutton, target, anchor);
+    			current = true;
+    		},
+    		p(ctx, [dirty]) {
+    			const togglebutton_changes = {};
+    			if (dirty & /*$storesLoaded*/ 2) togglebutton_changes.disabled = !/*$storesLoaded*/ ctx[1];
+
+    			if (!updating_enabled && dirty & /*speedupEnabled*/ 1) {
+    				updating_enabled = true;
+    				togglebutton_changes.enabled = /*speedupEnabled*/ ctx[0];
+    				add_flush_callback(() => updating_enabled = false);
+    			}
+
+    			togglebutton.$set(togglebutton_changes);
+    		},
+    		i(local) {
+    			if (current) return;
+    			transition_in(togglebutton.$$.fragment, local);
+    			current = true;
+    		},
+    		o(local) {
+    			transition_out(togglebutton.$$.fragment, local);
+    			current = false;
+    		},
+    		d(detaching) {
+    			destroy_component(togglebutton, detaching);
+    		}
+    	};
+    }
+
+    function instance$1($$self, $$props, $$invalidate) {
+    	let $storesLoaded;
+    	component_subscribe($$self, storesLoaded, $$value => $$invalidate(1, $storesLoaded = $$value));
+    	const speedupMultiplier = 490 / 357; // gathered from some testing, any higher and we get teleported back
+    	let nativeSpeed = 310;
+    	let lastSetTo = undefined;
+    	let speedupEnabled = false;
+
+    	function enableSpeedup(value) {
+    		var _a, _b;
+
+    		if (!((_b = (_a = getUnsafeWindow()) === null || _a === void 0
+    		? void 0
+    		: _a.stores) === null || _b === void 0
+    		? void 0
+    		: _b.me)) return;
+
+    		if (!value) {
+    			getUnsafeWindow().stores.me.movementSpeed = nativeSpeed;
+    		} else {
+    			let newSpeed = nativeSpeed * speedupMultiplier;
+    			lastSetTo = newSpeed;
+    			getUnsafeWindow().stores.me.movementSpeed = newSpeed;
+    		}
+    	}
+
+    	setInterval(checkSpeed, 500);
+
+    	function checkSpeed() {
+    		var _a, _b;
+
+    		if (!((_b = (_a = getUnsafeWindow()) === null || _a === void 0
+    		? void 0
+    		: _a.stores) === null || _b === void 0
+    		? void 0
+    		: _b.me)) return;
+
+    		let currentSpeed = getUnsafeWindow().stores.me.movementSpeed;
+
+    		if (currentSpeed !== lastSetTo) {
+    			nativeSpeed = currentSpeed;
+    			if (speedupEnabled) enableSpeedup(true);
+    		}
+    	}
+
+    	function togglebutton_enabled_binding(value) {
+    		speedupEnabled = value;
+    		$$invalidate(0, speedupEnabled);
+    	}
+
+    	const click_handler = e => enableSpeedup(e.detail);
+
+    	return [
+    		speedupEnabled,
+    		$storesLoaded,
+    		enableSpeedup,
+    		togglebutton_enabled_binding,
+    		click_handler
+    	];
+    }
+
+    class Speedup extends SvelteComponent {
+    	constructor(options) {
+    		super();
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
     	}
     }
 
@@ -19972,7 +20101,7 @@
     	append_styles(target, "svelte-1byew0x", "#gc-hud.svelte-1byew0x{position:absolute;top:0;left:0;z-index:9999999999;width:100vw;height:100vh;pointer-events:none;color:var(--textColor)}");
     }
 
-    // (32:12) <Group name="Menu Appearance">
+    // (33:12) <Group name="Menu Appearance">
     function create_default_slot_5(ctx) {
     	let colorpicker0;
     	let t0;
@@ -20062,7 +20191,7 @@
     	};
     }
 
-    // (38:12) <Group name="Button Appearance">
+    // (39:12) <Group name="Button Appearance">
     function create_default_slot_4(ctx) {
     	let colorpicker0;
     	let t;
@@ -20118,7 +20247,7 @@
     	};
     }
 
-    // (30:8) <Group name="HUD Appearance">
+    // (31:8) <Group name="HUD Appearance">
     function create_default_slot_3(ctx) {
     	let colorpicker;
     	let t0;
@@ -20209,7 +20338,7 @@
     	};
     }
 
-    // (29:4) <Menu name="Customization">
+    // (30:4) <Menu name="Customization">
     function create_default_slot_2(ctx) {
     	let group;
     	let t0;
@@ -20291,20 +20420,23 @@
     	};
     }
 
-    // (48:4) <Menu name="General Cheats">
+    // (49:4) <Menu name="General Cheats">
     function create_default_slot_1(ctx) {
     	let autoanswer;
     	let t0;
     	let instantuse;
     	let t1;
-    	let playerhighlighter;
+    	let speedup;
     	let t2;
-    	let freecam;
+    	let playerhighlighter;
     	let t3;
+    	let freecam;
+    	let t4;
     	let hideenergypopup;
     	let current;
     	autoanswer = new AutoAnswer({});
     	instantuse = new InstantUse({});
+    	speedup = new Speedup({});
     	playerhighlighter = new PlayerHighlighter({});
     	freecam = new Freecam({});
     	hideenergypopup = new HideEnergyPopup({});
@@ -20315,10 +20447,12 @@
     			t0 = space();
     			create_component(instantuse.$$.fragment);
     			t1 = space();
-    			create_component(playerhighlighter.$$.fragment);
+    			create_component(speedup.$$.fragment);
     			t2 = space();
-    			create_component(freecam.$$.fragment);
+    			create_component(playerhighlighter.$$.fragment);
     			t3 = space();
+    			create_component(freecam.$$.fragment);
+    			t4 = space();
     			create_component(hideenergypopup.$$.fragment);
     		},
     		m(target, anchor) {
@@ -20326,10 +20460,12 @@
     			insert(target, t0, anchor);
     			mount_component(instantuse, target, anchor);
     			insert(target, t1, anchor);
-    			mount_component(playerhighlighter, target, anchor);
+    			mount_component(speedup, target, anchor);
     			insert(target, t2, anchor);
-    			mount_component(freecam, target, anchor);
+    			mount_component(playerhighlighter, target, anchor);
     			insert(target, t3, anchor);
+    			mount_component(freecam, target, anchor);
+    			insert(target, t4, anchor);
     			mount_component(hideenergypopup, target, anchor);
     			current = true;
     		},
@@ -20337,6 +20473,7 @@
     			if (current) return;
     			transition_in(autoanswer.$$.fragment, local);
     			transition_in(instantuse.$$.fragment, local);
+    			transition_in(speedup.$$.fragment, local);
     			transition_in(playerhighlighter.$$.fragment, local);
     			transition_in(freecam.$$.fragment, local);
     			transition_in(hideenergypopup.$$.fragment, local);
@@ -20345,6 +20482,7 @@
     		o(local) {
     			transition_out(autoanswer.$$.fragment, local);
     			transition_out(instantuse.$$.fragment, local);
+    			transition_out(speedup.$$.fragment, local);
     			transition_out(playerhighlighter.$$.fragment, local);
     			transition_out(freecam.$$.fragment, local);
     			transition_out(hideenergypopup.$$.fragment, local);
@@ -20356,10 +20494,12 @@
     				detach(t1);
     				detach(t2);
     				detach(t3);
+    				detach(t4);
     			}
 
     			destroy_component(autoanswer, detaching);
     			destroy_component(instantuse, detaching);
+    			destroy_component(speedup, detaching);
     			destroy_component(playerhighlighter, detaching);
     			destroy_component(freecam, detaching);
     			destroy_component(hideenergypopup, detaching);
@@ -20367,7 +20507,7 @@
     	};
     }
 
-    // (56:4) <Menu name="Gamemode Specific Cheats">
+    // (58:4) <Menu name="Gamemode Specific Cheats">
     function create_default_slot(ctx) {
     	let classicautopurchase;
     	let t0;

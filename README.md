@@ -36,6 +36,7 @@ Hitting backslash (\\) at any point will hide the overlay. Hitting it again will
 - **Freecam**: Allows you to move your camera around the map freely, or spectate other players.
 - **Player Highlighter**: Draws arrows pointing towards teammates/enemies, allowing you to easily find them.
 - **Instant Use**: Will instantly use any interactible object rather than needing to hold down enter for a few seconds.
+- **Speedup**: Lets you move faster around 1.4x faster than usual. This stacks with in-game speed upgrades.
 
 #### Gamemode Specific
 

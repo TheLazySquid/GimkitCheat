@@ -7,7 +7,7 @@ This is a new version of GimkitCheat. If you want to use the older version, it c
 #### Tampermonkey (recommended)
 
 1. Install the [Tampermonkey](https://www.tampermonkey.net/) extension for your browser.
-2. Click [here](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/v4/build/bundle.user.js) to install the script.
+2. Click [here](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js) to install the script.
 
 #### Copy/Paste
 

@@ -3,9 +3,9 @@
     import { storesLoaded } from '../../stores';
     import ToggleButton from '../../hud/components/ToggleButton.svelte';
 
-    const speedupMultiplier = 490/357; // gathered from some testing, any higher and we get teleported back
+    const speedupMultiplier = 600/500; // gathered from some testing, any higher and we get teleported back
 
-    let nativeSpeed: number = 310;
+    let nativeSpeed: number = 550;
     let lastSetTo: undefined | number = undefined;
     let speedupEnabled = false;
 
@@ -21,7 +21,7 @@
         }
     }
 
-    setInterval(checkSpeed, 500);
+    setInterval(checkSpeed, 8000); // experimented and with this you only slightly get laggedback
 
     function checkSpeed() {
         if(!getUnsafeWindow()?.stores?.me) return;

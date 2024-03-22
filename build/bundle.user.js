@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Gimkit Cheat Testing
+// @name        Gimkit Cheat
 // @description A userscript that allows you to cheat across various gimkit games
 // @namespace   https://www.github.com/TheLazySquid/GimkitCheat/tree/v4
 // @match       https://www.gimkit.com/join*

@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Gimkit Cheat
+// @name        Gimkit Cheat Testing
 // @description A userscript that allows you to cheat across various gimkit games
 // @namespace   https://www.github.com/TheLazySquid/GimkitCheat/tree/v4
 // @match       https://www.gimkit.com/join*
@@ -1615,7 +1615,7 @@
                     c += h, i[++a] && (l = i[a].t);
                 } let y = Array.from(new Uint8Array(o));
             y.unshift(4);
-            return new Uint8Array(y).buffer 
+            return new Uint8Array(y).buffer
         }(o)
     }
 
@@ -2270,13 +2270,13 @@
                     bytes.push(0xc4, length);
                     size = 2;
                 }
-                else 
+                else
                 // bin 16
                 if (length < 0x10000) {
                     bytes.push(0xc5, length >> 8, length);
                     size = 3;
                 }
-                else 
+                else
                 // bin 32
                 if (length < 0x100000000) {
                     bytes.push(0xc6, length >> 24, length >> 16, length >> 8, length);
@@ -3055,13 +3055,13 @@
     	                    bytes.push(0xc4, length);
     	                    size = 2;
     	                }
-    	                else 
+    	                else
     	                // bin 16
     	                if (length < 0x10000) {
     	                    bytes.push(0xc5, length >> 8, length);
     	                    size = 3;
     	                }
-    	                else 
+    	                else
     	                // bin 32
     	                if (length < 0x100000000) {
     	                    bytes.push(0xc6, length >> 24, length >> 16, length >> 8, length);
@@ -7678,7 +7678,7 @@
     	    Object.defineProperty(exports, '__esModule', { value: true });
 
     	}));
-    	
+
     } (colyseus, colyseus.exports));
 
     var colyseusExports = colyseus.exports;
@@ -11079,7 +11079,7 @@
 
     	    Object.defineProperty(exports, '__esModule', { value: true });
 
-    	})); 
+    	}));
     } (umd, umd.exports));
 
     var umdExports = umd.exports;
@@ -11173,7 +11173,7 @@
     	    return length + 1;
     	}
     	exports.utf8Length = utf8Length;
-    	
+
     } (Protocol));
 
     class SchemaSerializer extends EventTarget {
@@ -11990,7 +11990,7 @@
     	};
     }
 
-    // (47:39) 
+    // (47:39)
     function create_if_block_3(ctx) {
     	let t;
 
@@ -20030,8 +20030,8 @@
     function instance$1($$self, $$props, $$invalidate) {
     	let $storesLoaded;
     	component_subscribe($$self, storesLoaded, $$value => $$invalidate(1, $storesLoaded = $$value));
-    	const speedupMultiplier = 490 / 357; // gathered from some testing, any higher and we get teleported back
-    	let nativeSpeed = 310;
+    	const speedupMultiplier = 600 / 500; // gathered from some testing, any higher and we get teleported back
+    	let nativeSpeed = 550;
     	let lastSetTo = undefined;
     	let speedupEnabled = false;
 
@@ -20053,7 +20053,7 @@
     		}
     	}
 
-    	setInterval(checkSpeed, 500);
+    	setInterval(checkSpeed, 8000);
 
     	function checkSpeed() {
     		var _a, _b;
@@ -20835,7 +20835,7 @@
     try {
         script.appendChild(document.createTextNode(text));
         document.head.appendChild(script);
-    } catch(e) { 
+    } catch(e) {
         script.text = text;
         document.head.appendChild(script);
     }

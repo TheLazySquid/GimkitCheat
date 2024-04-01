@@ -68,7 +68,7 @@ function addModifiedScript(src: string) {
         alert("GC: Failed to find the correct script to modify. Please open an issue on GitHub.")
         return;
     }
-    text = text.replace(endRegex, 'assignment:new(0,'+endRes[1]+'.default)};window.stores='+varRes[1]+';window.storesLoaded.set(true);')
+    text = text.replace(endRegex, 'assignment:new(0,'+endRes[1]+'.default)};window.stores='+varRes[1]+';window.storesLoaded.set(true);console.log("GC: Stores loaded via intercept");')
 
     const script = document.createElement('script');
     try {

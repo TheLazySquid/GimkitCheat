@@ -52,7 +52,7 @@ export default {
     plugins: [
         typescript({
             compilerOptions: {
-                target: "es6"
+                target: "es2022"
             }
         }),
         commonjs(),

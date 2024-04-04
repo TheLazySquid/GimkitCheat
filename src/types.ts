@@ -18,6 +18,7 @@ export interface IGimkitWindow extends Window {
     stores: any;
     storesLoaded: Writable<boolean>;
     WebSocket: typeof WebSocket;
+    Phaser: any;
 }
 
 export interface IColors {

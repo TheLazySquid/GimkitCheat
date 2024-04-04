@@ -24,6 +24,7 @@
     import FloorIsLava from "../scripts/floorIsLava/FloorIsLava.svelte";
     import Farmchain from "../scripts/farmchain/Farmchain.svelte";
     import Movement from "../scripts/2d/Movement.svelte";
+    import DigItUp from "../scripts/digItUp/DigItUp.svelte";
 
     keybindManager.addKeybind(new Set(["\\"]), () => {
         showHud.update(v => !v);
@@ -62,6 +63,7 @@
     <Menu name="Gamemode Specific Cheats">
         <ClassicAutoPurchase />
         <RichAutoPurchase />
+        <DigItUp />
         <Ctf />
         <Tag />
         <OneWayOut />

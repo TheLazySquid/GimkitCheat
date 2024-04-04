@@ -2,8 +2,7 @@ import createHud from "./hud/core";
 import socketManager from './network/socketManager'
 import modifyScripts from './modifyScripts'
 import Parcel from "./parcelIntercept";
-import { getUnsafeWindow } from "./utils";
-import { storesLoaded } from "./stores";
+import { exposeValues } from "./exposeValues";
 
 // confirm that no amplitude.com script exists
 let gameLoaded = document.querySelector('script[src*="amplitude.com"]') !== null;
@@ -14,11 +13,7 @@ if(gameLoaded) {
     if(!window["parcelRequire388b"]) {
         // add in the parcel intercept as a backup
         let parcel = new Parcel();
-        parcel.interceptRequire(null, exports => exports?.default?.characters, exports => {
-            getUnsafeWindow().stores = exports.default;
-            storesLoaded.set(true);
-            console.log("GC: Stores loaded via parcel")
-        })
+        exposeValues(parcel);
     } else {
         modifyScripts();
     }

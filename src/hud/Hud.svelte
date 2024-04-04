@@ -23,7 +23,7 @@
     import Snowbrawl from "../scripts/snowbrawl/Snowbrawl.svelte";
     import FloorIsLava from "../scripts/floorIsLava/FloorIsLava.svelte";
     import Farmchain from "../scripts/farmchain/Farmchain.svelte";
-    import Speedup from "../scripts/2d/Speedup.svelte";
+    import Movement from "../scripts/2d/Movement.svelte";
 
     keybindManager.addKeybind(new Set(["\\"]), () => {
         showHud.update(v => !v);
@@ -53,7 +53,7 @@
     <Menu name="General Cheats">
         <AutoAnswer />
         <InstantUse />
-        <Speedup />
+        <Movement />
         <PlayerHighlighter />
         <Freecam />
         <HideEnergyPopup />

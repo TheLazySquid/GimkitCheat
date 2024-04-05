@@ -182,6 +182,63 @@
 		if (tasks.size !== 0) raf(run_tasks);
 	}
 
+// for dig it up
+
+await fetch("https://www.gimkit.com/api/matchmaker/intent/map/play/create", {
+    "credentials": "include",
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Content-Type": "application/json",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin"
+    },
+    "referrer": "https://www.gimkit.com/view/64400b58a72beb0032990c05",
+    "body": "{\"experienceId\":\"660b4395181e0b002df0d413\",\"matchmakerOptions\":{\"group\":\"\",\"joinInLate\":true},\"options\":{\"hookOptions\":{\"kit\":\"64400b58a72beb0032990c05\",\"duration\":8,\"energyPerQuestion\":1000},\"cosmosBlocked\":false}}",
+    "method": "POST",
+    "mode": "cors"
+});
+
+// for dld
+await fetch("https://www.gimkit.com/api/matchmaker/intent/map/play/create", {
+    "credentials": "include",
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Content-Type": "application/json",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin"
+    },
+    "referrer": "https://www.gimkit.com/view/64400b58a72beb0032990c05",
+    "body": "{\"experienceId\":\"65397ce54a3a66002c7404ca\",\"matchmakerOptions\":{\"group\":\"\",\"joinInLate\":true},\"options\":{\"hookOptions\":{\"assignmentSummitGoal\":\"Summit 3\",\"assignmentQuestionGoal\":75,\"kit\":\"64400b58a72beb0032990c05\",\"gameDuration\":10,\"checkpoints\":\"Off\",\"energyPerQuestion\":1000},\"cosmosBlocked\":false}}",
+    "method": "POST",
+    "mode": "cors"
+});
+
+// for farmchain
+
+await fetch("https://www.gimkit.com/api/matchmaker/intent/map/play/create", {
+    "credentials": "include",
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Content-Type": "application/json",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin"
+    },
+    "referrer": "https://www.gimkit.com/view/64400b58a72beb0032990c05",
+    "body": "{\"experienceId\":\"634c59976e95c20021852eb9\",\"matchmakerOptions\":{\"group\":\"\",\"joinInLate\":true},\"options\":{\"hookOptions\":{\"game duration\":15,\"teams\":\"Three Teams\",\"kit\":\"64400b58a72beb0032990c05\",\"cashGoal\":200,\"Energy Per Question\":2000,\"useQuestionGoal\":\"No\",\"questionGoal\":75},\"cosmosBlocked\":false}}",
+    "method": "POST",
+    "mode": "cors"
+});
+
+	
 	/**
 	 * Creates a new task that runs on each raf frame
 	 * until it returns a falsy value or is aborted

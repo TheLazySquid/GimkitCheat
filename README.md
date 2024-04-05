@@ -42,6 +42,7 @@ Hitting backslash (\\) at any point will hide the overlay. Hitting it again will
 
 - **Auto Purchase**: Automatically purchases upgrades for you. Works for classic and similar gamemodes.
 - **Super Rich Mode**: Identical to Auto Purchase, but with adjusted values for Super Rich mode.
+- **Dig it Up**: Allows you to mine extremely fast.
 - **Trust No One**: Shows you who the imposters are in Trust No One mode. This does not work if you join mid-game.
 - **Capture the Flag**: Allows you to purchase upgrades and build walls anywhere.
 - **Tag**: Allows you to purchase upgrades anywhere.
@@ -53,5 +54,5 @@ Hitting backslash (\\) at any point will hide the overlay. Hitting it again will
 #### Cosmetic
 
 - **Hud Customization**: The hud is easily customizable, allowing you to change the color of buttons, menus, groups and text.
-- **Cosmetic Picker**: Allows you to pick any skin or trail to use. This will only be visible to you; no one else will see it. To equip a cosmetic you need to know it's internal id. This is usually listed on the [Gimkit Wiki](https://gimkit.fandom.com/wiki/Cosmetics).
+- **Cosmetic Picker**: Allows you to pick any skin or trail to use. This will only be visible to you; no one else will see it. There is an unmaintained list of cosmetics you can equip, or you can enter its internal ID to use it. This is usually listed on the [Gimkit Wiki](https://gimkit.fandom.com/wiki/Cosmetics).
 - **Custom Theme**: Allows you to create a custom theme, or use any built-in theme. This works in all gamemodes, even ones that don't normally allow you to change your theme.

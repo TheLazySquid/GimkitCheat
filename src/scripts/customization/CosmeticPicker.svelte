@@ -1,10 +1,11 @@
 <script lang="ts">
     import Group from '../../hud/Group.svelte';
     import Button from '../../hud/components/Button.svelte';
-    import Input from '../../hud/components/Input.svelte';
     import { playerId } from '../../stores';
     import { getUnsafeWindow } from '../../utils';
     import { serializer } from '../../network/schemaDecode';
+    import { knownSkins, knownTrails } from './knownCosmetics';
+    import InputWithSelect from '../../hud/components/InputWithSelect.svelte';
 
     let skinId: string = '';
     let trailId: string = '';
@@ -45,8 +46,14 @@
     <div class="disclaimer">
         These only work client-side. Nobody else can see these cosmetics.
     </div>
-    <Input name="Skin Id" bind:value={skinId} />
-    <Input name="Trail Id" bind:value={trailId} />
+    <div class="description">
+        Skin ID
+    </div>
+    <InputWithSelect selectOptions={knownSkins} bind:value={skinId} />
+    <div class="description">
+        Trail ID
+    </div>
+    <InputWithSelect selectOptions={knownTrails} bind:value={trailId} />
     <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
         Apply
     </Button>
@@ -56,6 +63,11 @@
     .disclaimer {
         margin-left: 5px;
         margin-right: 5px;
+        text-align: center;
+    }
+
+    .description {
+        width: 100%;
         text-align: center;
     }
 </style>

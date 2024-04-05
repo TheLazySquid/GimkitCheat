@@ -22,7 +22,7 @@
             x: body.x,
             y: body.y
         })
-    }, 50)
+    }, 0.001)
 </script>
 
 <Group name="Dig it Up">

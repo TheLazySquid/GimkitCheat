@@ -1,6 +1,6 @@
 {
   "name": "gimkitcheat",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "A script to cheat in various Gimkit gamemodes",
   "main": "build/bundle.js",
   "type": "module",

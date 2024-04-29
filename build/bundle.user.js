@@ -22116,6 +22116,7 @@
 	    // }
 	    setup() {
 	        let requireHook;
+	        let nativeParcel = getUnsafeWindow()["parcelRequire388b"];
 	        ((requireHook = (moduleName) => {
 	            if (moduleName in this._parcelModuleCache) {
 	                return this._parcelModuleCache[moduleName].exports;
@@ -22153,6 +22154,8 @@
 	            if (moduleName in this._parcelModuleCache) {
 	                delete this._parcelModuleCache[moduleName];
 	            }
+	            if (nativeParcel)
+	                nativeParcel.register(moduleName, moduleCallback);
 	        });
 	        Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {
 	            value: requireHook,

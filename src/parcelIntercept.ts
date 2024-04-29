@@ -40,7 +40,8 @@ export default class Parcel extends EventTarget {
 
     setup() {
         let requireHook: (moduleName: string) => void;
-    
+        let nativeParcel = getUnsafeWindow()["parcelRequire388b"];
+
         ((requireHook = (moduleName) => {
             if (moduleName in this._parcelModuleCache) {
                 return this._parcelModuleCache[moduleName].exports;
@@ -86,6 +87,8 @@ export default class Parcel extends EventTarget {
             if (moduleName in this._parcelModuleCache) {
                 delete this._parcelModuleCache[moduleName];
             }
+
+            if(nativeParcel) nativeParcel.register(moduleName, moduleCallback);
         });
 
         Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {

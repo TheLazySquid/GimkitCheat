@@ -3,7 +3,7 @@
 
 import { getUnsafeWindow } from "./utils";
 
-type Intercept = { id?: string, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean };
+type Intercept = { match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean };
 
 export default class Parcel extends EventTarget {
     _parcelModuleCache = {};
@@ -17,10 +17,9 @@ export default class Parcel extends EventTarget {
         this.setup();
     }
 
-    interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {
+    interceptRequire(match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {
         if(!match || !callback) throw new Error('match and callback are required');
         let intercept: Intercept = { match, callback, once };
-        if(id) intercept.id = id;
         this.reqIntercepts.push(intercept);
 
         // return a cancel function
@@ -29,14 +28,6 @@ export default class Parcel extends EventTarget {
             if(index !== -1) this.reqIntercepts.splice(index, 1);
         }
     }
-
-    stopIntercepts(id: string) {
-        this.reqIntercepts = this.reqIntercepts.filter(intercept => intercept.id !== id);
-    }
-    
-    // interceptRegister(match: string | RegExp, callback: (exports: any) => any) {
-    //     this.regIntercepts.push({ match, callback });
-    // }
 
     setup() {
         let requireHook: (moduleName: string) => void;

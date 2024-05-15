@@ -20020,13 +20020,13 @@
 	let physicsConsts = writable(null);
 	function exposeValues(parcel) {
 	    // get the stores object
-	    parcel.interceptRequire(null, exports => exports?.default?.characters, exports => {
+	    parcel.interceptRequire(exports => exports?.default?.characters, exports => {
 	        getUnsafeWindow().stores = exports.default;
 	        storesLoaded.set(true);
 	        console.log("GC: Stores loaded via parcel");
 	    });
 	    // get the physics constants
-	    parcel.interceptRequire(null, exports => exports?.CharacterPhysicsConsts, exports => {
+	    parcel.interceptRequire(exports => exports?.CharacterPhysicsConsts, exports => {
 	        physicsConsts.set(exports.CharacterPhysicsConsts);
 	        console.log("GC: Physics constants loaded");
 	    });
@@ -22079,12 +22079,10 @@
 	        super();
 	        this.setup();
 	    }
-	    interceptRequire(id, match, callback, once = false) {
+	    interceptRequire(match, callback, once = false) {
 	        if (!match || !callback)
 	            throw new Error('match and callback are required');
 	        let intercept = { match, callback, once };
-	        if (id)
-	            intercept.id = id;
 	        this.reqIntercepts.push(intercept);
 	        // return a cancel function
 	        return () => {
@@ -22093,12 +22091,6 @@
 	                this.reqIntercepts.splice(index, 1);
 	        };
 	    }
-	    stopIntercepts(id) {
-	        this.reqIntercepts = this.reqIntercepts.filter(intercept => intercept.id !== id);
-	    }
-	    // interceptRegister(match: string | RegExp, callback: (exports: any) => any) {
-	    //     this.regIntercepts.push({ match, callback });
-	    // }
 	    setup() {
 	        let requireHook;
 	        let nativeParcel = getUnsafeWindow()["parcelRequire388b"];
@@ -22157,14 +22149,9 @@
 	    alert("This script can only be run before you join the game. Please reload the page and try again.");
 	}
 	else {
-	    if (!window["parcelRequire388b"]) {
-	        // add in the parcel intercept as a backup
-	        let parcel = new Parcel();
-	        exposeValues(parcel);
-	    }
-	    else {
-	        setup();
-	    }
+	    let parcel = new Parcel();
+	    exposeValues(parcel);
+	    setup();
 	    socketManager.setup();
 	    createHud();
 	}

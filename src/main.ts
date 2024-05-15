@@ -10,13 +10,9 @@ let gameLoaded = document.querySelector('script[src*="amplitude.com"]') !== null
 if(gameLoaded) {
     alert("This script can only be run before you join the game. Please reload the page and try again.")
 } else {
-    if(!window["parcelRequire388b"]) {
-        // add in the parcel intercept as a backup
-        let parcel = new Parcel();
-        exposeValues(parcel);
-    } else {
-        modifyScripts();
-    }
+    let parcel = new Parcel();
+    exposeValues(parcel);
+    modifyScripts();
 
     socketManager.setup();
     createHud();

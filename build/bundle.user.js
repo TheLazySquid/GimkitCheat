@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js
-// @version     1.1.5
+// @version     1.1.6
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_deleteValue
@@ -20456,17 +20456,17 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[8] = list[i];
+		child_ctx[9] = list[i];
 		return child_ctx;
 	}
 
 	function get_each_context_1(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[8] = list[i];
+		child_ctx[9] = list[i];
 		return child_ctx;
 	}
 
-	// (48:4) {:else}
+	// (52:4) {:else}
 	function create_else_block_1(ctx) {
 		let each_1_anchor;
 		let current;
@@ -20500,7 +20500,7 @@
 				current = true;
 			},
 			p(ctx, dirty) {
-				if (dirty & /*buyPermit, permitDevices*/ 5) {
+				if (dirty & /*buyPermit, permitDevices*/ 9) {
 					each_value_1 = ensure_array_like(/*permitDevices*/ ctx[0]);
 					let i;
 
@@ -20555,33 +20555,68 @@
 		};
 	}
 
-	// (44:4) {#if permitDevices.length == 0}
+	// (47:4) {#if permitDevices.length == 0}
 	function create_if_block_1(ctx) {
 		let div;
+		let t1;
+		let button;
+		let current;
+
+		button = new Button({
+				props: {
+					$$slots: { default: [create_default_slot_4$1] },
+					$$scope: { ctx }
+				}
+			});
+
+		button.$on("click", /*checkDevices*/ ctx[2]);
 
 		return {
 			c() {
 				div = element("div");
 				div.textContent = "Permits haven't loaded in yet";
+				t1 = space();
+				create_component(button.$$.fragment);
 				attr(div, "class", "notLoaded svelte-1a7yjpn");
 			},
 			m(target, anchor) {
 				insert(target, div, anchor);
+				insert(target, t1, anchor);
+				mount_component(button, target, anchor);
+				current = true;
 			},
-			p: noop,
-			i: noop,
-			o: noop,
+			p(ctx, dirty) {
+				const button_changes = {};
+
+				if (dirty & /*$$scope*/ 16384) {
+					button_changes.$$scope = { dirty, ctx };
+				}
+
+				button.$set(button_changes);
+			},
+			i(local) {
+				if (current) return;
+				transition_in(button.$$.fragment, local);
+				current = true;
+			},
+			o(local) {
+				transition_out(button.$$.fragment, local);
+				current = false;
+			},
 			d(detaching) {
 				if (detaching) {
 					detach(div);
+					detach(t1);
 				}
+
+				destroy_component(button, detaching);
 			}
 		};
 	}
 
-	// (50:12) <Button on:click={() => buyPermit(device)}>
-	function create_default_slot_3$1(ctx) {
-		let t0_value = /*device*/ ctx[8].options.text + "";
+	// (54:12) <Button on:click={() => buyPermit(device)}>
+	function create_default_slot_5$1(ctx) {
+		let t0_value = /*device*/ ctx[9].options.text + "";
 		let t0;
 		let t1;
 
@@ -20595,7 +20630,7 @@
 				insert(target, t1, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*permitDevices*/ 1 && t0_value !== (t0_value = /*device*/ ctx[8].options.text + "")) set_data(t0, t0_value);
+				if (dirty & /*permitDevices*/ 1 && t0_value !== (t0_value = /*device*/ ctx[9].options.text + "")) set_data(t0, t0_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -20606,18 +20641,18 @@
 		};
 	}
 
-	// (49:8) {#each permitDevices as device}
+	// (53:8) {#each permitDevices as device}
 	function create_each_block_1(ctx) {
 		let button;
 		let current;
 
 		function click_handler() {
-			return /*click_handler*/ ctx[4](/*device*/ ctx[8]);
+			return /*click_handler*/ ctx[5](/*device*/ ctx[9]);
 		}
 
 		button = new Button({
 				props: {
-					$$slots: { default: [create_default_slot_3$1] },
+					$$slots: { default: [create_default_slot_5$1] },
 					$$scope: { ctx }
 				}
 			});
@@ -20636,7 +20671,7 @@
 				ctx = new_ctx;
 				const button_changes = {};
 
-				if (dirty & /*$$scope, permitDevices*/ 8193) {
+				if (dirty & /*$$scope, permitDevices*/ 16385) {
 					button_changes.$$scope = { dirty, ctx };
 				}
 
@@ -20657,8 +20692,27 @@
 		};
 	}
 
-	// (43:0) <Group name="Permits">
-	function create_default_slot_2$1(ctx) {
+	// (51:8) <Button on:click={checkDevices}>
+	function create_default_slot_4$1(ctx) {
+		let t;
+
+		return {
+			c() {
+				t = text("Retry");
+			},
+			m(target, anchor) {
+				insert(target, t, anchor);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(t);
+				}
+			}
+		};
+	}
+
+	// (46:0) <Group name="Permits">
+	function create_default_slot_3$1(ctx) {
 		let current_block_type_index;
 		let if_block;
 		let if_block_anchor;
@@ -20730,7 +20784,7 @@
 		};
 	}
 
-	// (61:4) {:else}
+	// (66:4) {:else}
 	function create_else_block(ctx) {
 		let each_1_anchor;
 		let current;
@@ -20764,7 +20818,7 @@
 				current = true;
 			},
 			p(ctx, dirty) {
-				if (dirty & /*buyPickaxe, pickaxeDevices*/ 10) {
+				if (dirty & /*buyPickaxe, pickaxeDevices*/ 18) {
 					each_value = ensure_array_like(/*pickaxeDevices*/ ctx[1]);
 					let i;
 
@@ -20819,33 +20873,68 @@
 		};
 	}
 
-	// (57:4) {#if pickaxeDevices.length == 0}
+	// (61:4) {#if pickaxeDevices.length == 0}
 	function create_if_block(ctx) {
 		let div;
+		let t1;
+		let button;
+		let current;
+
+		button = new Button({
+				props: {
+					$$slots: { default: [create_default_slot_1$1] },
+					$$scope: { ctx }
+				}
+			});
+
+		button.$on("click", /*checkDevices*/ ctx[2]);
 
 		return {
 			c() {
 				div = element("div");
 				div.textContent = "Pickaxes haven't loaded in yet";
+				t1 = space();
+				create_component(button.$$.fragment);
 				attr(div, "class", "notLoaded svelte-1a7yjpn");
 			},
 			m(target, anchor) {
 				insert(target, div, anchor);
+				insert(target, t1, anchor);
+				mount_component(button, target, anchor);
+				current = true;
 			},
-			p: noop,
-			i: noop,
-			o: noop,
+			p(ctx, dirty) {
+				const button_changes = {};
+
+				if (dirty & /*$$scope*/ 16384) {
+					button_changes.$$scope = { dirty, ctx };
+				}
+
+				button.$set(button_changes);
+			},
+			i(local) {
+				if (current) return;
+				transition_in(button.$$.fragment, local);
+				current = true;
+			},
+			o(local) {
+				transition_out(button.$$.fragment, local);
+				current = false;
+			},
 			d(detaching) {
 				if (detaching) {
 					detach(div);
+					detach(t1);
 				}
+
+				destroy_component(button, detaching);
 			}
 		};
 	}
 
-	// (63:12) <Button on:click={() => buyPickaxe(device)}>
-	function create_default_slot_1$1(ctx) {
-		let t0_value = /*device*/ ctx[8].options.text + "";
+	// (68:12) <Button on:click={() => buyPickaxe(device)}>
+	function create_default_slot_2$1(ctx) {
+		let t0_value = /*device*/ ctx[9].options.text + "";
 		let t0;
 		let t1;
 
@@ -20859,7 +20948,7 @@
 				insert(target, t1, anchor);
 			},
 			p(ctx, dirty) {
-				if (dirty & /*pickaxeDevices*/ 2 && t0_value !== (t0_value = /*device*/ ctx[8].options.text + "")) set_data(t0, t0_value);
+				if (dirty & /*pickaxeDevices*/ 2 && t0_value !== (t0_value = /*device*/ ctx[9].options.text + "")) set_data(t0, t0_value);
 			},
 			d(detaching) {
 				if (detaching) {
@@ -20870,18 +20959,18 @@
 		};
 	}
 
-	// (62:8) {#each pickaxeDevices as device}
+	// (67:8) {#each pickaxeDevices as device}
 	function create_each_block(ctx) {
 		let button;
 		let current;
 
 		function click_handler_1() {
-			return /*click_handler_1*/ ctx[5](/*device*/ ctx[8]);
+			return /*click_handler_1*/ ctx[6](/*device*/ ctx[9]);
 		}
 
 		button = new Button({
 				props: {
-					$$slots: { default: [create_default_slot_1$1] },
+					$$slots: { default: [create_default_slot_2$1] },
 					$$scope: { ctx }
 				}
 			});
@@ -20900,7 +20989,7 @@
 				ctx = new_ctx;
 				const button_changes = {};
 
-				if (dirty & /*$$scope, pickaxeDevices*/ 8194) {
+				if (dirty & /*$$scope, pickaxeDevices*/ 16386) {
 					button_changes.$$scope = { dirty, ctx };
 				}
 
@@ -20921,7 +21010,26 @@
 		};
 	}
 
-	// (56:0) <Group name="Pickaxes">
+	// (65:8) <Button on:click={checkDevices}>
+	function create_default_slot_1$1(ctx) {
+		let t;
+
+		return {
+			c() {
+				t = text("Retry");
+			},
+			m(target, anchor) {
+				insert(target, t, anchor);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(t);
+				}
+			}
+		};
+	}
+
+	// (60:0) <Group name="Pickaxes">
 	function create_default_slot$2(ctx) {
 		let current_block_type_index;
 		let if_block;
@@ -21003,7 +21111,7 @@
 		group0 = new Group({
 				props: {
 					name: "Permits",
-					$$slots: { default: [create_default_slot_2$1] },
+					$$slots: { default: [create_default_slot_3$1] },
 					$$scope: { ctx }
 				}
 			});
@@ -21031,14 +21139,14 @@
 			p(ctx, [dirty]) {
 				const group0_changes = {};
 
-				if (dirty & /*$$scope, permitDevices*/ 8193) {
+				if (dirty & /*$$scope, permitDevices*/ 16385) {
 					group0_changes.$$scope = { dirty, ctx };
 				}
 
 				group0.$set(group0_changes);
 				const group1_changes = {};
 
-				if (dirty & /*$$scope, pickaxeDevices*/ 8194) {
+				if (dirty & /*$$scope, pickaxeDevices*/ 16386) {
 					group1_changes.$$scope = { dirty, ctx };
 				}
 
@@ -21072,8 +21180,7 @@
 		let pickaxeDevices = [];
 		let pickaxePurchaseDevice = null;
 
-		devicesLoaded.subscribe(val => {
-			if (!val) return;
+		const checkDevices = () => {
 			let devices = getUnsafeWindow().stores.phaser.scene.worldManager.devices.allDevices;
 
 			// set permit devices
@@ -21087,6 +21194,11 @@
 
 			pickaxePurchaseDevice = pickaxeDevices.find(d => d.options.message);
 			$$invalidate(1, pickaxeDevices = pickaxeDevices.filter(d => d !== pickaxePurchaseDevice));
+		};
+
+		devicesLoaded.subscribe(val => {
+			if (!val) return;
+			checkDevices();
 		});
 
 		function buyPermit(device) {
@@ -21111,6 +21223,7 @@
 		return [
 			permitDevices,
 			pickaxeDevices,
+			checkDevices,
 			buyPermit,
 			buyPickaxe,
 			click_handler,
@@ -22072,6 +22185,10 @@
 	        // create a new script element with the modified url
 	        const script = document.createElement('script');
 	        script.type = "module";
+	        document.querySelector("#root")?.remove();
+	        let root = document.createElement('div');
+	        root.id = "root";
+	        document.body.appendChild(root);
 	        try {
 	            script.appendChild(document.createTextNode(text));
 	            document.head.appendChild(script);

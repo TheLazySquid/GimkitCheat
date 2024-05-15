@@ -87,6 +87,10 @@ function addModifiedScript(src: string) {
             // create a new script element with the modified url
             const script = document.createElement('script');
             script.type="module"
+            document.querySelector("#root")?.remove();
+            let root = document.createElement('div');
+            root.id = "root";
+            document.body.appendChild(root);
 
             try {
                 script.appendChild(document.createTextNode(text));

@@ -11,8 +11,7 @@
     let pickaxeDevices = [];
     let pickaxePurchaseDevice = null;
 
-    devicesLoaded.subscribe(val => {
-        if(!val) return;
+    const checkDevices = () => {
         let devices: any[] = getUnsafeWindow().stores.phaser.scene.worldManager.devices.allDevices;
 
         // set permit devices
@@ -26,6 +25,11 @@
 
         pickaxePurchaseDevice = pickaxeDevices.find(d => d.options.message);
         pickaxeDevices = pickaxeDevices.filter(d => d !== pickaxePurchaseDevice);
+    }
+
+    devicesLoaded.subscribe(val => {
+        if(!val) return;
+        checkDevices();
     })
 
     function buyPermit(device: any) {
@@ -54,6 +58,7 @@
         <div class="notLoaded">
             Permits haven't loaded in yet
         </div>
+        <Button on:click={checkDevices}>Retry</Button>
     {:else}
         {#each permitDevices as device}
             <Button on:click={() => buyPermit(device)}>
@@ -67,6 +72,7 @@
         <div class="notLoaded">
             Pickaxes haven't loaded in yet
         </div>
+        <Button on:click={checkDevices}>Retry</Button>
     {:else}
         {#each pickaxeDevices as device}
             <Button on:click={() => buyPickaxe(device)}>

@@ -46,10 +46,11 @@ Hitting backslash (\\) at any point will hide the overlay. Hitting it again will
 - **Trust No One**: Shows you who the imposters are in Trust No One mode. This does not work if you join mid-game.
 - **Capture the Flag**: Allows you to purchase upgrades and build walls anywhere.
 - **Tag**: Allows you to purchase upgrades anywhere.
-- **Snowbrawl**: Allows you to purchase medkits and shield cans anywhere.
+- **Snowbrawl**: Allows you to purchase medkits and shield cans anywhere, and fire snowballs faster.
 - **One Way Out**: Allows you to purchase medkits and shield cans anywhere.
 - **Farmchain**: Allows you to automatically plant seeds (assuming you have enough water and energy) and automatically harvest the plants once they grow. This will actually plant the seeds in plots that are supposed to be inaccessible until later in the game; the only thing stopping you from using them is the box on top that the script ignores. So while you might not see your plants growing, they are still being grown. Additionally, this script lets you purchase/unlock seeds anywhere.
 - **The Floor is Lava**: Lets you automatically build structures when you have enough money. Also allows you to hide the "You purchased/built x" popups. Leaving this off may cause them to pile up and lag your game.
+- **Knockback**: Allows you to fire faster.
 
 #### Cosmetic
 

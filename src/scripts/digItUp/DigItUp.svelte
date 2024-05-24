@@ -1,10 +1,10 @@
 <script lang="ts">
     import Group from "../../hud/Group.svelte";
     import Purchasers from "./Purchasers.svelte";
-    import Speedmine from "./Speedmine.svelte";
+    import Rapidfire from "../shared/Rapidfire.svelte";
 </script>
 
 <Group name="Dig it Up">
-    <Speedmine />
+    <Rapidfire message="Speedmine" hotkeyId="speedMine" />
     <Purchasers />
 </Group>

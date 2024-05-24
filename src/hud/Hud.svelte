@@ -25,6 +25,7 @@
     import Farmchain from "../scripts/farmchain/Farmchain.svelte";
     import Movement from "../scripts/2d/Movement.svelte";
     import DigItUp from "../scripts/digItUp/DigItUp.svelte";
+    import Knockback from "../scripts/knockback/Knockback.svelte";
 
     keybindManager.addKeybind(new Set(["\\"]), () => {
         showHud.update(v => !v);
@@ -64,6 +65,7 @@
         <ClassicAutoPurchase />
         <RichAutoPurchase />
         <DigItUp />
+        <Knockback />
         <Ctf />
         <Tag />
         <OneWayOut />

@@ -4,19 +4,10 @@ This is a new version of GimkitCheat. If you want to use the older version, it c
 
 ## Usage
 
-#### Tampermonkey (recommended)
+#### ViolentMonkey (recommended)
 
-1. Install the [Tampermonkey](https://www.tampermonkey.net/) extension for your browser.
+1. Install the [ViolentMonkey](https://violentmonkey.github.io/get-it/) extension for your browser.
 2. Click [here](https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.user.js) to install the script.
-
-<details>
-<summary>Enabling developer mode (needed on Chromium browsers)</summary>
-
-This is likely to happen on browsers such as Chrome because of anti-userscript measures. You can read the official Tampermonkey guide [here](https://www.tampermonkey.net/faq.php#Q209), but here's a quick step-by step to get it working.
-
-1. Go to the extensions page (`chrome://extensions`, `edge://extensions`, etc.).
-2. Enable developer mode. On Chrome, this is a switch in the top right.
-</details>
 
 #### Copy/Paste
 

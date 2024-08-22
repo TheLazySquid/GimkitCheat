@@ -13928,7 +13928,7 @@
 		append_styles(target, "svelte-1ychv30", ".disclaimer.svelte-1ychv30{margin-left:5px;margin-right:5px;text-align:center}.description.svelte-1ychv30{width:100%;text-align:center}");
 	}
 
-	// (54:4) <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
+	// (56:4) <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
 	function create_default_slot_1$5(ctx) {
 		let t;
 
@@ -13947,7 +13947,7 @@
 		};
 	}
 
-	// (42:0) <Group name="Cosmetic Picker">
+	// (44:0) <Group name="Cosmetic Picker">
 	function create_default_slot$i(ctx) {
 		let div0;
 		let t1;
@@ -14145,23 +14145,34 @@
 		let skinId = '';
 		let trailId = '';
 		let gotSkinId = false;
-		serializer.addEventListener('patch', onPatch);
 
-		function onPatch() {
-			var _a, _b;
+		let checkInterval = setInterval(
+			() => {
+				var _a, _b, _c, _d, _e, _f;
 
-			let character = (_b = (_a = serializer.getState()) === null || _a === void 0
-			? void 0
-			: _a.characters) === null || _b === void 0
-			? void 0
-			: _b[$playerId];
+				let char = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
+				? void 0
+				: _a.stores) === null || _b === void 0
+				? void 0
+				: _b.phaser) === null || _c === void 0
+				? void 0
+				: _c.scene) === null || _d === void 0
+				? void 0
+				: _d.characterManager) === null || _e === void 0
+				? void 0
+				: _e.characters) === null || _f === void 0
+				? void 0
+				: _f.get($playerId);
 
-			if (!character) return;
-			$$invalidate(0, skinId = character.appearance.skinId);
-			$$invalidate(1, trailId = character.appearance.trailId);
-			$$invalidate(2, gotSkinId = true);
-			serializer.removeEventListener('patch', onPatch);
-		}
+				if (char) {
+					$$invalidate(0, skinId = char.skin.skinId);
+					$$invalidate(1, trailId = char.characterTrail.currentAppearanceId);
+					$$invalidate(2, gotSkinId = true);
+					clearInterval(checkInterval);
+				}
+			},
+			500
+		);
 
 		function apply() {
 			var _a, _b, _c, _d, _e, _f;
@@ -14185,7 +14196,7 @@
 			if (skinId != "") {
 				let setSkinId = skinId;
 				if (!setSkinId.startsWith('character_')) setSkinId = 'character_' + setSkinId;
-				char.skin.updateSkin(setSkinId);
+				char.skin.updateSkin({ id: setSkinId });
 			}
 
 			if (trailId != "") {
@@ -14194,6 +14205,10 @@
 				char.characterTrail.updateAppearance(setTrailId);
 			}
 		}
+
+		onDestroy(() => {
+			clearInterval(checkInterval);
+		});
 
 		function inputwithselect0_value_binding(value) {
 			skinId = value;

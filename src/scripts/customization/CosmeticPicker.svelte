@@ -6,23 +6,21 @@
     import { serializer } from '../../network/schemaDecode';
     import { knownSkins, knownTrails } from './knownCosmetics';
     import InputWithSelect from '../../hud/components/InputWithSelect.svelte';
+    import { onDestroy } from 'svelte';
 
     let skinId: string = '';
     let trailId: string = '';
     let gotSkinId: boolean = false;
 
-    serializer.addEventListener('patch', onPatch);
-
-    function onPatch () {
-        let character = serializer.getState()?.characters?.[$playerId];
-        if(!character) return;
-
-        skinId = character.appearance.skinId;
-        trailId = character.appearance.trailId;
-        gotSkinId = true;
-
-        serializer.removeEventListener('patch', onPatch);
-    }
+    let checkInterval = setInterval(() => {
+        let char = getUnsafeWindow()?.stores?.phaser?.scene?.characterManager?.characters?.get($playerId)
+        if(char) {
+            skinId = char.skin.skinId;
+            trailId = char.characterTrail.currentAppearanceId;
+            gotSkinId = true;
+            clearInterval(checkInterval);
+        }
+    }, 500);
 
     function apply () {
         let char = getUnsafeWindow()?.stores?.phaser?.scene?.characterManager?.characters?.get($playerId)
@@ -31,7 +29,7 @@
         if(skinId != "") {
             let setSkinId = skinId;
             if(!setSkinId.startsWith('character_')) setSkinId = 'character_' + setSkinId;
-            char.skin.updateSkin(setSkinId);
+            char.skin.updateSkin({ id: setSkinId });
         }
 
         if(trailId != "") {
@@ -40,6 +38,10 @@
             char.characterTrail.updateAppearance(setTrailId);
         }
     }
+
+    onDestroy(() => {
+        clearInterval(checkInterval);
+    })
 </script>
 
 <Group name="Cosmetic Picker">

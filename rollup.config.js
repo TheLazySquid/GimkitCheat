@@ -50,11 +50,7 @@ export default {
     input: 'src/main.ts',
     output,
     plugins: [
-        typescript({
-            compilerOptions: {
-                target: "es2022"
-            }
-        }),
+        typescript(),
         commonjs(),
         svelte({
             emitCss: false,

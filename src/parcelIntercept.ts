@@ -14,7 +14,68 @@ export default class Parcel extends EventTarget {
     constructor() {
         super();
 
-        this.setup();
+        let existingScripts = document.querySelectorAll<HTMLScriptElement>('script[src*="index"]:not([nomodule])');
+        if(existingScripts.length > 0) {
+            this.readyToIntercept = false;
+            window.addEventListener('load', () => {
+                this.setup();
+                this.reloadExistingScripts(existingScripts);
+            })
+        }
+        else this.setup();
+
+        (getUnsafeWindow() as any).decachedImport = this.decachedImport.bind(this);
+    }
+
+    async reloadExistingScripts(existingScripts: NodeListOf<HTMLScriptElement>) {
+        // nuke the dom
+        this.nukeDom();
+
+        this.readyToIntercept = true;
+        this.emptyModules();
+
+        existingScripts.forEach(script => {
+            // re-import the script since it's already loaded
+            console.log(script, 'has already loaded, re-importing...')
+            
+            this.decachedImport(script.src);
+
+            script.remove();
+        });
+    }
+
+    nukeDom() {
+        document.querySelector("#root")?.remove();
+        let newRoot = document.createElement('div');
+        newRoot.id = 'root';
+        document.body.appendChild(newRoot);
+        
+        // remove all global variables
+        let vars = ["__mobxGlobals", "__mobxInstanceCount"]
+        for(let v of vars) {
+            if(v in window) delete window[v];
+        }
+    }
+
+    async decachedImport(url: string) {
+        let src = new URL(url, location.origin).href;
+
+        let res = await fetch(src);
+        let text = await res.text();
+
+        // nasty hack to prevent the browser from caching other scripts
+        text = text.replaceAll('import(', 'window.decachedImport(');
+        text = text.replaceAll('import.meta.url', `'${src}'`)
+
+        let blob = new Blob([text], { type: 'application/javascript' });
+        let blobUrl = URL.createObjectURL(blob);
+
+        return import(blobUrl);
+    }
+
+    emptyModules() {
+        this._parcelModuleCache = {};
+        this._parcelModules = {};
     }
 
     interceptRequire(match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {

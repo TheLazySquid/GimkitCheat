@@ -11473,36 +11473,15 @@
 	function instance$x($$self, $$props, $$invalidate) {
 		let $coordSpring;
 		let { $$slots: slots = {}, $$scope } = $$props;
-		var _a, _b, _c, _d, _e;
 		let { name } = $$props;
 
 		// This whole file is a mess, but it's a mess that works*
 		let transform = getMenuTransform(name);
 
-		let x = (_a = transform === null || transform === void 0
-		? void 0
-		: transform.x) !== null && _a !== void 0
-		? _a
-		: 50;
-
-		let y = (_b = transform === null || transform === void 0
-		? void 0
-		: transform.y) !== null && _b !== void 0
-		? _b
-		: 50;
-
-		let width = (_c = transform === null || transform === void 0
-		? void 0
-		: transform.width) !== null && _c !== void 0
-		? _c
-		: 200;
-
-		let height = (_d = transform === null || transform === void 0
-		? void 0
-		: transform.height) !== null && _d !== void 0
-		? _d
-		: 200;
-
+		let x = transform?.x ?? 50;
+		let y = transform?.y ?? 50;
+		let width = transform?.width ?? 200;
+		let height = transform?.height ?? 200;
 		let lastWidth = width;
 		let lastHeight = height;
 		let coordSpring = spring(moveInbounds(x, y), { stiffness: 0.1, damping: 0.5 });
@@ -11557,13 +11536,7 @@
 		});
 
 		let element;
-
-		let minimized = (_e = transform === null || transform === void 0
-		? void 0
-		: transform.minimized) !== null && _e !== void 0
-		? _e
-		: false;
-
+		let minimized = transform?.minimized ?? false;
 		let dragState = 'waiting';
 		let startX, startY;
 		let dragDistance;
@@ -12312,7 +12285,7 @@
 		append_styles(target, "svelte-1tsrn0k", "button.svelte-1tsrn0k{background-color:transparent;border:none;height:30px;margin:0px;padding-right:0px}");
 	}
 
-	// (29:0) {#if keybindCreatorOpen}
+	// (28:0) {#if keybindCreatorOpen}
 	function create_if_block$9(ctx) {
 		let keybindcreator;
 		let current;
@@ -12423,14 +12396,10 @@
 	}
 
 	function instance$u($$self, $$props, $$invalidate) {
-		var _a;
 		let { hotkeyId } = $$props;
 		let dispatch = createEventDispatcher();
 		let keybindCreatorOpen = false;
-
-		let keybind = new Set((_a = getHotkey(hotkeyId)) !== null && _a !== void 0
-			? _a
-			: []);
+		let keybind = new Set(getHotkey(hotkeyId) ?? []);
 
 		function onCreatorClose(result) {
 			$$invalidate(0, keybindCreatorOpen = false);
@@ -12922,7 +12891,7 @@
 		append_styles(target, "svelte-qar3ci", ".colorPicker.svelte-qar3ci{width:100%;display:flex;flex-direction:column;align-items:center}.inputs.svelte-qar3ci{display:flex;align-items:center;justify-content:space-around;width:100%;max-width:100%}.opacityBlock.svelte-qar3ci{display:flex;flex-direction:column;align-items:center}.alphaInput.svelte-qar3ci{flex-shrink:1;min-width:0;width:100%}.colorInput.svelte-qar3ci{flex-shrink:0}.preview.svelte-qar3ci{width:50px;height:50px;border-radius:10px;flex-shrink:0;border:2px solid black}");
 	}
 
-	// (37:8) {#if allowOpacity}
+	// (36:8) {#if allowOpacity}
 	function create_if_block$7(ctx) {
 		let div1;
 		let div0;
@@ -13078,19 +13047,12 @@
 	}
 
 	function instance$r($$self, $$props, $$invalidate) {
-		var _a;
 		let { text } = $$props;
 		let { color = undefined } = $$props;
 		let { bindValue = undefined } = $$props;
 		let { allowOpacity = true } = $$props;
 		let { minOpactiy = 0 } = $$props;
-
-		let useColor = (_a = color !== null && color !== void 0
-		? color
-		: getCssVar(bindValue)) !== null && _a !== void 0
-		? _a
-		: 'rgba(255, 255, 255, 1)';
-
+		let useColor = color ?? getCssVar(bindValue) ?? 'rgba(255, 255, 255, 1)';
 		let channels = parseRGBA(useColor);
 		let colorVal = rgbToHex(channels.r, channels.g, channels.b);
 		let alphaVal = channels.a;
@@ -13575,11 +13537,7 @@
 		});
 
 		socketManager.addEventListener("blueboatMessage", event => {
-			var _a;
-
-			if (((_a = event.detail) === null || _a === void 0
-			? void 0
-			: _a.key) != "STATE_UPDATE") return;
+			if (event.detail?.key != "STATE_UPDATE") return;
 
 			switch (event.detail.data.type) {
 				case "GAME_QUESTIONS":
@@ -13686,30 +13644,10 @@
 		keybindManager.addKeybind(new Set(["enter"]), useNearest);
 
 		function useNearest() {
-			var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 			if (!enabled) return;
 			let win = getUnsafeWindow();
-
-			let devices = (_e = (_d = (_c = (_b = (_a = win === null || win === void 0 ? void 0 : win.stores) === null || _a === void 0
-			? void 0
-			: _a.phaser) === null || _b === void 0
-			? void 0
-			: _b.scene) === null || _c === void 0
-			? void 0
-			: _c.worldManager) === null || _d === void 0
-			? void 0
-			: _d.devices) === null || _e === void 0
-			? void 0
-			: _e.devicesInView;
-
-			let body = (_h = (_g = (_f = win === null || win === void 0 ? void 0 : win.stores) === null || _f === void 0
-			? void 0
-			: _f.phaser) === null || _g === void 0
-			? void 0
-			: _g.mainCharacter) === null || _h === void 0
-			? void 0
-			: _h.body;
-
+			let devices = win?.stores?.phaser?.scene?.worldManager?.devices?.devicesInView;
+			let body = win?.stores?.phaser?.mainCharacter?.body;
 			if (!devices || !body) return;
 			let closest = null;
 			let closestDistance = Infinity;
@@ -13726,14 +13664,7 @@
 			}
 
 			if (!closest) return;
-
-			(_k = (_j = closest === null || closest === void 0
-			? void 0
-			: closest.interactiveZones) === null || _j === void 0
-			? void 0
-			: _j.onInteraction) === null || _k === void 0
-			? void 0
-			: _k.call(_j);
+			closest?.interactiveZones?.onInteraction?.();
 		}
 
 		function togglebutton_enabled_binding(value) {
@@ -13928,7 +13859,7 @@
 		append_styles(target, "svelte-1ychv30", ".disclaimer.svelte-1ychv30{margin-left:5px;margin-right:5px;text-align:center}.description.svelte-1ychv30{width:100%;text-align:center}");
 	}
 
-	// (56:4) <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
+	// (54:4) <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
 	function create_default_slot_1$5(ctx) {
 		let t;
 
@@ -13947,7 +13878,7 @@
 		};
 	}
 
-	// (44:0) <Group name="Cosmetic Picker">
+	// (42:0) <Group name="Cosmetic Picker">
 	function create_default_slot$i(ctx) {
 		let div0;
 		let t1;
@@ -14148,21 +14079,7 @@
 
 		let checkInterval = setInterval(
 			() => {
-				var _a, _b, _c, _d, _e, _f;
-
-				let char = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-				? void 0
-				: _a.stores) === null || _b === void 0
-				? void 0
-				: _b.phaser) === null || _c === void 0
-				? void 0
-				: _c.scene) === null || _d === void 0
-				? void 0
-				: _d.characterManager) === null || _e === void 0
-				? void 0
-				: _e.characters) === null || _f === void 0
-				? void 0
-				: _f.get($playerId);
+				let char = getUnsafeWindow()?.stores?.phaser?.scene?.characterManager?.characters?.get($playerId);
 
 				if (char) {
 					$$invalidate(0, skinId = char.skin.skinId);
@@ -14175,22 +14092,7 @@
 		);
 
 		function apply() {
-			var _a, _b, _c, _d, _e, _f;
-
-			let char = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-			? void 0
-			: _a.stores) === null || _b === void 0
-			? void 0
-			: _b.phaser) === null || _c === void 0
-			? void 0
-			: _c.scene) === null || _d === void 0
-			? void 0
-			: _d.characterManager) === null || _e === void 0
-			? void 0
-			: _e.characters) === null || _f === void 0
-			? void 0
-			: _f.get($playerId);
-
+			let char = getUnsafeWindow()?.stores?.phaser?.scene?.characterManager?.characters?.get($playerId);
 			if (!char) return;
 
 			if (skinId != "") {
@@ -15439,7 +15341,7 @@
 
 	function instance$i($$self, $$props, $$invalidate) {
 		let dialog;
-		let theme = structuredClone(Object.assign(Object.assign({}, defaultThemes[0]), { custom: true }));
+		let theme = structuredClone({ ...defaultThemes[0], custom: true });
 		let dispatch = createEventDispatcher();
 
 		onMount(() => {
@@ -16147,7 +16049,7 @@
 		if (themesString) {
 			themes = JSON.parse(themesString);
 		} else {
-			themes = defaultThemes.map(theme => Object.assign(Object.assign({}, theme), { custom: false }));
+			themes = defaultThemes.map(theme => ({ ...theme, custom: false }));
 		}
 
 		let questionElement = null;
@@ -16299,7 +16201,7 @@
 		append_styles(target, "svelte-gt58ph", "canvas.svelte-gt58ph{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;pointer-events:none}");
 	}
 
-	// (72:0) <Group name="Player Highlighter">
+	// (71:0) <Group name="Player Highlighter">
 	function create_default_slot$g(ctx) {
 		let togglebutton0;
 		let updating_enabled;
@@ -16482,29 +16384,10 @@
 		let highlightEnemies = false;
 
 		function render() {
-			var _a, _b, _c, _d, _e, _f;
-
-			if (!((_a = serializer === null || serializer === void 0
-			? void 0
-			: serializer.state) === null || _a === void 0
-			? void 0
-			: _a.characters) || !ctx) return;
-
+			if (!serializer?.state?.characters || !ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			if (!highlightTeammates && !highlightEnemies) return;
-
-			let camera = (_f = (_e = (_d = (_c = (_b = getUnsafeWindow()) === null || _b === void 0
-			? void 0
-			: _b.stores) === null || _c === void 0
-			? void 0
-			: _c.phaser) === null || _d === void 0
-			? void 0
-			: _d.scene) === null || _e === void 0
-			? void 0
-			: _e.cameras) === null || _f === void 0
-			? void 0
-			: _f.cameras[0];
-
+			let camera = getUnsafeWindow()?.stores?.phaser?.scene?.cameras?.cameras[0];
 			let player = serializer.state.characters.$items.get($playerId);
 			if (!player || !camera) return;
 			let camX = camera.midPoint.x;
@@ -16572,9 +16455,7 @@
 
 		$$self.$$.update = () => {
 			if ($$self.$$.dirty & /*canvas*/ 1) {
-				ctx = canvas === null || canvas === void 0
-				? void 0
-				: canvas.getContext("2d");
+				ctx = canvas?.getContext("2d");
 			}
 		};
 
@@ -16795,7 +16676,7 @@
 		return child_ctx;
 	}
 
-	// (134:8) {:else}
+	// (133:8) {:else}
 	function create_else_block$1(ctx) {
 		let t0_value = (/*freecamming*/ ctx[1] ? "Stop" : "Start") + "";
 		let t0;
@@ -16822,7 +16703,7 @@
 		};
 	}
 
-	// (132:8) {#if spectating}
+	// (131:8) {#if spectating}
 	function create_if_block$2(ctx) {
 		let t;
 
@@ -16842,7 +16723,7 @@
 		};
 	}
 
-	// (130:4) <Button disabled={!$storesLoaded} disabledMsg="Camera hasn't loaded"      on:click={onBtnClick}>
+	// (129:4) <Button disabled={!$storesLoaded} disabledMsg="Camera hasn't loaded"      on:click={onBtnClick}>
 	function create_default_slot_1$3(ctx) {
 		let if_block_anchor;
 
@@ -16886,7 +16767,7 @@
 		};
 	}
 
-	// (144:8) {#each specCharacters as char}
+	// (143:8) {#each specCharacters as char}
 	function create_each_block$1(ctx) {
 		let option;
 		let t_value = /*char*/ ctx[20].name + "";
@@ -16920,7 +16801,7 @@
 		};
 	}
 
-	// (129:0) <Group name="Freecam">
+	// (128:0) <Group name="Freecam">
 	function create_default_slot$f(ctx) {
 		let button;
 		let t0;
@@ -17214,21 +17095,7 @@
 
 			let getZoomInterval = setInterval(
 				() => {
-					var _a, _b, _c, _d, _e, _f;
-
-					let zoom = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-					? void 0
-					: _a.stores) === null || _b === void 0
-					? void 0
-					: _b.phaser) === null || _c === void 0
-					? void 0
-					: _c.scene) === null || _d === void 0
-					? void 0
-					: _d.cameras) === null || _e === void 0
-					? void 0
-					: _e.cameras[0]) === null || _f === void 0
-					? void 0
-					: _f.zoom;
+					let zoom = getUnsafeWindow()?.stores?.phaser?.scene?.cameras?.cameras[0]?.zoom;
 
 					if (zoom) {
 						$$invalidate(2, zoomValue = zoom);
@@ -17543,11 +17410,7 @@
 		let autoBuy = false;
 
 		socketManager.addEventListener("blueboatMessage", e => {
-			var _a, _b;
-
-			if (((_a = e.detail.data) === null || _a === void 0
-			? void 0
-			: _a.type) == "UPGRADE_LEVELS") {
+			if (e.detail.data?.type == "UPGRADE_LEVELS") {
 				upgradeLevels = e.detail.data.value;
 
 				// delete any upgrades that we already have
@@ -17564,9 +17427,7 @@
 				}
 			}
 
-			if (((_b = e.detail.data) === null || _b === void 0
-			? void 0
-			: _b.type) == "BALANCE") {
+			if (e.detail.data?.type == "BALANCE") {
 				$$invalidate(0, money = e.detail.data.value);
 				checkAutoBuy();
 			}
@@ -17735,11 +17596,7 @@
 		let autoBuy = false;
 
 		socketManager.addEventListener("blueboatMessage", e => {
-			var _a, _b;
-
-			if (((_a = e.detail.data) === null || _a === void 0
-			? void 0
-			: _a.type) == "UPGRADE_LEVELS") {
+			if (e.detail.data?.type == "UPGRADE_LEVELS") {
 				upgradeLevels = e.detail.data.value;
 
 				// delete any upgrades that we already have
@@ -17756,9 +17613,7 @@
 				}
 			}
 
-			if (((_b = e.detail.data) === null || _b === void 0
-			? void 0
-			: _b.type) == "BALANCE") {
+			if (e.detail.data?.type == "BALANCE") {
 				$$invalidate(0, money = e.detail.data.value);
 				checkAutoBuy();
 			}
@@ -17939,7 +17794,7 @@
 		};
 	}
 
-	// (79:0) <Button disabled={!$devicesLoaded || purchaseDevices.length == 0} disabledMsg={!$devicesLoaded ? "Devices haven't loaded yet" : "No matching purchase devices"}  on:click={purchase} >
+	// (65:0) <Button disabled={!$devicesLoaded || purchaseDevices.length == 0} disabledMsg={!$devicesLoaded ? "Devices haven't loaded yet" : "No matching purchase devices"}  on:click={purchase} >
 	function create_default_slot$b(ctx) {
 		let t0;
 		let t1;
@@ -18024,7 +17879,7 @@
 				? "Devices haven't loaded yet"
 				: "No matching purchase devices";
 
-				if (dirty & /*$$scope, cost, purchaseDevices, displayText*/ 263) {
+				if (dirty & /*$$scope, cost, purchaseDevices, displayText*/ 135) {
 					button_changes.$$scope = { dirty, ctx };
 				}
 
@@ -18048,43 +17903,6 @@
 	function instance$9($$self, $$props, $$invalidate) {
 		let $devicesLoaded;
 		component_subscribe($$self, devicesLoaded, $$value => $$invalidate(3, $devicesLoaded = $$value));
-
-		var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
-			function adopt(value) {
-				return value instanceof P
-				? value
-				: new P(function (resolve) {
-							resolve(value);
-						});
-			}
-
-			return new (P || (P = Promise))(function (resolve, reject) {
-					function fulfilled(value) {
-						try {
-							step(generator.next(value));
-						} catch(e) {
-							reject(e);
-						}
-					}
-
-					function rejected(value) {
-						try {
-							step(generator["throw"](value));
-						} catch(e) {
-							reject(e);
-						}
-					}
-
-					function step(result) {
-						result.done
-						? resolve(result.value)
-						: adopt(result.value).then(fulfilled, rejected);
-					}
-
-					step((generator = generator.apply(thisArg, _arguments || [])).next());
-				});
-		};
-
 		let { selector } = $$props;
 		let { displayText } = $$props;
 		let { reusable = false } = $$props;
@@ -18092,60 +17910,29 @@
 		let purchaseDevices = [];
 
 		devicesLoaded.subscribe(value => {
-			var _a, _b, _c, _d, _e, _f;
 			if (!value) return;
-
-			let devices = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-			? void 0
-			: _a.stores) === null || _b === void 0
-			? void 0
-			: _b.phaser) === null || _c === void 0
-			? void 0
-			: _c.scene) === null || _d === void 0
-			? void 0
-			: _d.worldManager) === null || _e === void 0
-			? void 0
-			: _e.devices) === null || _f === void 0
-			? void 0
-			: _f.allDevices;
+			let devices = getUnsafeWindow()?.stores?.phaser?.scene?.worldManager?.devices?.allDevices;
 
 			$$invalidate(2, purchaseDevices = devices.filter(device => {
-				var _a, _b, _c, _d, _e;
 				let matches = true;
 
 				for (let [category, matchFields] of Object.entries(selector)) {
 					for (let [key, value] of Object.entries(matchFields)) {
-						if ((_a = value.endsWith) === null || _a === void 0
-						? void 0
-						: _a.call(value, "*")) {
+						if (value.endsWith?.("*")) {
 							value = value.slice(0, -1);
 
-							if (!((_c = (_b = device === null || device === void 0
-							? void 0
-							: device[category]) === null || _b === void 0
-							? void 0
-							: _b[key]) === null || _c === void 0
-							? void 0
-							: _c.startsWith(value))) {
+							if (!device?.[category]?.[key]?.startsWith(value)) {
 								matches = false;
 								break;
 							}
 						} else if (typeof value == "function") {
-							if (((_d = device === null || device === void 0
-							? void 0
-							: device[category]) === null || _d === void 0
-							? void 0
-							: _d[key]) != value()) {
+							if (device?.[category]?.[key] != value()) {
 								matches = false;
 								break;
 							}
 						} else {
 							// find an exact match
-							if (((_e = device === null || device === void 0
-							? void 0
-							: device[category]) === null || _e === void 0
-							? void 0
-							: _e[key]) != value) {
+							if (device?.[category]?.[key] != value) {
 								matches = false;
 								break;
 							}
@@ -18156,64 +17943,31 @@
 				return matches;
 			}));
 
-			purchaseDevices.sort((a, b) => {
-				var _a, _b;
-
-				return ((_a = a === null || a === void 0 ? void 0 : a.options) === null || _a === void 0
-				? void 0
-				: _a.amountOfRequiredItem) - ((_b = b === null || b === void 0 ? void 0 : b.options) === null || _b === void 0
-				? void 0
-				: _b.amountOfRequiredItem);
-			});
+			purchaseDevices.sort((a, b) => a?.options?.amountOfRequiredItem - b?.options?.amountOfRequiredItem);
 		});
 
-		function purchase() {
-			var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+		async function purchase() {
+			let devices = getUnsafeWindow()?.stores?.phaser?.scene?.worldManager?.devices?.allDevices;
 
-			return __awaiter(this, void 0, void 0, function* () {
-				let devices = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-				? void 0
-				: _a.stores) === null || _b === void 0
-				? void 0
-				: _b.phaser) === null || _c === void 0
-				? void 0
-				: _c.scene) === null || _d === void 0
-				? void 0
-				: _d.worldManager) === null || _e === void 0
-				? void 0
-				: _e.devices) === null || _f === void 0
-				? void 0
-				: _f.allDevices;
+			// this code has been here a while and I don't know what exactly it does but I don't dare remove it
+			if (!purchaseDevices[0]?.interactiveZones?.onInteraction) {
+				$$invalidate(2, purchaseDevices = purchaseDevices.map(device => {
+					return devices.find(d => d.id == device.id);
+				}));
 
-				// this code has been here a while and I don't know what exactly it does but I don't dare remove it
-				if (!((_h = (_g = purchaseDevices[0]) === null || _g === void 0
-				? void 0
-				: _g.interactiveZones) === null || _h === void 0
-				? void 0
-				: _h.onInteraction)) {
-					$$invalidate(2, purchaseDevices = purchaseDevices.map(device => {
-						return devices.find(d => d.id == device.id);
-					}));
+				return;
+			}
 
-					return;
-				}
+			purchaseDevices[0]?.interactiveZones?.onInteraction();
+			if (reusable) return;
 
-				(_k = (_j = purchaseDevices[0]) === null || _j === void 0
-				? void 0
-				: _j.interactiveZones) === null || _k === void 0
-				? void 0
-				: _k.onInteraction();
+			// check whether it was successfully purchased
+			// wait 500ms for the purchase to go through
+			await new Promise(resolve => setTimeout(resolve, 500));
 
-				if (reusable) return;
-
-				// check whether it was successfully purchased
-				// wait 500ms for the purchase to go through
-				yield new Promise(resolve => setTimeout(resolve, 500));
-
-				if (purchaseDevices[0].state.active) return; // it wasn't purchased
-				purchaseDevices.shift();
-				$$invalidate(2, purchaseDevices);
-			});
+			if (purchaseDevices[0].state.active) return; // it wasn't purchased
+			purchaseDevices.shift();
+			$$invalidate(2, purchaseDevices);
 		}
 
 		$$self.$$set = $$props => {
@@ -19027,11 +18781,7 @@
 		let cooldown = false;
 
 		socketManager.addEventListener('blueboatMessage', e => {
-			var _a;
-
-			if (((_a = e.detail.data) === null || _a === void 0
-			? void 0
-			: _a.type) == "BALANCE") {
+			if (e.detail.data?.type == "BALANCE") {
 				money = e.detail.data.value;
 
 				if (enabled) {
@@ -19147,12 +18897,8 @@
 		if (!message.detail) return;
 
 		document.querySelectorAll(".Toastify__toast").forEach(node => {
-			var _a;
 			node.style.display = "none";
-
-			(_a = node.querySelector('.Toastify__close-button')) === null || _a === void 0
-			? void 0
-			: _a.click();
+			node.querySelector('.Toastify__close-button')?.click();
 		});
 	}
 
@@ -19160,7 +18906,6 @@
 		let hidingPopups = false;
 
 		let observer = new MutationObserver(mutations => {
-				var _a;
 				if (!hidingPopups) return;
 
 				for (let mutation of mutations) {
@@ -19169,10 +18914,7 @@
 
 						if (node.matches(".Toastify__toast")) {
 							node.style.display = "none";
-
-							(_a = node.querySelector('.Toastify__close-button')) === null || _a === void 0
-							? void 0
-							: _a.click();
+							node.querySelector('.Toastify__close-button')?.click();
 						}
 					}
 				}
@@ -19367,51 +19109,20 @@
 		let autoPlantInterval = undefined;
 
 		function onClick(e) {
-			var _a, _b, _c, _d, _e, _f, _g, _h;
-
 			if (e.detail) {
-				let devices = (_f = (_e = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-				? void 0
-				: _a.stores) === null || _b === void 0
-				? void 0
-				: _b.phaser) === null || _c === void 0
-				? void 0
-				: _c.scene) === null || _d === void 0
-				? void 0
-				: _d.worldManager) === null || _e === void 0
-				? void 0
-				: _e.devices) === null || _f === void 0
-				? void 0
-				: _f.allDevices;
-
+				let devices = getUnsafeWindow()?.stores?.phaser?.scene?.worldManager?.devices?.allDevices;
 				let plots = devices.filter(device => device.options.style == "plant");
 				let recipieDevices = {};
 
 				for (let device of devices) {
-					if (!seedRanking.includes((_g = device.options) === null || _g === void 0
-					? void 0
-					: _g.ingredient1Item)) continue;
-
-					recipieDevices[(_h = device.options) === null || _h === void 0
-					? void 0
-					: _h.ingredient1Item] = device;
+					if (!seedRanking.includes(device.options?.ingredient1Item)) continue;
+					recipieDevices[device.options?.ingredient1Item] = device;
 				}
 
 				// set up auto plant
 				autoPlantInterval = setInterval(
 					() => {
-						var _a, _b, _c, _d, _e, _f;
-
-						let inventory = (_d = (_c = (_b = (_a = getUnsafeWindow()) === null || _a === void 0
-						? void 0
-						: _a.stores) === null || _b === void 0
-						? void 0
-						: _b.me) === null || _c === void 0
-						? void 0
-						: _c.inventory) === null || _d === void 0
-						? void 0
-						: _d.slots;
-
+						let inventory = getUnsafeWindow()?.stores?.me?.inventory?.slots;
 						if (!inventory) return;
 
 						// find the most valuable seed that we can plant
@@ -19423,17 +19134,10 @@
 
 							// check if we have enough of each ingredient
 							for (let i = 0; i < 5; i++) {
-								let reqIngredient = (_e = recipie === null || recipie === void 0
-								? void 0
-								: recipie.options) === null || _e === void 0
-								? void 0
-								: _e[`ingredient${i}Item`];
-
+								let reqIngredient = recipie?.options?.[`ingredient${i}Item`];
 								if (!reqIngredient) continue;
 
-								if (!((_f = inventory.get(reqIngredient)) === null || _f === void 0
-								? void 0
-								: _f.amount) >= recipie.options[`ingredient${i}Amount`]) {
+								if (!inventory.get(reqIngredient)?.amount >= recipie.options[`ingredient${i}Amount`]) {
 									canPlant = false;
 									break;
 								}
@@ -20416,14 +20120,7 @@
 		let speedupEnabled = false;
 
 		function enableSpeedup(value) {
-			var _a, _b;
-
-			if (!((_b = (_a = getUnsafeWindow()) === null || _a === void 0
-			? void 0
-			: _a.stores) === null || _b === void 0
-			? void 0
-			: _b.me)) return;
-
+			if (!getUnsafeWindow()?.stores?.me) return;
 			let mapStyle = getUnsafeWindow().stores.session.mapStyle;
 
 			// restore or set the speed
@@ -20449,14 +20146,7 @@
 		setInterval(checkSpeed, 500);
 
 		function checkSpeed() {
-			var _a, _b;
-
-			if (!((_b = (_a = getUnsafeWindow()) === null || _a === void 0
-			? void 0
-			: _a.stores) === null || _b === void 0
-			? void 0
-			: _b.me)) return;
-
+			if (!getUnsafeWindow()?.stores?.me) return;
 			let mapStyle = getUnsafeWindow().stores.session.mapStyle;
 			if (!mapStyle) return;
 
@@ -20480,15 +20170,8 @@
 		}
 
 		function onSpeedupMultChange(value) {
-			var _a, _b;
 			$$invalidate(0, speedupMultiplier = value.detail);
-
-			if (!((_b = (_a = getUnsafeWindow()) === null || _a === void 0
-			? void 0
-			: _a.stores) === null || _b === void 0
-			? void 0
-			: _b.me) || !speedupEnabled) return;
-
+			if (!getUnsafeWindow()?.stores?.me || !speedupEnabled) return;
 			let mapStyle = getUnsafeWindow().stores.session.mapStyle;
 			if (!mapStyle) return;
 			let newSpeed = nativeSpeed * value.detail;
@@ -22351,7 +22034,56 @@
 	    readyToIntercept = true;
 	    constructor() {
 	        super();
-	        this.setup();
+	        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])');
+	        if (existingScripts.length > 0) {
+	            this.readyToIntercept = false;
+	            window.addEventListener('load', () => {
+	                this.setup();
+	                this.reloadExistingScripts(existingScripts);
+	            });
+	        }
+	        else
+	            this.setup();
+	        getUnsafeWindow().decachedImport = this.decachedImport.bind(this);
+	    }
+	    async reloadExistingScripts(existingScripts) {
+	        // nuke the dom
+	        this.nukeDom();
+	        this.readyToIntercept = true;
+	        this.emptyModules();
+	        existingScripts.forEach(script => {
+	            // re-import the script since it's already loaded
+	            console.log(script, 'has already loaded, re-importing...');
+	            this.decachedImport(script.src);
+	            script.remove();
+	        });
+	    }
+	    nukeDom() {
+	        document.querySelector("#root")?.remove();
+	        let newRoot = document.createElement('div');
+	        newRoot.id = 'root';
+	        document.body.appendChild(newRoot);
+	        // remove all global variables
+	        let vars = ["__mobxGlobals", "__mobxInstanceCount"];
+	        for (let v of vars) {
+	            if (v in window)
+	                delete window[v];
+	        }
+	    }
+	    async decachedImport(url) {
+	        let src = new URL(url, location.origin).href;
+	        let res = await fetch(src);
+	        let text = await res.text();
+	        // nasty hack to prevent the browser from caching other scripts
+	        text = text.replaceAll('import(', 'window.decachedImport(');
+	        text = text.replaceAll('import.meta.url', `'${src}'`);
+	        let blob = new Blob([text], { type: 'application/javascript' });
+	        let blobUrl = URL.createObjectURL(blob);
+	        return import(blobUrl);
+	    }
+	    emptyModules() {
+	        this._parcelModuleCache = {};
+	        this._parcelModules = {};
 	    }
 	    interceptRequire(match, callback, once = false) {
 	        if (!match || !callback)

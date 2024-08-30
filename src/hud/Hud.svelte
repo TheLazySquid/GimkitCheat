@@ -26,6 +26,8 @@
     import Movement from "../scripts/2d/Movement.svelte";
     import DigItUp from "../scripts/digItUp/DigItUp.svelte";
     import Knockback from "../scripts/knockback/Knockback.svelte";
+    import DontLookDown from "../scripts/dontLookDown/dontLookDown.svelte";
+    import Powerups from "../scripts/powerups/Powerups.svelte";
 
     keybindManager.addKeybind(new Set(["\\"]), () => {
         showHud.update(v => !v);
@@ -73,6 +75,7 @@
         <FloorIsLava />
         <ShowImposters />
         <Farmchain />
+        <DontLookDown />
     </Menu>
 </div>
 

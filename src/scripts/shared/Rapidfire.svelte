@@ -25,7 +25,7 @@
                     x: body.x,
                     y: body.y
                 })
-            }, 50)
+            }, 1)
         } else {
             clearInterval(rapidfireInterval);
         }

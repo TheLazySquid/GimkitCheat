@@ -2,8 +2,8 @@
     import ToggleButton from '../../hud/components/ToggleButton.svelte'
     import Group from '../../hud/Group.svelte'
     import socketManager from '../../network/socketManager'
+    import Powerups from '../powerups/Powerups.svelte';
 
-    // taken from https://github.com/Noble-Mushtak/Gimkit-Strategy/ which is no longer accurate
     const upgradesToGet = [
         ["Streak Bonus", 2, 20],
         ["Money Per Question", 3, 100],
@@ -93,4 +93,5 @@
 <Group name="Classic">
     <ToggleButton onText="Stop auto purchasing" offText="Auto Purchase Upgrades" hotkeyId="classicAutoPurchase"
     on:click={onClick} disabled={money == null} disabledMsg="Money hasn't loaded yet" />
+    <Powerups />
 </Group>

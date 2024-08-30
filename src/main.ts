@@ -16,4 +16,5 @@ if(gameLoaded) {
 
     socketManager.setup();
     createHud();
+    alert("DEVELOPER BUILD, NOT FOR USER USE.")
 }

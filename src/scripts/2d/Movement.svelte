@@ -5,8 +5,8 @@
     import ToggleButton from '../../hud/components/ToggleButton.svelte';
     import Slider from '../../hud/components/Slider.svelte';
     import Group from '../../hud/Group.svelte';
-
-    const maxSpeedupMultiplier = 490/357; // gathered from some testing, any higher and we get teleported back
+    
+    const maxSpeedupMultiplier = 490/357; 
 
     // this file is a hot mess, but it works
     let speedupMultiplier = 1;
@@ -108,10 +108,10 @@
 <Group name="Movement">
     <Slider title="Speedup Amount" min={1} max={maxSpeedupMultiplier} step={0.005}
     on:input={onSpeedupMultChange} bind:value={speedupMultiplier} />
-    <ToggleButton disabled={!$storesLoaded} onText="Speedup: On" offText="Speedup: Off"
+    <ToggleButton onText="Speedup: On" offText="Speedup: Off"
     on:click={(e) => enableSpeedup(e.detail)} bind:enabled={speedupEnabled} hotkeyId="speedup" />
-    <Slider title="Jump Boost Amount" min={1} max={maxSpeedupMultiplier} step={0.005}
+    <Slider title="Jump Boost Amount" min={1} max={1000} step={0.005}
     on:input={onJumpboostMultChange} bind:value={jumpboostMultiplier} />
-    <ToggleButton disabled={!$physicsConsts} onText="Jump Boost: On" offText="Jump Boost: Off"
+    <ToggleButton onText="Jump Boost: On" offText="Jump Boost: Off"
     on:click={(e) => enableJumpboost(e.detail)} bind:enabled={jumpboostEnabled} hotkeyId="jumpboost" />
 </Group>

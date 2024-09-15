@@ -22037,10 +22037,16 @@
 	        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])');
 	        if (existingScripts.length > 0) {
 	            this.readyToIntercept = false;
-	            window.addEventListener('load', () => {
+	            if (document.readyState === 'complete') {
 	                this.setup();
 	                this.reloadExistingScripts(existingScripts);
-	            });
+	            }
+	            else {
+	                window.addEventListener('load', () => {
+	                    this.setup();
+	                    this.reloadExistingScripts(existingScripts);
+	                });
+	            }
 	        }
 	        else
 	            this.setup();
@@ -22099,7 +22105,6 @@
 	    }
 	    setup() {
 	        let requireHook;
-	        let nativeParcel = getUnsafeWindow()["parcelRequire388b"];
 	        ((requireHook = (moduleName) => {
 	            if (moduleName in this._parcelModuleCache) {
 	                return this._parcelModuleCache[moduleName].exports;
@@ -22137,8 +22142,6 @@
 	            if (moduleName in this._parcelModuleCache) {
 	                delete this._parcelModuleCache[moduleName];
 	            }
-	            if (nativeParcel)
-	                nativeParcel.register(moduleName, moduleCallback);
 	        });
 	        Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {
 	            value: requireHook,

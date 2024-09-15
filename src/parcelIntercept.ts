@@ -17,10 +17,15 @@ export default class Parcel extends EventTarget {
         let existingScripts = document.querySelectorAll<HTMLScriptElement>('script[src*="index"]:not([nomodule])');
         if(existingScripts.length > 0) {
             this.readyToIntercept = false;
-            window.addEventListener('load', () => {
+            if(document.readyState === 'complete') {
                 this.setup();
                 this.reloadExistingScripts(existingScripts);
-            })
+            } else {
+                window.addEventListener('load', () => {
+                    this.setup();
+                    this.reloadExistingScripts(existingScripts);
+                })
+            }
         }
         else this.setup();
 
@@ -92,7 +97,6 @@ export default class Parcel extends EventTarget {
 
     setup() {
         let requireHook: (moduleName: string) => void;
-        let nativeParcel = getUnsafeWindow()["parcelRequire388b"];
 
         ((requireHook = (moduleName) => {
             if (moduleName in this._parcelModuleCache) {
@@ -139,8 +143,6 @@ export default class Parcel extends EventTarget {
             if (moduleName in this._parcelModuleCache) {
                 delete this._parcelModuleCache[moduleName];
             }
-
-            if(nativeParcel) nativeParcel.register(moduleName, moduleCallback);
         });
 
         Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {

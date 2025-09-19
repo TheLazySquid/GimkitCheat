@@ -139,11 +139,6 @@
 		return -1;
 	}
 
-	function set_store_value(store, ret, value) {
-		store.set(value);
-		return ret;
-	}
-
 	const is_client = typeof window !== 'undefined';
 
 	/** @type {() => number} */
@@ -389,7 +384,7 @@
 		if (value == null) {
 			node.style.removeProperty(key);
 		} else {
-			node.style.setProperty(key, value, important ? 'important' : '');
+			node.style.setProperty(key, value, '');
 		}
 	}
 
@@ -452,7 +447,7 @@
 	 *
 	 * If a function is returned _synchronously_ from `onMount`, it will be called when the component is unmounted.
 	 *
-	 * `onMount` does not run inside a [server-side component](/docs#run-time-server-side-component-api).
+	 * `onMount` does not run inside a [server-side component](https://svelte.dev/docs#run-time-server-side-component-api).
 	 *
 	 * https://svelte.dev/docs/svelte#onmount
 	 * @template T
@@ -478,7 +473,7 @@
 	}
 
 	/**
-	 * Creates an event dispatcher that can be used to dispatch [component events](/docs#template-syntax-component-directives-on-eventname).
+	 * Creates an event dispatcher that can be used to dispatch [component events](https://svelte.dev/docs#template-syntax-component-directives-on-eventname).
 	 * Event dispatchers are functions that can take two arguments: `name` and `detail`.
 	 *
 	 * Component events created with `createEventDispatcher` create a
@@ -1001,6 +996,15 @@
 		let timestamp;
 		let result;
 
+		function run() {
+			const callContext = storedContext;
+			const callArguments = storedArguments;
+			storedContext = undefined;
+			storedArguments = undefined;
+			result = function_.apply(callContext, callArguments);
+			return result;
+		}
+
 		function later() {
 			const last = Date.now() - timestamp;
 
@@ -1010,11 +1014,7 @@
 				timeoutId = undefined;
 
 				if (!immediate) {
-					const callContext = storedContext;
-					const callArguments = storedArguments;
-					storedContext = undefined;
-					storedArguments = undefined;
-					result = function_.apply(callContext, callArguments);
+					result = run();
 				}
 			}
 		}
@@ -1035,11 +1035,7 @@
 			}
 
 			if (callNow) {
-				const callContext = storedContext;
-				const callArguments = storedArguments;
-				storedContext = undefined;
-				storedArguments = undefined;
-				result = function_.apply(callContext, callArguments);
+				result = run();
 			}
 
 			return result;
@@ -1059,14 +1055,13 @@
 				return;
 			}
 
-			const callContext = storedContext;
-			const callArguments = storedArguments;
-			storedContext = undefined;
-			storedArguments = undefined;
-			result = function_.apply(callContext, callArguments);
+			debounced.trigger();
+		};
 
-			clearTimeout(timeoutId);
-			timeoutId = undefined;
+		debounced.trigger = () => {
+			result = run();
+
+			debounced.clear();
 		};
 
 		return debounced;
@@ -2341,7 +2336,7 @@
 	var colyseus = {exports: {}};
 
 	(function (module, exports) {
-		// colyseus.js@0.15.17 (@colyseus/schema 2.0.9)
+		// colyseus.js@0.15.26 (@colyseus/schema 2.0.9)
 		(function (global, factory) {
 		    factory(exports) ;
 		})(commonjsGlobal, (function (exports) {
@@ -2427,7 +2422,7 @@
 		            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
 		            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
 		            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-		            step((generator = generator.apply(thisArg, _arguments || [])).next());
+		            step((generator = generator.apply(thisArg, [])).next());
 		        });
 		    }
 
@@ -2466,10 +2461,8 @@
 		    }
 
 		    function __classPrivateFieldSet(receiver, state, value, kind, f) {
-		        if (kind === "m") throw new TypeError("Private method is not writable");
-		        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
 		        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-		        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+		        return (state.set(receiver, value)), value;
 		    }
 
 		    var CloseCode;
@@ -3442,14 +3435,14 @@
 		        }
 
 		        function __decorate(decorators, target, key, desc) {
-		            var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+		            var c = arguments.length, r = c < 3 ? target : desc, d;
 		            if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
 		            else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 		            return c > 3 && r && Object.defineProperty(target, key, r), r;
 		        }
 
 		        function __spreadArray(to, from, pack) {
-		            if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+		            if (arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 		                if (ar || !(i in from)) {
 		                    if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 		                    ar[i] = from[i];
@@ -7068,7 +7061,12 @@
 		            if (options === void 0) { options = {}; }
 		            return httpie[method](this.client['getHttpEndpoint'](path), this.getOptions(options)).catch(function (e) {
 		                var _a;
-		                throw new ServerError(e.statusCode || -1, ((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) || e.statusMessage || e.message || "offline");
+		                var status = e.statusCode; //  || -1
+		                var message = ((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) || e.statusMessage || e.message; //  || "offline"
+		                if (!status && !message) {
+		                    throw e;
+		                }
+		                throw new ServerError(status, message);
 		            });
 		        };
 		        HTTP.prototype.getOptions = function (options) {
@@ -7077,6 +7075,10 @@
 		                    options.headers = {};
 		                }
 		                options.headers['Authorization'] = "Bearer ".concat(this.authToken);
+		            }
+		            if (typeof (cc) !== 'undefined' && cc.sys && cc.sys.isNative) ;
+		            else {
+		                // always include credentials
 		                options.withCredentials = true;
 		            }
 		            return options;
@@ -7093,16 +7095,23 @@
 		    var storage;
 		    function getStorage() {
 		        if (!storage) {
-		            storage = (typeof (cc) !== 'undefined' && cc.sys && cc.sys.localStorage)
-		                ? cc.sys.localStorage // compatibility with cocos creator
-		                : typeof (window) !== "undefined" && window.localStorage //RN does have window object at this point, but localStorage is not defined
-		                    ? window.localStorage // regular browser environment
-		                    : {
-		                        cache: {},
-		                        setItem: function (key, value) { this.cache[key] = value; },
-		                        getItem: function (key) { this.cache[key]; },
-		                        removeItem: function (key) { delete this.cache[key]; },
-		                    };
+		            try {
+		                storage = (typeof (cc) !== 'undefined' && cc.sys && cc.sys.localStorage)
+		                    ? cc.sys.localStorage // compatibility with cocos creator
+		                    : window.localStorage; // RN does have window object at this point, but localStorage is not defined
+		            }
+		            catch (e) {
+		                // ignore error
+		            }
+		        }
+		        if (!storage) {
+		            // mock localStorage if not available (Node.js or RN environment)
+		            storage = {
+		                cache: {},
+		                setItem: function (key, value) { this.cache[key] = value; },
+		                getItem: function (key) { this.cache[key]; },
+		                removeItem: function (key) { delete this.cache[key]; },
+		            };
 		        }
 		        return storage;
 		    }
@@ -7163,9 +7172,9 @@
 		                    }).finally(function () {
 		                        resolve();
 		                    });
-		                }), "f");
+		                }));
 		            }
-		            __classPrivateFieldSet(this, _Auth__initialized, true, "f");
+		            __classPrivateFieldSet(this, _Auth__initialized, true);
 		            return unbindChange;
 		        };
 		        Auth.prototype.getUserData = function () {
@@ -7256,7 +7265,7 @@
 		                            var url = _this.http['client']['getHttpEndpoint']("".concat((settings.prefix || "".concat(_this.settings.path, "/provider")), "/").concat(providerName).concat(upgradingToken));
 		                            var left = (screen.width / 2) - (w / 2);
 		                            var top = (screen.height / 2) - (h / 2);
-		                            __classPrivateFieldSet(_this, _Auth__signInWindow, window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left), "f");
+		                            __classPrivateFieldSet(_this, _Auth__signInWindow, window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left));
 		                            var onMessage = function (event) {
 		                                // TODO: it is a good idea to check if event.origin can be trusted!
 		                                // if (event.origin.indexOf(window.location.hostname) === -1) { return; }
@@ -7266,7 +7275,7 @@
 		                                }
 		                                clearInterval(rejectionChecker);
 		                                __classPrivateFieldGet(_this, _Auth__signInWindow, "f").close();
-		                                __classPrivateFieldSet(_this, _Auth__signInWindow, undefined, "f");
+		                                __classPrivateFieldSet(_this, _Auth__signInWindow, undefined);
 		                                window.removeEventListener("message", onMessage);
 		                                if (event.data.error !== undefined) {
 		                                    reject(event.data.error);
@@ -7278,7 +7287,7 @@
 		                            };
 		                            var rejectionChecker = setInterval(function () {
 		                                if (!__classPrivateFieldGet(_this, _Auth__signInWindow, "f") || __classPrivateFieldGet(_this, _Auth__signInWindow, "f").closed) {
-		                                    __classPrivateFieldSet(_this, _Auth__signInWindow, undefined, "f");
+		                                    __classPrivateFieldSet(_this, _Auth__signInWindow, undefined);
 		                                    reject("cancelled");
 		                                    window.removeEventListener("message", onMessage);
 		                                }
@@ -7313,6 +7322,52 @@
 		    }());
 		    _Auth__initialized = new WeakMap(), _Auth__initializationPromise = new WeakMap(), _Auth__signInWindow = new WeakMap(), _Auth__events = new WeakMap();
 
+		    /**
+		     * Discord Embedded App SDK
+		     * https://github.com/colyseus/colyseus/issues/707
+		     *
+		     * All URLs must go through the local proxy from
+		     * https://<app_id>.discordsays.com/.proxy/<mapped_url>/...
+		     *
+		     * URL Mapping Examples:
+		     *
+		     * 1. Using Colyseus Cloud:
+		     *   - /colyseus/{subdomain} -> {subdomain}.colyseus.cloud
+		     *
+		     *   Example:
+		     *     const client = new Client("https://xxxx.colyseus.cloud");
+		     *
+		     * -------------------------------------------------------------
+		     *
+		     * 2. Using `cloudflared` tunnel:
+		     *   - /colyseus/ -> <your-cloudflared-url>.trycloudflare.com
+		     *
+		     *   Example:
+		     *     const client = new Client("https://<your-cloudflared-url>.trycloudflare.com");
+		     *
+		     * -------------------------------------------------------------
+		     *
+		     * 3. Providing a manual /.proxy/your-mapping:
+		     *   - /your-mapping/ -> your-endpoint.com
+		     *
+		     *   Example:
+		     *     const client = new Client("/.proxy/your-mapping");
+		     *
+		     */
+		    function discordURLBuilder(url) {
+		        var _a;
+		        var localHostname = ((_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.hostname) || "localhost";
+		        var remoteHostnameSplitted = url.hostname.split('.');
+		        var subdomain = (!url.hostname.includes("trycloudflare.com") && // ignore cloudflared subdomains
+		            !url.hostname.includes("discordsays.com") && // ignore discordsays.com subdomains
+		            remoteHostnameSplitted.length > 2)
+		            ? "/".concat(remoteHostnameSplitted[0])
+		            : '';
+		        return (url.pathname.startsWith("/.proxy"))
+		            ? "".concat(url.protocol, "//").concat(localHostname).concat(subdomain).concat(url.pathname).concat(url.search)
+		            : "".concat(url.protocol, "//").concat(localHostname, "/.proxy/colyseus").concat(subdomain).concat(url.pathname).concat(url.search);
+		    }
+
 		    var _a;
 		    var MatchMakeError = /** @class */ (function (_super) {
 		        __extends(MatchMakeError, _super);
@@ -7330,13 +7385,16 @@
 		        ? "".concat(window.location.protocol.replace("http", "ws"), "//").concat(window.location.hostname).concat((window.location.port && ":".concat(window.location.port)))
 		        : "ws://127.0.0.1:2567";
 		    var Client = /** @class */ (function () {
-		        function Client(settings) {
+		        function Client(settings, customURLBuilder) {
 		            if (settings === void 0) { settings = DEFAULT_ENDPOINT; }
+		            var _a, _b;
 		            if (typeof (settings) === "string") {
 		                //
 		                // endpoint by url
 		                //
-		                var url = new URL(settings);
+		                var url = (settings.startsWith("/"))
+		                    ? new URL(settings, DEFAULT_ENDPOINT)
+		                    : new URL(settings);
 		                var secure = (url.protocol === "https:" || url.protocol === "wss:");
 		                var port = Number(url.port || (secure ? 443 : 80));
 		                this.settings = {
@@ -7364,6 +7422,16 @@
 		            }
 		            this.http = new HTTP(this);
 		            this.auth = new Auth(this.http);
+		            this.urlBuilder = customURLBuilder;
+		            //
+		            // Discord Embedded SDK requires a custom URL builder
+		            //
+		            if (!this.urlBuilder &&
+		                typeof (window) !== "undefined" &&
+		                ((_b = (_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.hostname) === null || _b === void 0 ? void 0 : _b.includes("discordsays.com"))) {
+		                this.urlBuilder = discordURLBuilder;
+		                console.log("Colyseus SDK: Discord Embedded SDK detected. Using custom URL builder.");
+		            }
 		        }
 		        Client.prototype.joinOrCreate = function (roomName, options, rootSchema) {
 		            if (options === void 0) { options = {}; }
@@ -7565,12 +7633,18 @@
 		            else {
 		                endpoint += "".concat(this.settings.hostname).concat(this.getEndpointPort()).concat(this.settings.pathname);
 		            }
-		            return "".concat(endpoint, "/").concat(room.processId, "/").concat(room.roomId, "?").concat(params.join('&'));
+		            var endpointURL = "".concat(endpoint, "/").concat(room.processId, "/").concat(room.roomId, "?").concat(params.join('&'));
+		            return (this.urlBuilder)
+		                ? this.urlBuilder(new URL(endpointURL))
+		                : endpointURL;
 		        };
 		        Client.prototype.getHttpEndpoint = function (segments) {
 		            if (segments === void 0) { segments = ''; }
 		            var path = segments.startsWith("/") ? segments : "/".concat(segments);
-		            return "".concat((this.settings.secure) ? "https" : "http", "://").concat(this.settings.hostname).concat(this.getEndpointPort()).concat(this.settings.pathname).concat(path);
+		            var endpointURL = "".concat((this.settings.secure) ? "https" : "http", "://").concat(this.settings.hostname).concat(this.getEndpointPort()).concat(this.settings.pathname).concat(path);
+		            return (this.urlBuilder)
+		                ? this.urlBuilder(new URL(endpointURL))
+		                : endpointURL;
 		        };
 		        Client.prototype.getEndpointPort = function () {
 		            return (this.settings.port !== 80 && this.settings.port !== 443)
@@ -7676,14 +7750,14 @@
 		    }
 
 		    function __decorate(decorators, target, key, desc) {
-		        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+		        var c = arguments.length, r = c < 3 ? target : desc, d;
 		        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
 		        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 		        return c > 3 && r && Object.defineProperty(target, key, r), r;
 		    }
 
 		    function __spreadArray(to, from, pack) {
-		        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+		        if (arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 		            if (ar || !(i in from)) {
 		                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 		                ar[i] = from[i];
@@ -8121,6 +8195,13 @@
 		            //
 		            // FIXME: this should be O(1)
 		            //
+		            index = Math.trunc(index) || 0;
+		            // Allow negative indexing from the end
+		            if (index < 0)
+		                index += this.length;
+		            // OOB access is guaranteed to return undefined
+		            if (index < 0 || index >= this.length)
+		                return undefined;
 		            var key = Array.from(this.$items.keys())[index];
 		            return this.$items.get(key);
 		        };
@@ -9326,22 +9407,22 @@
 
 		    var encode = /*#__PURE__*/Object.freeze({
 		        __proto__: null,
-		        utf8Write: utf8Write,
-		        int8: int8$1,
-		        uint8: uint8$1,
-		        int16: int16$1,
-		        uint16: uint16$1,
-		        int32: int32$1,
-		        uint32: uint32$1,
-		        int64: int64$1,
-		        uint64: uint64$1,
+		        boolean: boolean$1,
 		        float32: float32$1,
 		        float64: float64$1,
-		        writeFloat32: writeFloat32,
-		        writeFloat64: writeFloat64,
-		        boolean: boolean$1,
+		        int16: int16$1,
+		        int32: int32$1,
+		        int64: int64$1,
+		        int8: int8$1,
+		        number: number$1,
 		        string: string$1,
-		        number: number$1
+		        uint16: uint16$1,
+		        uint32: uint32$1,
+		        uint64: uint64$1,
+		        uint8: uint8$1,
+		        utf8Write: utf8Write,
+		        writeFloat32: writeFloat32,
+		        writeFloat64: writeFloat64
 		    });
 
 		    /**
@@ -9576,25 +9657,25 @@
 
 		    var decode = /*#__PURE__*/Object.freeze({
 		        __proto__: null,
-		        int8: int8,
-		        uint8: uint8,
-		        int16: int16,
-		        uint16: uint16,
-		        int32: int32,
-		        uint32: uint32,
+		        arrayCheck: arrayCheck,
+		        boolean: boolean,
 		        float32: float32,
 		        float64: float64,
+		        int16: int16,
+		        int32: int32,
 		        int64: int64,
-		        uint64: uint64,
-		        readFloat32: readFloat32,
-		        readFloat64: readFloat64,
-		        boolean: boolean,
-		        string: string,
-		        stringCheck: stringCheck,
+		        int8: int8,
 		        number: number,
 		        numberCheck: numberCheck,
-		        arrayCheck: arrayCheck,
-		        switchStructureCheck: switchStructureCheck
+		        readFloat32: readFloat32,
+		        readFloat64: readFloat64,
+		        string: string,
+		        stringCheck: stringCheck,
+		        switchStructureCheck: switchStructureCheck,
+		        uint16: uint16,
+		        uint32: uint32,
+		        uint64: uint64,
+		        uint8: uint8
 		    });
 
 		    var CollectionSchema = /** @class */ (function () {
@@ -11032,8 +11113,6 @@
 		    exports.registerType = registerType;
 		    exports.type = type;
 
-		    Object.defineProperty(exports, '__esModule', { value: true });
-
 		})); 
 	} (umd, umd.exports));
 
@@ -11341,7 +11420,7 @@
 	    }
 	});
 
-	/* src\hud\Menu.svelte generated by Svelte v4.2.9 */
+	/* src\hud\Menu.svelte generated by Svelte v4.2.19 */
 
 	const { window: window_1$1 } = globals;
 
@@ -11651,7 +11730,7 @@
 		}
 	}
 
-	/* node_modules\svelte-material-icons\KeyboardOutline.svelte generated by Svelte v4.2.9 */
+	/* node_modules\svelte-material-icons\KeyboardOutline.svelte generated by Svelte v4.2.19 */
 
 	function create_if_block_1$5(ctx) {
 		let desc_1;
@@ -11889,7 +11968,7 @@
 	}
 	const keybindManager = new KeybindManager();
 
-	/* src\hud\KeybindCreator.svelte generated by Svelte v4.2.9 */
+	/* src\hud\KeybindCreator.svelte generated by Svelte v4.2.19 */
 
 	function add_css$e(target) {
 		append_styles(target, "svelte-1j00okq", "dialog.svelte-1j00okq{width:400px;height:300px;border-radius:15px;background-color:white;border:3px solid black;display:flex;flex-direction:column}h2.svelte-1j00okq{width:100%;text-align:center}button[disabled].svelte-1j00okq{opacity:0.5;cursor:not-allowed}.recordBtn.svelte-1j00okq{width:100%;height:50px;border:none;background-color:#f0f0f0;cursor:pointer;border-radius:10px}.hotkeyDisplay.svelte-1j00okq{width:100%;text-align:center;height:80px;overflow-y:auto;margin-top:20px}.completeContainer.svelte-1j00okq{display:flex;justify-content:space-between;margin-top:20px}.confirm.svelte-1j00okq,.cancel.svelte-1j00okq{width:40%;border:none;border-radius:3px}.confirm.svelte-1j00okq{background-color:lightgreen}.cancel.svelte-1j00okq{background-color:lightcoral}");
@@ -12279,7 +12358,7 @@
 		}
 	}
 
-	/* src\hud\components\Hotkey.svelte generated by Svelte v4.2.9 */
+	/* src\hud\components\Hotkey.svelte generated by Svelte v4.2.19 */
 
 	function add_css$d(target) {
 		append_styles(target, "svelte-1tsrn0k", "button.svelte-1tsrn0k{background-color:transparent;border:none;height:30px;margin:0px;padding-right:0px}");
@@ -12437,7 +12516,7 @@
 		}
 	}
 
-	/* src\hud\components\Button.svelte generated by Svelte v4.2.9 */
+	/* src\hud\components\Button.svelte generated by Svelte v4.2.19 */
 
 	function add_css$c(target) {
 		append_styles(target, "svelte-o69qzc", ".wrap.svelte-o69qzc{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;margin:5px 10px}button.svelte-o69qzc{background-color:var(--buttonBackgroundColor);border:1px solid var(--buttonBorderColor);border-radius:5px;transition:transform 0.1s;flex-grow:1}button.svelte-o69qzc:disabled{opacity:0.5;cursor:not-allowed}button.svelte-o69qzc:active,button.active.svelte-o69qzc{transform:scale(0.95)}");
@@ -12661,7 +12740,7 @@
 		}
 	}
 
-	/* src\hud\Group.svelte generated by Svelte v4.2.9 */
+	/* src\hud\Group.svelte generated by Svelte v4.2.19 */
 
 	function add_css$b(target) {
 		append_styles(target, "svelte-151a7uw", ".groupContent.svelte-151a7uw{transform:translateX(100%);opacity:0;pointer-events:none;display:none}@keyframes slide-in-left{0%{transform:translateX(-100%);opacity:0;pointer-events:none}100%{transform:translateX(0%);opacity:1;pointer-events:all}}@keyframes slide-out-left{0%{transform:translateX(0%);opacity:1;pointer-events:all}100%{transform:translateX(-100%);opacity:0;pointer-events:none}}@keyframes slide-in-right{0%{transform:translateX(100%);opacity:0;pointer-events:none}100%{transform:translateX(0%);opacity:1;pointer-events:all}}@keyframes slide-out-right{0%{transform:translateX(0%);opacity:1;pointer-events:all}100%{transform:translateX(100%);opacity:0;pointer-events:none}}");
@@ -12885,7 +12964,7 @@
 		}
 	}
 
-	/* src\hud\components\ColorPicker.svelte generated by Svelte v4.2.9 */
+	/* src\hud\components\ColorPicker.svelte generated by Svelte v4.2.19 */
 
 	function add_css$a(target) {
 		append_styles(target, "svelte-qar3ci", ".colorPicker.svelte-qar3ci{width:100%;display:flex;flex-direction:column;align-items:center}.inputs.svelte-qar3ci{display:flex;align-items:center;justify-content:space-around;width:100%;max-width:100%}.opacityBlock.svelte-qar3ci{display:flex;flex-direction:column;align-items:center}.alphaInput.svelte-qar3ci{flex-shrink:1;min-width:0;width:100%}.colorInput.svelte-qar3ci{flex-shrink:0}.preview.svelte-qar3ci{width:50px;height:50px;border-radius:10px;flex-shrink:0;border:2px solid black}");
@@ -13142,7 +13221,7 @@
 		}
 	}
 
-	/* src\hud\ResetStyles.svelte generated by Svelte v4.2.9 */
+	/* src\hud\ResetStyles.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$k(ctx) {
 		let t;
@@ -13229,7 +13308,7 @@
 		}
 	}
 
-	/* src\hud\components\ToggleButton.svelte generated by Svelte v4.2.9 */
+	/* src\hud\components\ToggleButton.svelte generated by Svelte v4.2.19 */
 
 	function create_else_block$2(ctx) {
 		let t;
@@ -13410,7 +13489,7 @@
 		}
 	}
 
-	/* src\scripts\AutoAnswer.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\AutoAnswer.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$v(ctx) {
 		let togglebutton;
@@ -13581,7 +13660,7 @@
 		}
 	}
 
-	/* src\scripts\2d\InstantUse.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\2d\InstantUse.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$u(ctx) {
 		let togglebutton;
@@ -13685,7 +13764,7 @@
 	const knownSkins = ["dayOne", "echoAgent", "stripeDoubleGreen", "mustache", "vortexAgent", "grayGradient", "redNinja", "sprinklesRed", "redDeliciousApple", "sunny", "fadedBlueGradient", "glassHalfFull", "whiteAndBlueVerticalStripes", "polkaDotBlueAndYellow", "pinkPaste", "volcanoCracks", "mustachePink", "mountainAndSun", "camoTan", "redDinoCostume", "stripeDoubleRed", "coolRedBlueGradient", "pencilPack", "glyphsYellowBrown", "camoBlue", "purplePaste", "galaxy", "luchador", "fox", "pumpkin", "rockyWest", "mummy", "ghostCostume", "fifthBirthday", "corn", "feast", "pumpkinPie", "frostBuddy", "polkaDotWhiteAndRed", "festiveOnesieBlue", "festiveOnesieRed", "festiveOnesieGreen", "festiveOnesieTan", "gift", "hotChocolate", "snowman", "snowglobe", "mustacheSanta", "firework", "polkaDotFestiveReverse", "polkaDotFestive", "puzzleYellowPurple", "puzzleGreenBlue", "puzzleOrangeBlue", "puzzleGrayWhite", "puzzleRedGreen", "roses", "heart", "hamster", "leprechaun", "cellGold", "pirate", "constellationPurpleYellow", "constellationBlackGreen", "constellationBlackWhite", "constellationPinkGreen", "constellationYellowPink", "detective", "sketch", "astroHelmet", "mustacheBrown", "yinYang", "fisher", "coffee", "partyPineapple", "construction", "graduate", "graduateBlue", "stripeDoublePurple", "bananaSplit", "rainbowWave", "rockstar", "mountain", "tent", "goat", "daisy", "climber", "cookie", "zebra", "diamondRainbow", "circuitGreen", "circuitBlue", "circuitGray", "clock", "squiggles", "autumnTree", "crashTestDummy", "stripeDoubleYellow", "witch", "skeleton", "spiderWeb", "trickTreat", "calacaOne", "turkey", "farmer", "knight", "yellowCracksPurple", "arcticFox", "whistle", "penguinBlue", "goldenHotChocolate", "blastball", "blastballGimchester", "blastballKitcelona", "pufferJacket", "christmasTree", "rudolph", "snowball", "santaClaus", "causticWaterBlue", "causticWaterRed", "causticWaterGreen", "causticWaterCaribe", "causticWaterOcean", "causticWaterPurple", "taco", "gimKing", "sketchBlue", "clown", "camoGreen", "cellBlue", "burger", "sprinklesChocolate", "glyphsOrangeBlue", "frozenMummy", "evilPlantGreen", "evilPlantPink", "gamerGreen", "gamerPink", "gamerPurple", "gamerYellow", "sentryRobot", "8bit", "redDino", "calacaTwo", "calacaThree", "yarn", "racoon", "pilot", "shark", "redPanda", "marshmallow", "discoBall", "incognito", "dragon", "golden", "valenTime", "referee", "pilot", "sprinklesChocolate", "miningCart", "rainCloud", "watermelon", "terrainBlock", "floatingTube", "miner", "sproutingFlower", "luckyClover", "shark", "axolotlPink", "axolotlBlue", "axolotlYellow", "astroCaptain", "tuxedo", "blacksmith"];
 	const knownTrails = ["origin_token", "fire_notes", "banana_peel", "rainbow_dots", "dust_particles", "bubble", "flowers", "metal_spring", "candy", "day_of_the_dead", "autumn_leaves", "corn", "hearts", "stars", "yin_yang", "puzzle_pieces", "taco", "blastball_phrases", "penguin_footprints", "blastball", "cupid_arrow", "birds", "mining_terrains", "beachball", "clovers", "easter_eggs"];
 
-	/* src\hud\components\InputWithSelect.svelte generated by Svelte v4.2.9 */
+	/* src\hud\components\InputWithSelect.svelte generated by Svelte v4.2.19 */
 
 	function add_css$9(target) {
 		append_styles(target, "svelte-bgasye", ".container.svelte-bgasye{display:flex;padding:5px 10px;width:100%;justify-items:center;align-self:center}input.svelte-bgasye{flex-grow:1;color:black}select.svelte-bgasye{width:20px;color:black}");
@@ -13853,7 +13932,7 @@
 		}
 	}
 
-	/* src\scripts\customization\CosmeticPicker.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\customization\CosmeticPicker.svelte generated by Svelte v4.2.19 */
 
 	function add_css$8(target) {
 		append_styles(target, "svelte-1ychv30", ".disclaimer.svelte-1ychv30{margin-left:5px;margin-right:5px;text-align:center}.description.svelte-1ychv30{width:100%;text-align:center}");
@@ -14382,7 +14461,7 @@
 	    }
 	];
 
-	/* node_modules\svelte-material-icons\Delete.svelte generated by Svelte v4.2.9 */
+	/* node_modules\svelte-material-icons\Delete.svelte generated by Svelte v4.2.19 */
 
 	function create_if_block_1$3(ctx) {
 		let desc_1;
@@ -14589,7 +14668,7 @@
 		}
 	}
 
-	/* node_modules\svelte-material-icons\PlusCircleOutline.svelte generated by Svelte v4.2.9 */
+	/* node_modules\svelte-material-icons\PlusCircleOutline.svelte generated by Svelte v4.2.19 */
 
 	function create_if_block_1$2(ctx) {
 		let desc_1;
@@ -14796,7 +14875,7 @@
 		}
 	}
 
-	/* src\scripts\customization\customTheme\CreateTheme.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\customization\customTheme\CreateTheme.svelte generated by Svelte v4.2.19 */
 
 	function add_css$7(target) {
 		append_styles(target, "svelte-v66qr8", ".buttons.svelte-v66qr8{display:flex;flex-direction:row;width:100%}.submit.svelte-v66qr8,.cancel.svelte-v66qr8{padding:10px;margin:10px;font-size:20px;border:none;border-radius:5px;flex-grow:1}.submit.svelte-v66qr8{background-color:green}.cancel.svelte-v66qr8{background-color:red}dialog.svelte-v66qr8{width:80%;height:80%;display:flex}.pickers.svelte-v66qr8{width:200px;overflow-y:auto;overflow-x:hidden}.wrap.svelte-v66qr8{display:flex;flex-direction:column;height:100%;flex-grow:1}.question.svelte-v66qr8{width:100%;height:30%;font-family:'Product Sans', sans-serif;display:flex;align-items:center;justify-content:center;font-size:50px}.options.svelte-v66qr8{flex-grow:1;display:grid;grid-template-columns:repeat(2, 1fr);width:100%}.option.svelte-v66qr8{background-color:blue;display:flex;align-items:center;justify-content:center;font-family:'Product Sans', sans-serif;font-size:25px;border:6px solid rgba(0, 0, 0, 0.3)}");
@@ -15460,7 +15539,7 @@
 		}
 	}
 
-	/* src\scripts\customization\customTheme\CustomTheme.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\customization\customTheme\CustomTheme.svelte generated by Svelte v4.2.19 */
 
 	function add_css$6(target) {
 		append_styles(target, "svelte-1yznqq", ".createTheme.svelte-1yznqq.svelte-1yznqq{display:flex;align-items:center;justify-content:center;gap:5px}.title.svelte-1yznqq.svelte-1yznqq{position:relative;width:100%;text-align:center;display:flex;justify-content:center}.title.svelte-1yznqq>div.svelte-1yznqq{position:absolute;right:0;top:0}.theme.svelte-1yznqq.svelte-1yznqq{display:flex;flex-direction:column;align-items:center;margin:10px}.theme.selected.svelte-1yznqq.svelte-1yznqq{border:5px solid black;outline:3px solid white}.options.svelte-1yznqq.svelte-1yznqq{display:flex;flex-direction:row;align-items:center;width:100%}.option.svelte-1yznqq.svelte-1yznqq{flex-grow:1;text-align:center;margin:5px}.themeEnabled.svelte-1yznqq.svelte-1yznqq{display:flex;align-items:center;justify-content:center;margin-left:10px;margin-right:10px}.themeEnabled.svelte-1yznqq>div.svelte-1yznqq{margin-right:10px}.themeEnabled.svelte-1yznqq>input.svelte-1yznqq{width:20px;height:20px}");
@@ -16037,7 +16116,7 @@
 		};
 	}
 
-	const selector$1 = '[style^="opacity:"][style*="transform: translateY(0%)"]';
+	const selector = '[style^="opacity:"][style*="transform: translateY(0%)"]';
 
 	function instance$h($$self, $$props, $$invalidate) {
 		let $transportType;
@@ -16061,9 +16140,9 @@
 						let found;
 
 						if ($transportType === 'colyseus') {
-							found = node.querySelector(selector$1);
+							found = node.querySelector(selector);
 						} else if ($transportType === 'blueboat') {
-							if (node.matches(selector$1)) {
+							if (node.matches(selector)) {
 								found = node;
 							}
 						}
@@ -16193,7 +16272,7 @@
 		}
 	}
 
-	/* src\scripts\2d\PlayerHighlighter.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\2d\PlayerHighlighter.svelte generated by Svelte v4.2.19 */
 
 	const { window: window_1 } = globals;
 
@@ -16478,7 +16557,7 @@
 		}
 	}
 
-	/* src\hud\components\Slider.svelte generated by Svelte v4.2.9 */
+	/* src\hud\components\Slider.svelte generated by Svelte v4.2.19 */
 
 	function add_css$4(target) {
 		append_styles(target, "svelte-vkb13i", ".sliderWrap.svelte-vkb13i{display:flex;flex-direction:column;align-items:center;margin:5px 10px}.sliderWrap.disabled.svelte-vkb13i{opacity:0.5}input.svelte-vkb13i{flex-grow:1;width:100%}input[disabled].svelte-vkb13i{cursor:not-allowed}");
@@ -16664,7 +16743,7 @@
 		}
 	}
 
-	/* src\scripts\2d\Freecam.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\2d\Freecam.svelte generated by Svelte v4.2.19 */
 
 	function add_css$3(target) {
 		append_styles(target, "svelte-oqtmhy", "select.svelte-oqtmhy{width:calc(100% - 10px);padding:5px;margin-left:5px;margin-right:5px;color:black}select[disabled].svelte-oqtmhy{cursor:not-allowed}");
@@ -17200,7 +17279,7 @@
 		}
 	}
 
-	/* src\scripts\2d\HideEnergyPopup.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\2d\HideEnergyPopup.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$k(ctx) {
 		let togglebutton;
@@ -17280,7 +17359,7 @@
 		}
 	}
 
-	/* src\scripts\classic\AutoPurchase.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\classic\AutoPurchase.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$e(ctx) {
 		let togglebutton;
@@ -17466,7 +17545,7 @@
 		}
 	};
 
-	/* src\scripts\superRichMode\AutoPurchase.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\superRichMode\AutoPurchase.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$d(ctx) {
 		let togglebutton;
@@ -17652,7 +17731,7 @@
 		}
 	}
 
-	/* src\scripts\trustNoOne\ShowImposters.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\trustNoOne\ShowImposters.svelte generated by Svelte v4.2.19 */
 
 	function add_css$2(target) {
 		append_styles(target, "svelte-1h3d0lh", "div.svelte-1h3d0lh{padding-left:10px;padding-right:10px}");
@@ -17762,7 +17841,7 @@
 		}
 	}
 
-	/* src\scripts\shared\PurchaseAnywhere.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\shared\PurchaseAnywhere.svelte generated by Svelte v4.2.19 */
 
 	function create_if_block$1(ctx) {
 		let t0;
@@ -18001,7 +18080,7 @@
 		}
 	}
 
-	/* src\scripts\ctf\Ctf.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\ctf\Ctf.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$a(ctx) {
 		let purchaseanywhere0;
@@ -18204,7 +18283,7 @@
 		}
 	}
 
-	/* src\scripts\tag\Tag.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\tag\Tag.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$9(ctx) {
 		let purchaseanywhere0;
@@ -18356,7 +18435,7 @@
 		}
 	}
 
-	/* src\scripts\oneWayOut\OneWayOut.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\oneWayOut\OneWayOut.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$8(ctx) {
 		let purchaseanywhere0;
@@ -18466,7 +18545,7 @@
 		}
 	}
 
-	/* src\scripts\shared\Rapidfire.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\shared\Rapidfire.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$c(ctx) {
 		let togglebutton;
@@ -18577,7 +18656,7 @@
 		}
 	}
 
-	/* src\scripts\snowbrawl\Snowbrawl.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\snowbrawl\Snowbrawl.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$7(ctx) {
 		let purchaseanywhere0;
@@ -18704,7 +18783,7 @@
 		}
 	}
 
-	/* src\scripts\floorIsLava\AutoBuild.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\floorIsLava\AutoBuild.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$a(ctx) {
 		let togglebutton;
@@ -18834,7 +18913,7 @@
 		}
 	}
 
-	/* src\scripts\floorIsLava\HidePopups.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\floorIsLava\HidePopups.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$9(ctx) {
 		let togglebutton;
@@ -18945,7 +19024,7 @@
 		}
 	}
 
-	/* src\scripts\floorIsLava\FloorIsLava.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\floorIsLava\FloorIsLava.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$6(ctx) {
 		let autobuild;
@@ -19040,7 +19119,7 @@
 		}
 	}
 
-	/* src\scripts\farmchain\AutoPlant.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\farmchain\AutoPlant.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$7(ctx) {
 		let togglebutton;
@@ -19179,7 +19258,7 @@
 		}
 	}
 
-	/* src\scripts\farmchain\AutoHarvest.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\farmchain\AutoHarvest.svelte generated by Svelte v4.2.19 */
 
 	function create_fragment$6(ctx) {
 		let togglebutton;
@@ -19271,7 +19350,7 @@
 		}
 	}
 
-	/* src\scripts\farmchain\Farmchain.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\farmchain\Farmchain.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot_2$2(ctx) {
 		let purchaseanywhere0;
@@ -19864,199 +19943,105 @@
 		}
 	}
 
-	let physicsConsts = writable(null);
-	function exposeValues(parcel) {
-	    // get the stores object
-	    parcel.interceptRequire(exports => exports?.default?.characters, exports => {
-	        getUnsafeWindow().stores = exports.default;
-	        storesLoaded.set(true);
-	        console.log("GC: Stores loaded via parcel");
-	    });
-	    // get the physics constants
-	    parcel.interceptRequire(exports => exports?.CharacterPhysicsConsts, exports => {
-	        physicsConsts.set(exports.CharacterPhysicsConsts);
-	        console.log("GC: Physics constants loaded");
-	    });
-	}
-
-	/* src\scripts\2d\Movement.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\2d\Movement.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$4(ctx) {
-		let slider0;
+		let slider;
 		let updating_value;
-		let t0;
-		let togglebutton0;
+		let t;
+		let togglebutton;
 		let updating_enabled;
-		let t1;
-		let slider1;
-		let updating_value_1;
-		let t2;
-		let togglebutton1;
-		let updating_enabled_1;
 		let current;
 
-		function slider0_value_binding(value) {
-			/*slider0_value_binding*/ ctx[11](value);
+		function slider_value_binding(value) {
+			/*slider_value_binding*/ ctx[6](value);
 		}
 
-		let slider0_props = {
+		let slider_props = {
 			title: "Speedup Amount",
 			min: 1,
-			max: /*maxSpeedupMultiplier*/ ctx[6],
+			max: /*maxSpeedupMultiplier*/ ctx[3],
 			step: 0.005
 		};
 
 		if (/*speedupMultiplier*/ ctx[0] !== void 0) {
-			slider0_props.value = /*speedupMultiplier*/ ctx[0];
+			slider_props.value = /*speedupMultiplier*/ ctx[0];
 		}
 
-		slider0 = new Slider({ props: slider0_props });
-		binding_callbacks.push(() => bind(slider0, 'value', slider0_value_binding));
-		slider0.$on("input", /*onSpeedupMultChange*/ ctx[8]);
+		slider = new Slider({ props: slider_props });
+		binding_callbacks.push(() => bind(slider, 'value', slider_value_binding));
+		slider.$on("input", /*onSpeedupMultChange*/ ctx[5]);
 
-		function togglebutton0_enabled_binding(value) {
-			/*togglebutton0_enabled_binding*/ ctx[12](value);
+		function togglebutton_enabled_binding(value) {
+			/*togglebutton_enabled_binding*/ ctx[7](value);
 		}
 
-		let togglebutton0_props = {
-			disabled: !/*$storesLoaded*/ ctx[5],
+		let togglebutton_props = {
+			disabled: !/*$storesLoaded*/ ctx[2],
 			onText: "Speedup: On",
 			offText: "Speedup: Off",
 			hotkeyId: "speedup"
 		};
 
 		if (/*speedupEnabled*/ ctx[1] !== void 0) {
-			togglebutton0_props.enabled = /*speedupEnabled*/ ctx[1];
+			togglebutton_props.enabled = /*speedupEnabled*/ ctx[1];
 		}
 
-		togglebutton0 = new ToggleButton({ props: togglebutton0_props });
-		binding_callbacks.push(() => bind(togglebutton0, 'enabled', togglebutton0_enabled_binding));
-		togglebutton0.$on("click", /*click_handler*/ ctx[13]);
-
-		function slider1_value_binding(value) {
-			/*slider1_value_binding*/ ctx[14](value);
-		}
-
-		let slider1_props = {
-			title: "Jump Boost Amount",
-			min: 1,
-			max: /*maxSpeedupMultiplier*/ ctx[6],
-			step: 0.005
-		};
-
-		if (/*jumpboostMultiplier*/ ctx[3] !== void 0) {
-			slider1_props.value = /*jumpboostMultiplier*/ ctx[3];
-		}
-
-		slider1 = new Slider({ props: slider1_props });
-		binding_callbacks.push(() => bind(slider1, 'value', slider1_value_binding));
-		slider1.$on("input", /*onJumpboostMultChange*/ ctx[10]);
-
-		function togglebutton1_enabled_binding(value) {
-			/*togglebutton1_enabled_binding*/ ctx[15](value);
-		}
-
-		let togglebutton1_props = {
-			disabled: !/*$physicsConsts*/ ctx[4],
-			onText: "Jump Boost: On",
-			offText: "Jump Boost: Off",
-			hotkeyId: "jumpboost"
-		};
-
-		if (/*jumpboostEnabled*/ ctx[2] !== void 0) {
-			togglebutton1_props.enabled = /*jumpboostEnabled*/ ctx[2];
-		}
-
-		togglebutton1 = new ToggleButton({ props: togglebutton1_props });
-		binding_callbacks.push(() => bind(togglebutton1, 'enabled', togglebutton1_enabled_binding));
-		togglebutton1.$on("click", /*click_handler_1*/ ctx[16]);
+		togglebutton = new ToggleButton({ props: togglebutton_props });
+		binding_callbacks.push(() => bind(togglebutton, 'enabled', togglebutton_enabled_binding));
+		togglebutton.$on("click", /*click_handler*/ ctx[8]);
 
 		return {
 			c() {
-				create_component(slider0.$$.fragment);
-				t0 = space();
-				create_component(togglebutton0.$$.fragment);
-				t1 = space();
-				create_component(slider1.$$.fragment);
-				t2 = space();
-				create_component(togglebutton1.$$.fragment);
+				create_component(slider.$$.fragment);
+				t = space();
+				create_component(togglebutton.$$.fragment);
 			},
 			m(target, anchor) {
-				mount_component(slider0, target, anchor);
-				insert(target, t0, anchor);
-				mount_component(togglebutton0, target, anchor);
-				insert(target, t1, anchor);
-				mount_component(slider1, target, anchor);
-				insert(target, t2, anchor);
-				mount_component(togglebutton1, target, anchor);
+				mount_component(slider, target, anchor);
+				insert(target, t, anchor);
+				mount_component(togglebutton, target, anchor);
 				current = true;
 			},
 			p(ctx, dirty) {
-				const slider0_changes = {};
+				const slider_changes = {};
 
 				if (!updating_value && dirty & /*speedupMultiplier*/ 1) {
 					updating_value = true;
-					slider0_changes.value = /*speedupMultiplier*/ ctx[0];
+					slider_changes.value = /*speedupMultiplier*/ ctx[0];
 					add_flush_callback(() => updating_value = false);
 				}
 
-				slider0.$set(slider0_changes);
-				const togglebutton0_changes = {};
-				if (dirty & /*$storesLoaded*/ 32) togglebutton0_changes.disabled = !/*$storesLoaded*/ ctx[5];
+				slider.$set(slider_changes);
+				const togglebutton_changes = {};
+				if (dirty & /*$storesLoaded*/ 4) togglebutton_changes.disabled = !/*$storesLoaded*/ ctx[2];
 
 				if (!updating_enabled && dirty & /*speedupEnabled*/ 2) {
 					updating_enabled = true;
-					togglebutton0_changes.enabled = /*speedupEnabled*/ ctx[1];
+					togglebutton_changes.enabled = /*speedupEnabled*/ ctx[1];
 					add_flush_callback(() => updating_enabled = false);
 				}
 
-				togglebutton0.$set(togglebutton0_changes);
-				const slider1_changes = {};
-
-				if (!updating_value_1 && dirty & /*jumpboostMultiplier*/ 8) {
-					updating_value_1 = true;
-					slider1_changes.value = /*jumpboostMultiplier*/ ctx[3];
-					add_flush_callback(() => updating_value_1 = false);
-				}
-
-				slider1.$set(slider1_changes);
-				const togglebutton1_changes = {};
-				if (dirty & /*$physicsConsts*/ 16) togglebutton1_changes.disabled = !/*$physicsConsts*/ ctx[4];
-
-				if (!updating_enabled_1 && dirty & /*jumpboostEnabled*/ 4) {
-					updating_enabled_1 = true;
-					togglebutton1_changes.enabled = /*jumpboostEnabled*/ ctx[2];
-					add_flush_callback(() => updating_enabled_1 = false);
-				}
-
-				togglebutton1.$set(togglebutton1_changes);
+				togglebutton.$set(togglebutton_changes);
 			},
 			i(local) {
 				if (current) return;
-				transition_in(slider0.$$.fragment, local);
-				transition_in(togglebutton0.$$.fragment, local);
-				transition_in(slider1.$$.fragment, local);
-				transition_in(togglebutton1.$$.fragment, local);
+				transition_in(slider.$$.fragment, local);
+				transition_in(togglebutton.$$.fragment, local);
 				current = true;
 			},
 			o(local) {
-				transition_out(slider0.$$.fragment, local);
-				transition_out(togglebutton0.$$.fragment, local);
-				transition_out(slider1.$$.fragment, local);
-				transition_out(togglebutton1.$$.fragment, local);
+				transition_out(slider.$$.fragment, local);
+				transition_out(togglebutton.$$.fragment, local);
 				current = false;
 			},
 			d(detaching) {
 				if (detaching) {
-					detach(t0);
-					detach(t1);
-					detach(t2);
+					detach(t);
 				}
 
-				destroy_component(slider0, detaching);
-				destroy_component(togglebutton0, detaching);
-				destroy_component(slider1, detaching);
-				destroy_component(togglebutton1, detaching);
+				destroy_component(slider, detaching);
+				destroy_component(togglebutton, detaching);
 			}
 		};
 	}
@@ -20084,7 +20069,7 @@
 			p(ctx, [dirty]) {
 				const group_changes = {};
 
-				if (dirty & /*$$scope, $physicsConsts, jumpboostEnabled, jumpboostMultiplier, $storesLoaded, speedupEnabled, speedupMultiplier*/ 2097215) {
+				if (dirty & /*$$scope, $storesLoaded, speedupEnabled, speedupMultiplier*/ 4103) {
 					group_changes.$$scope = { dirty, ctx };
 				}
 
@@ -20106,10 +20091,8 @@
 	}
 
 	function instance$2($$self, $$props, $$invalidate) {
-		let $physicsConsts;
 		let $storesLoaded;
-		component_subscribe($$self, physicsConsts, $$value => $$invalidate(4, $physicsConsts = $$value));
-		component_subscribe($$self, storesLoaded, $$value => $$invalidate(5, $storesLoaded = $$value));
+		component_subscribe($$self, storesLoaded, $$value => $$invalidate(2, $storesLoaded = $$value));
 		const maxSpeedupMultiplier = 490 / 357; // gathered from some testing, any higher and we get teleported back
 
 		// this file is a hot mess, but it works
@@ -20121,25 +20104,14 @@
 
 		function enableSpeedup(value) {
 			if (!getUnsafeWindow()?.stores?.me) return;
-			let mapStyle = getUnsafeWindow().stores.session.mapStyle;
 
 			// restore or set the speed
-			if (mapStyle == "platformer") {
-				if (!value) {
-					set_store_value(physicsConsts, $physicsConsts.platformerGroundSpeed = nativeSpeed, $physicsConsts);
-				} else {
-					let newSpeed = nativeSpeed * speedupMultiplier;
-					lastSetTo = newSpeed;
-					set_store_value(physicsConsts, $physicsConsts.platformerGroundSpeed = newSpeed, $physicsConsts);
-				}
+			if (!value) {
+				getUnsafeWindow().stores.me.movementSpeed = nativeSpeed;
 			} else {
-				if (!value) {
-					getUnsafeWindow().stores.me.movementSpeed = nativeSpeed;
-				} else {
-					let newSpeed = nativeSpeed * speedupMultiplier;
-					lastSetTo = newSpeed;
-					getUnsafeWindow().stores.me.movementSpeed = newSpeed;
-				}
+				let newSpeed = nativeSpeed * speedupMultiplier;
+				lastSetTo = newSpeed;
+				getUnsafeWindow().stores.me.movementSpeed = newSpeed;
 			}
 		}
 
@@ -20147,108 +20119,46 @@
 
 		function checkSpeed() {
 			if (!getUnsafeWindow()?.stores?.me) return;
-			let mapStyle = getUnsafeWindow().stores.session.mapStyle;
-			if (!mapStyle) return;
 
-			if (mapStyle == "platformer") {
-				// 2d platformer modes
-				let currentSpeed = $physicsConsts.platformerGroundSpeed;
+			// 2d modes
+			let currentSpeed = getUnsafeWindow().stores.me.movementSpeed;
 
-				if (currentSpeed !== lastSetTo) {
-					nativeSpeed = currentSpeed;
-					if (speedupEnabled) enableSpeedup(true);
-				}
-			} else {
-				// 2d modes
-				let currentSpeed = getUnsafeWindow().stores.me.movementSpeed;
-
-				if (currentSpeed !== lastSetTo) {
-					nativeSpeed = currentSpeed;
-					if (speedupEnabled) enableSpeedup(true);
-				}
+			if (currentSpeed !== lastSetTo) {
+				nativeSpeed = currentSpeed;
+				if (speedupEnabled) enableSpeedup(true);
 			}
 		}
 
 		function onSpeedupMultChange(value) {
 			$$invalidate(0, speedupMultiplier = value.detail);
 			if (!getUnsafeWindow()?.stores?.me || !speedupEnabled) return;
-			let mapStyle = getUnsafeWindow().stores.session.mapStyle;
-			if (!mapStyle) return;
 			let newSpeed = nativeSpeed * value.detail;
 			lastSetTo = newSpeed;
-
-			if (mapStyle == "platformer") {
-				set_store_value(physicsConsts, $physicsConsts.platformerGroundSpeed = newSpeed, $physicsConsts);
-			} else {
-				getUnsafeWindow().stores.me.movementSpeed = newSpeed;
-			}
+			getUnsafeWindow().stores.me.movementSpeed = newSpeed;
 		}
 
-		let jumpboostEnabled = false;
-		let jumpboostMultiplier = 1;
-		let nativeJumpboost = -1;
-
-		function enableJumpboost(value) {
-			if (nativeJumpboost == -1) nativeJumpboost = $physicsConsts.jump.height;
-
-			if (!value) {
-				set_store_value(physicsConsts, $physicsConsts.jump.height = nativeJumpboost, $physicsConsts);
-			} else {
-				let newJump = nativeJumpboost * jumpboostMultiplier;
-				set_store_value(physicsConsts, $physicsConsts.jump.height = newJump, $physicsConsts);
-			}
-		}
-
-		function onJumpboostMultChange(e) {
-			$$invalidate(3, jumpboostMultiplier = e.detail);
-			if (!jumpboostEnabled || !$physicsConsts) return;
-			if (nativeJumpboost == -1) nativeJumpboost = $physicsConsts.jump.height;
-			let newJump = nativeJumpboost * e.detail;
-			set_store_value(physicsConsts, $physicsConsts.jump.height = newJump, $physicsConsts);
-		}
-
-		function slider0_value_binding(value) {
+		function slider_value_binding(value) {
 			speedupMultiplier = value;
 			$$invalidate(0, speedupMultiplier);
 		}
 
-		function togglebutton0_enabled_binding(value) {
+		function togglebutton_enabled_binding(value) {
 			speedupEnabled = value;
 			$$invalidate(1, speedupEnabled);
 		}
 
 		const click_handler = e => enableSpeedup(e.detail);
 
-		function slider1_value_binding(value) {
-			jumpboostMultiplier = value;
-			$$invalidate(3, jumpboostMultiplier);
-		}
-
-		function togglebutton1_enabled_binding(value) {
-			jumpboostEnabled = value;
-			$$invalidate(2, jumpboostEnabled);
-		}
-
-		const click_handler_1 = e => enableJumpboost(e.detail);
-
 		return [
 			speedupMultiplier,
 			speedupEnabled,
-			jumpboostEnabled,
-			jumpboostMultiplier,
-			$physicsConsts,
 			$storesLoaded,
 			maxSpeedupMultiplier,
 			enableSpeedup,
 			onSpeedupMultChange,
-			enableJumpboost,
-			onJumpboostMultChange,
-			slider0_value_binding,
-			togglebutton0_enabled_binding,
-			click_handler,
-			slider1_value_binding,
-			togglebutton1_enabled_binding,
-			click_handler_1
+			slider_value_binding,
+			togglebutton_enabled_binding,
+			click_handler
 		];
 	}
 
@@ -20259,7 +20169,7 @@
 		}
 	}
 
-	/* src\scripts\digItUp\Purchasers.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\digItUp\Purchasers.svelte generated by Svelte v4.2.19 */
 
 	function add_css$1(target) {
 		append_styles(target, "svelte-1a7yjpn", ".notLoaded.svelte-1a7yjpn{width:100%;text-align:center}");
@@ -21049,7 +20959,7 @@
 		}
 	}
 
-	/* src\scripts\digItUp\DigItUp.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\digItUp\DigItUp.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$2(ctx) {
 		let rapidfire;
@@ -21152,7 +21062,7 @@
 		}
 	}
 
-	/* src\scripts\knockback\Knockback.svelte generated by Svelte v4.2.9 */
+	/* src\scripts\knockback\Knockback.svelte generated by Svelte v4.2.19 */
 
 	function create_default_slot$1(ctx) {
 		let rapidfire;
@@ -21240,7 +21150,7 @@
 		}
 	}
 
-	/* src\hud\Hud.svelte generated by Svelte v4.2.9 */
+	/* src\hud\Hud.svelte generated by Svelte v4.2.19 */
 
 	function add_css(target) {
 		append_styles(target, "svelte-1byew0x", "#gc-hud.svelte-1byew0x{position:absolute;top:0;left:0;z-index:9999999999;width:100vw;height:100vh;pointer-events:none;color:var(--textColor)}");
@@ -21928,228 +21838,23 @@
 	    addVars();
 	}
 
-	const selector = 'script[src^="/index"][type="module"]';
-	function setup() {
-	    const script = document.querySelector(selector);
-	    if (script) {
-	        addModifiedScript(script.src);
-	        console.log("GC: Added modified script", script);
-	        return;
+	async function exposeValues() {
+	    if (!document.body) {
+	        await new Promise((res) => document.addEventListener('DOMContentLoaded', res));
 	    }
-	    let observer = new MutationObserver((mutations) => {
-	        for (let mutation of mutations) {
-	            for (let node of mutation.addedNodes) {
-	                if (node instanceof HTMLScriptElement && node.src.includes("/index") && node.type == "module") {
-	                    addModifiedScript(node.src);
-	                    console.log("GC: Added modified script", node);
-	                    observer.disconnect();
-	                }
-	            }
-	        }
-	    });
-	    const attachObserver = () => {
-	        observer.observe(document.head, {
-	            childList: true
-	        });
-	    };
-	    if (document.head)
-	        attachObserver();
-	    else
-	        document.addEventListener('DOMContentLoaded', attachObserver);
-	}
-	function addModifiedScript(src) {
-	    console.log(src);
-	    // we want to manually fetch the script so we can modify it
-	    fetch(src)
-	        .then(response => response.text())
-	        .then(text => {
-	        // find the five character id (plus quotes) of the script we want to get
-	        // eg: ,"5CPH7":"App.83745002.js",
-	        const index = text.indexOf(':"App.');
-	        if (!index) {
-	            alert("GC: Failed to find the correct script to modify. Please open an issue on GitHub.");
-	            return;
-	        }
-	        const id = text.substring(index - 7, index);
-	        const scriptModuleIndex = text.lastIndexOf(').register(JSON.parse(', index);
-	        const scriptModuleId = text.substring(scriptModuleIndex - 7, scriptModuleIndex);
-	        const regex = new RegExp(`import\\("\\.\\/"\\+(.)\\(${scriptModuleId}\\)\\.resolve\\(${id}\\)\\)`, 'g');
-	        // get the wildcard character
-	        const wildcard = regex.exec(text)?.[1];
-	        if (!wildcard) {
-	            alert("GC: Failed to find the correct script to modify. Please open an issue on GitHub.");
-	            return;
-	        }
-	        text = text.replace(regex, `new Promise(async (resolve) => {
-    const src = "./"+${wildcard}(${scriptModuleId}).resolve(${id})
-    console.log(src)
-    const res = await fetch(src)
-    let text = await res.text()
-    const endRegex = /assignment:new\\(0,(.)\\.default\\)\\}/
-    const endRes = endRegex.exec(text)
-    const varRegex = /(.)={network:new/
-    const varRes = varRegex.exec(text)
-    if(!endRes[1] || !varRes[1]) {
-        alert("GC: Failed to find the correct script to modify. Please open an issue on GitHub.")
-        return;
-    }
-    text = text.replace(endRegex, 'assignment:new(0,'+endRes[1]+'.default)};window.stores='+varRes[1]+';window.storesLoaded.set(true);console.log("GC: Stores loaded via intercept");')
-
-    const script = document.createElement('script');
-    try {
-        script.appendChild(document.createTextNode(text));
-        document.head.appendChild(script);
-    } catch(e) { 
-        script.text = text;
-        document.head.appendChild(script);
-    }
-    setTimeout(resolve, 0)
-})`);
-	        // replace all "./" with "/"
-	        text = text.replace(/"\.\/"/g, '"/"');
-	        // create a new script element with the modified url
-	        const script = document.createElement('script');
-	        script.type = "module";
-	        document.querySelector("#root")?.remove();
-	        let root = document.createElement('div');
-	        root.id = "root";
-	        document.body.appendChild(root);
-	        try {
-	            script.appendChild(document.createTextNode(text));
-	            document.head.appendChild(script);
-	        }
-	        catch (e) {
-	            script.text = text;
-	            document.head.appendChild(script);
-	        }
-	    });
-	}
-
-	// mostly copied from https://github.com/TheLazySquid/Gimloader/blob/main/src/parcel/parcel.ts
-	// which was inspired by https://codeberg.org/gimhook/gimhook
-	class Parcel extends EventTarget {
-	    _parcelModuleCache = {};
-	    _parcelModules = {};
-	    reqIntercepts = [];
-	    readyToIntercept = true;
-	    constructor() {
-	        super();
-	        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])');
-	        if (existingScripts.length > 0) {
-	            this.readyToIntercept = false;
-	            if (document.readyState === 'complete') {
-	                this.setup();
-	                this.reloadExistingScripts(existingScripts);
-	            }
-	            else {
-	                window.addEventListener('load', () => {
-	                    this.setup();
-	                    this.reloadExistingScripts(existingScripts);
-	                });
-	            }
-	        }
-	        else
-	            this.setup();
-	        getUnsafeWindow().decachedImport = this.decachedImport.bind(this);
-	    }
-	    async reloadExistingScripts(existingScripts) {
-	        // nuke the dom
-	        this.nukeDom();
-	        this.readyToIntercept = true;
-	        this.emptyModules();
-	        existingScripts.forEach(script => {
-	            // re-import the script since it's already loaded
-	            console.log(script, 'has already loaded, re-importing...');
-	            this.decachedImport(script.src);
-	            script.remove();
-	        });
-	    }
-	    nukeDom() {
-	        document.querySelector("#root")?.remove();
-	        let newRoot = document.createElement('div');
-	        newRoot.id = 'root';
-	        document.body.appendChild(newRoot);
-	        // remove all global variables
-	        let vars = ["__mobxGlobals", "__mobxInstanceCount"];
-	        for (let v of vars) {
-	            if (v in window)
-	                delete window[v];
-	        }
-	    }
-	    async decachedImport(url) {
-	        let src = new URL(url, location.origin).href;
-	        let res = await fetch(src);
-	        let text = await res.text();
-	        // nasty hack to prevent the browser from caching other scripts
-	        text = text.replaceAll('import(', 'window.decachedImport(');
-	        text = text.replaceAll('import.meta.url', `'${src}'`);
-	        let blob = new Blob([text], { type: 'application/javascript' });
-	        let blobUrl = URL.createObjectURL(blob);
-	        return import(blobUrl);
-	    }
-	    emptyModules() {
-	        this._parcelModuleCache = {};
-	        this._parcelModules = {};
-	    }
-	    interceptRequire(match, callback, once = false) {
-	        if (!match || !callback)
-	            throw new Error('match and callback are required');
-	        let intercept = { match, callback, once };
-	        this.reqIntercepts.push(intercept);
-	        // return a cancel function
-	        return () => {
-	            let index = this.reqIntercepts.indexOf(intercept);
-	            if (index !== -1)
-	                this.reqIntercepts.splice(index, 1);
-	        };
-	    }
-	    setup() {
-	        let requireHook;
-	        ((requireHook = (moduleName) => {
-	            if (moduleName in this._parcelModuleCache) {
-	                return this._parcelModuleCache[moduleName].exports;
-	            }
-	            if (moduleName in this._parcelModules) {
-	                let moduleCallback = this._parcelModules[moduleName];
-	                delete this._parcelModules[moduleName];
-	                let moduleObject = {
-	                    id: moduleName,
-	                    exports: {}
-	                };
-	                this._parcelModuleCache[moduleName] = moduleObject;
-	                moduleCallback.call(moduleObject.exports, moduleObject, moduleObject.exports);
-	                // run intercepts
-	                if (this.readyToIntercept) {
-	                    for (let intercept of this.reqIntercepts) {
-	                        if (intercept.match(moduleObject.exports)) {
-	                            let returned = intercept.callback?.(moduleObject.exports);
-	                            if (returned)
-	                                moduleObject.exports = returned;
-	                            if (intercept.once) {
-	                                this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
-	                            }
-	                        }
-	                    }
-	                }
-	                return moduleObject.exports;
-	            }
-	            throw new Error(`Cannot find module '${moduleName}'`);
-	        }
-	        // @ts-ignore
-	        ).register = (moduleName, moduleCallback) => {
-	            this._parcelModules[moduleName] = moduleCallback;
-	            // remove it from the cache if it's already been loaded
-	            if (moduleName in this._parcelModuleCache) {
-	                delete this._parcelModuleCache[moduleName];
-	            }
-	        });
-	        Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {
-	            value: requireHook,
-	            writable: false,
-	            enumerable: true,
-	            configurable: false
-	        });
-	    }
+	    const script = document.querySelector("script[src][type='module']");
+	    if (!script)
+	        throw new Error("Failed to find script");
+	    const res = await fetch(script.src);
+	    const text = await res.text();
+	    const gameScriptUrl = text.match(/FixSpinePlugin-[^.]+\.js/)?.[0];
+	    if (!gameScriptUrl)
+	        throw new Error("Failed to find game script URL");
+	    const gameScript = await import(`/assets/${gameScriptUrl}`);
+	    const stores = Object.values(gameScript).find(v => v.assignment);
+	    getUnsafeWindow().stores = stores;
+	    storesLoaded.set(true);
+	    console.log("GC: Stores loaded");
 	}
 
 	// confirm that no amplitude.com script exists
@@ -22158,9 +21863,7 @@
 	    alert("This script can only be run before you join the game. Please reload the page and try again.");
 	}
 	else {
-	    let parcel = new Parcel();
-	    exposeValues(parcel);
-	    setup();
+	    exposeValues();
 	    socketManager.setup();
 	    createHud();
 	}

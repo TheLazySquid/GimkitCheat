@@ -1,21 +1,23 @@
-import Parcel from "./parcelIntercept";
 import { getUnsafeWindow } from "./utils";
 import { storesLoaded } from "./stores";
-import { writable } from "svelte/store";
 
-export let physicsConsts = writable<any | null>(null);
+export async function exposeValues() {
+    if(!document.body) {
+        await new Promise((res) => document.addEventListener('DOMContentLoaded', res));
+    }
 
-export function exposeValues(parcel: Parcel) {
-    // get the stores object
-    parcel.interceptRequire(exports => exports?.default?.characters, exports => {
-        getUnsafeWindow().stores = exports.default;
-        storesLoaded.set(true);
-        console.log("GC: Stores loaded via parcel")
-    })
+    const script = document.querySelector<HTMLScriptElement>("script[src][type='module']");
+    if(!script) throw new Error("Failed to find script");
 
-    // get the physics constants
-    parcel.interceptRequire(exports => exports?.CharacterPhysicsConsts, exports => {
-        physicsConsts.set(exports.CharacterPhysicsConsts);
-        console.log("GC: Physics constants loaded")
-    })
+    const res = await fetch(script.src);
+    const text = await res.text();
+    const gameScriptUrl = text.match(/FixSpinePlugin-[^.]+\.js/)?.[0];
+    if(!gameScriptUrl) throw new Error("Failed to find game script URL");
+
+    const gameScript = await import(`/assets/${gameScriptUrl}`);
+    const stores = Object.values<any>(gameScript).find(v => v.assignment);
+
+    getUnsafeWindow().stores = stores;
+    storesLoaded.set(true);
+    console.log("GC: Stores loaded");
 }

@@ -42,14 +42,16 @@
                 let mostValuableSeed = undefined
                 for(let seed of seedRanking) {
                     let recipie = recipieDevices[seed]
+                    if(!recipie) continue
                     let canPlant = true
 
                     // check if we have enough of each ingredient
-                    for(let i = 0; i < 5; i++) {
-                        let reqIngredient = recipie?.options?.[`ingredient${i}Item`]
+                    for(let i = 0; i <= 5; i++) {
+                        let reqIngredient = recipie.options?.[`ingredient${i}Item`]
                         if(!reqIngredient) continue
 
-                        if(!inventory.get(reqIngredient)?.amount >= recipie.options[`ingredient${i}Amount`]) {
+                        let have = inventory.get(reqIngredient)?.amount ?? 0
+                        if(have < (recipie.options[`ingredient${i}Amount`] ?? 0)) {
                             canPlant = false
                             break
                         }
@@ -65,6 +67,7 @@
         
                 // plant the seed in the last idle plot
                 let plantPlot = plots.findLast((plot: any) => plot.state.status == "idle")
+                if(!plantPlot) return
         
                 socketManager.sendMessage("MESSAGE_FOR_DEVICE", {
                     key: "craft",

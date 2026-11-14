@@ -30,9 +30,22 @@
     keybindManager.addKeybind(new Set(["\\"]), () => {
         showHud.update(v => !v);
     })
+
+    // Keep keystrokes typed into HUD fields from reaching the game's hotkeys
+    // (and our own keybinds), which listen on window in the bubble phase.
+    const nonTextInputs = new Set(["checkbox", "radio", "range", "color", "button", "submit", "reset", "file"]);
+
+    function stopIfTyping(event: KeyboardEvent) {
+        let target = event.target as HTMLInputElement;
+        let isTextInput = target?.tagName === "INPUT" && !nonTextInputs.has(target.type);
+        if(isTextInput || target?.tagName === "TEXTAREA") {
+            event.stopPropagation();
+        }
+    }
 </script>
 
-<div id="gc-hud" style="display: {$showHud ? 'block' : 'none'}">
+<div id="gc-hud" style="display: {$showHud ? 'block' : 'none'}"
+on:keydown={stopIfTyping} on:keyup={stopIfTyping}>
     <Menu name="Customization">
         <Group name="HUD Appearance">
             <ColorPicker text="Text Color" bindValue="textColor" minOpactiy={0.3} />

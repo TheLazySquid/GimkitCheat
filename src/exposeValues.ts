@@ -1,6 +1,19 @@
 import { getUnsafeWindow } from "./utils";
 import { storesLoaded } from "./stores";
 
+function isStores(value: any) {
+    return value && typeof value === "object" && "assignment" in value && "phaser" in value;
+}
+
+async function tryModule(url: string) {
+    try {
+        const mod = await import(/* @vite-ignore */ url);
+        return Object.values<any>(mod).find(isStores) ?? null;
+    } catch {
+        return null;
+    }
+}
+
 export async function exposeValues() {
     if(!document.body) {
         await new Promise((res) => document.addEventListener('DOMContentLoaded', res));
@@ -11,13 +24,21 @@ export async function exposeValues() {
 
     const res = await fetch(script.src);
     const text = await res.text();
-    const gameScriptUrl = text.match(/FixSpinePlugin-[^.]+\.js/)?.[0];
-    if(!gameScriptUrl) throw new Error("Failed to find game script URL");
 
-    const gameScript = await import(`/assets/${gameScriptUrl}`);
-    const stores = Object.values<any>(gameScript).find(v => v.assignment);
+    // Chunk names are hashed and change between Gimkit builds, so look for the
+    // chunk(s) named "stores-*" first, falling back to the old chunk name.
+    const chunks = [...new Set(text.match(/(?:stores|FixSpinePlugin)-[\w-]+\.js/g) ?? [])];
+    if(chunks.length === 0) throw new Error("Failed to find stores chunk");
 
-    getUnsafeWindow().stores = stores;
-    storesLoaded.set(true);
-    console.log("GC: Stores loaded");
+    for(const chunk of chunks) {
+        const stores = await tryModule(new URL(chunk, script.src).href);
+        if(!stores) continue;
+
+        getUnsafeWindow().stores = stores;
+        storesLoaded.set(true);
+        console.log("GC: Stores loaded");
+        return;
+    }
+
+    throw new Error("Failed to find stores object");
 }

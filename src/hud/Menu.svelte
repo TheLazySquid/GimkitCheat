@@ -29,9 +29,35 @@
     let returnX: number = coords.x;
     let returnY: number = coords.y;
 
+    // The spring integrates using the time since the last animation frame. When the tab is
+    // in the background, frames are throttled, the timestep gets huge and the spring can
+    // blow up to +-Infinity, leaving the menu permanently off-screen. Track the target and
+    // snap straight to it whenever the position stops being sane.
+    let springTarget = coords;
+
+    function isSane(c: { x: number, y: number }) {
+        const limitX = window.innerWidth * 3 + 1000;
+        const limitY = window.innerHeight * 3 + 1000;
+        return Number.isFinite(c.x) && Number.isFinite(c.y) &&
+            Math.abs(c.x) < limitX && Math.abs(c.y) < limitY;
+    }
+
+    function setCoords(target: { x: number, y: number }) {
+        springTarget = target;
+        coordSpring.set(target, { hard: document.hidden || !isSane(get(coordSpring)) });
+    }
+
+    coordSpring.subscribe((c) => {
+        if(!isSane(c) && isSane(springTarget)) coordSpring.set(springTarget, { hard: true });
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if(!document.hidden) coordSpring.set(springTarget, { hard: true });
+    });
+
     function onResize() {
         let coords = get(coordSpring);
-        coordSpring.set(moveInbounds(coords.x, coords.y));
+        setCoords(moveInbounds(coords.x, coords.y));
     }
 
     function moveInbounds(x: number, y: number) {
@@ -47,7 +73,7 @@
     // move out of the way when the hud is hidden
     showHud.subscribe((v) => {
         if(v) {
-            coordSpring.set(moveInbounds(returnX, returnY));
+            setCoords(moveInbounds(returnX, returnY));
             transitioning = false;
         } else {
             transitioning = true;
@@ -61,9 +87,9 @@
             let endY = cY < window.innerHeight / 2 ? -lastHeight : window.innerHeight;
             
             if(Math.abs(endX - coords.x) < Math.abs(endY - coords.y)) {
-                coordSpring.set({ x: endX, y: coords.y });
+                setCoords({ x: endX, y: coords.y });
             } else {
-                coordSpring.set({ x: coords.x, y: endY });
+                setCoords({ x: coords.x, y: endY });
             }
         }
     })
@@ -86,6 +112,7 @@
     function saveTransform() {
         if(transitioning) return;
         let coords = get(coordSpring);
+        if(!isSane(coords)) return;
         setMenuTransform(name, {
             x: coords.x,
             y: coords.y,
@@ -114,7 +141,7 @@
             returnX = newX;
             returnY = newY;
 
-            coordSpring.set(moveInbounds(newX, newY));
+            setCoords(moveInbounds(newX, newY));
             saveTransformDebounce();
         }
     }

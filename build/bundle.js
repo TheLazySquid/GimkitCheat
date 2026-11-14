@@ -384,7 +384,7 @@
 		if (value == null) {
 			node.style.removeProperty(key);
 		} else {
-			node.style.setProperty(key, value, '');
+			node.style.setProperty(key, value, important ? 'important' : '');
 		}
 	}
 
@@ -447,7 +447,7 @@
 	 *
 	 * If a function is returned _synchronously_ from `onMount`, it will be called when the component is unmounted.
 	 *
-	 * `onMount` does not run inside a [server-side component](https://svelte.dev/docs#run-time-server-side-component-api).
+	 * `onMount` does not run inside a [server-side component](/docs#run-time-server-side-component-api).
 	 *
 	 * https://svelte.dev/docs/svelte#onmount
 	 * @template T
@@ -473,7 +473,7 @@
 	}
 
 	/**
-	 * Creates an event dispatcher that can be used to dispatch [component events](https://svelte.dev/docs#template-syntax-component-directives-on-eventname).
+	 * Creates an event dispatcher that can be used to dispatch [component events](/docs#template-syntax-component-directives-on-eventname).
 	 * Event dispatchers are functions that can take two arguments: `name` and `detail`.
 	 *
 	 * Component events created with `createEventDispatcher` create a
@@ -996,15 +996,6 @@
 		let timestamp;
 		let result;
 
-		function run() {
-			const callContext = storedContext;
-			const callArguments = storedArguments;
-			storedContext = undefined;
-			storedArguments = undefined;
-			result = function_.apply(callContext, callArguments);
-			return result;
-		}
-
 		function later() {
 			const last = Date.now() - timestamp;
 
@@ -1014,7 +1005,11 @@
 				timeoutId = undefined;
 
 				if (!immediate) {
-					result = run();
+					const callContext = storedContext;
+					const callArguments = storedArguments;
+					storedContext = undefined;
+					storedArguments = undefined;
+					result = function_.apply(callContext, callArguments);
 				}
 			}
 		}
@@ -1035,7 +1030,11 @@
 			}
 
 			if (callNow) {
-				result = run();
+				const callContext = storedContext;
+				const callArguments = storedArguments;
+				storedContext = undefined;
+				storedArguments = undefined;
+				result = function_.apply(callContext, callArguments);
 			}
 
 			return result;
@@ -1055,13 +1054,14 @@
 				return;
 			}
 
-			debounced.trigger();
-		};
+			const callContext = storedContext;
+			const callArguments = storedArguments;
+			storedContext = undefined;
+			storedArguments = undefined;
+			result = function_.apply(callContext, callArguments);
 
-		debounced.trigger = () => {
-			result = run();
-
-			debounced.clear();
+			clearTimeout(timeoutId);
+			timeoutId = undefined;
 		};
 
 		return debounced;
@@ -2336,7 +2336,7 @@
 	var colyseus = {exports: {}};
 
 	(function (module, exports) {
-		// colyseus.js@0.15.26 (@colyseus/schema 2.0.9)
+		// colyseus.js@0.15.17 (@colyseus/schema 2.0.9)
 		(function (global, factory) {
 		    factory(exports) ;
 		})(commonjsGlobal, (function (exports) {
@@ -2422,7 +2422,7 @@
 		            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
 		            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
 		            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-		            step((generator = generator.apply(thisArg, [])).next());
+		            step((generator = generator.apply(thisArg, _arguments || [])).next());
 		        });
 		    }
 
@@ -2461,8 +2461,10 @@
 		    }
 
 		    function __classPrivateFieldSet(receiver, state, value, kind, f) {
+		        if (kind === "m") throw new TypeError("Private method is not writable");
+		        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
 		        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-		        return (state.set(receiver, value)), value;
+		        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 		    }
 
 		    var CloseCode;
@@ -3435,14 +3437,14 @@
 		        }
 
 		        function __decorate(decorators, target, key, desc) {
-		            var c = arguments.length, r = c < 3 ? target : desc, d;
+		            var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 		            if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
 		            else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 		            return c > 3 && r && Object.defineProperty(target, key, r), r;
 		        }
 
 		        function __spreadArray(to, from, pack) {
-		            if (arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+		            if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 		                if (ar || !(i in from)) {
 		                    if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 		                    ar[i] = from[i];
@@ -7061,12 +7063,7 @@
 		            if (options === void 0) { options = {}; }
 		            return httpie[method](this.client['getHttpEndpoint'](path), this.getOptions(options)).catch(function (e) {
 		                var _a;
-		                var status = e.statusCode; //  || -1
-		                var message = ((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) || e.statusMessage || e.message; //  || "offline"
-		                if (!status && !message) {
-		                    throw e;
-		                }
-		                throw new ServerError(status, message);
+		                throw new ServerError(e.statusCode || -1, ((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) || e.statusMessage || e.message || "offline");
 		            });
 		        };
 		        HTTP.prototype.getOptions = function (options) {
@@ -7075,10 +7072,6 @@
 		                    options.headers = {};
 		                }
 		                options.headers['Authorization'] = "Bearer ".concat(this.authToken);
-		            }
-		            if (typeof (cc) !== 'undefined' && cc.sys && cc.sys.isNative) ;
-		            else {
-		                // always include credentials
 		                options.withCredentials = true;
 		            }
 		            return options;
@@ -7095,23 +7088,16 @@
 		    var storage;
 		    function getStorage() {
 		        if (!storage) {
-		            try {
-		                storage = (typeof (cc) !== 'undefined' && cc.sys && cc.sys.localStorage)
-		                    ? cc.sys.localStorage // compatibility with cocos creator
-		                    : window.localStorage; // RN does have window object at this point, but localStorage is not defined
-		            }
-		            catch (e) {
-		                // ignore error
-		            }
-		        }
-		        if (!storage) {
-		            // mock localStorage if not available (Node.js or RN environment)
-		            storage = {
-		                cache: {},
-		                setItem: function (key, value) { this.cache[key] = value; },
-		                getItem: function (key) { this.cache[key]; },
-		                removeItem: function (key) { delete this.cache[key]; },
-		            };
+		            storage = (typeof (cc) !== 'undefined' && cc.sys && cc.sys.localStorage)
+		                ? cc.sys.localStorage // compatibility with cocos creator
+		                : typeof (window) !== "undefined" && window.localStorage //RN does have window object at this point, but localStorage is not defined
+		                    ? window.localStorage // regular browser environment
+		                    : {
+		                        cache: {},
+		                        setItem: function (key, value) { this.cache[key] = value; },
+		                        getItem: function (key) { this.cache[key]; },
+		                        removeItem: function (key) { delete this.cache[key]; },
+		                    };
 		        }
 		        return storage;
 		    }
@@ -7172,9 +7158,9 @@
 		                    }).finally(function () {
 		                        resolve();
 		                    });
-		                }));
+		                }), "f");
 		            }
-		            __classPrivateFieldSet(this, _Auth__initialized, true);
+		            __classPrivateFieldSet(this, _Auth__initialized, true, "f");
 		            return unbindChange;
 		        };
 		        Auth.prototype.getUserData = function () {
@@ -7265,7 +7251,7 @@
 		                            var url = _this.http['client']['getHttpEndpoint']("".concat((settings.prefix || "".concat(_this.settings.path, "/provider")), "/").concat(providerName).concat(upgradingToken));
 		                            var left = (screen.width / 2) - (w / 2);
 		                            var top = (screen.height / 2) - (h / 2);
-		                            __classPrivateFieldSet(_this, _Auth__signInWindow, window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left));
+		                            __classPrivateFieldSet(_this, _Auth__signInWindow, window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left), "f");
 		                            var onMessage = function (event) {
 		                                // TODO: it is a good idea to check if event.origin can be trusted!
 		                                // if (event.origin.indexOf(window.location.hostname) === -1) { return; }
@@ -7275,7 +7261,7 @@
 		                                }
 		                                clearInterval(rejectionChecker);
 		                                __classPrivateFieldGet(_this, _Auth__signInWindow, "f").close();
-		                                __classPrivateFieldSet(_this, _Auth__signInWindow, undefined);
+		                                __classPrivateFieldSet(_this, _Auth__signInWindow, undefined, "f");
 		                                window.removeEventListener("message", onMessage);
 		                                if (event.data.error !== undefined) {
 		                                    reject(event.data.error);
@@ -7287,7 +7273,7 @@
 		                            };
 		                            var rejectionChecker = setInterval(function () {
 		                                if (!__classPrivateFieldGet(_this, _Auth__signInWindow, "f") || __classPrivateFieldGet(_this, _Auth__signInWindow, "f").closed) {
-		                                    __classPrivateFieldSet(_this, _Auth__signInWindow, undefined);
+		                                    __classPrivateFieldSet(_this, _Auth__signInWindow, undefined, "f");
 		                                    reject("cancelled");
 		                                    window.removeEventListener("message", onMessage);
 		                                }
@@ -7322,52 +7308,6 @@
 		    }());
 		    _Auth__initialized = new WeakMap(), _Auth__initializationPromise = new WeakMap(), _Auth__signInWindow = new WeakMap(), _Auth__events = new WeakMap();
 
-		    /**
-		     * Discord Embedded App SDK
-		     * https://github.com/colyseus/colyseus/issues/707
-		     *
-		     * All URLs must go through the local proxy from
-		     * https://<app_id>.discordsays.com/.proxy/<mapped_url>/...
-		     *
-		     * URL Mapping Examples:
-		     *
-		     * 1. Using Colyseus Cloud:
-		     *   - /colyseus/{subdomain} -> {subdomain}.colyseus.cloud
-		     *
-		     *   Example:
-		     *     const client = new Client("https://xxxx.colyseus.cloud");
-		     *
-		     * -------------------------------------------------------------
-		     *
-		     * 2. Using `cloudflared` tunnel:
-		     *   - /colyseus/ -> <your-cloudflared-url>.trycloudflare.com
-		     *
-		     *   Example:
-		     *     const client = new Client("https://<your-cloudflared-url>.trycloudflare.com");
-		     *
-		     * -------------------------------------------------------------
-		     *
-		     * 3. Providing a manual /.proxy/your-mapping:
-		     *   - /your-mapping/ -> your-endpoint.com
-		     *
-		     *   Example:
-		     *     const client = new Client("/.proxy/your-mapping");
-		     *
-		     */
-		    function discordURLBuilder(url) {
-		        var _a;
-		        var localHostname = ((_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.hostname) || "localhost";
-		        var remoteHostnameSplitted = url.hostname.split('.');
-		        var subdomain = (!url.hostname.includes("trycloudflare.com") && // ignore cloudflared subdomains
-		            !url.hostname.includes("discordsays.com") && // ignore discordsays.com subdomains
-		            remoteHostnameSplitted.length > 2)
-		            ? "/".concat(remoteHostnameSplitted[0])
-		            : '';
-		        return (url.pathname.startsWith("/.proxy"))
-		            ? "".concat(url.protocol, "//").concat(localHostname).concat(subdomain).concat(url.pathname).concat(url.search)
-		            : "".concat(url.protocol, "//").concat(localHostname, "/.proxy/colyseus").concat(subdomain).concat(url.pathname).concat(url.search);
-		    }
-
 		    var _a;
 		    var MatchMakeError = /** @class */ (function (_super) {
 		        __extends(MatchMakeError, _super);
@@ -7385,16 +7325,13 @@
 		        ? "".concat(window.location.protocol.replace("http", "ws"), "//").concat(window.location.hostname).concat((window.location.port && ":".concat(window.location.port)))
 		        : "ws://127.0.0.1:2567";
 		    var Client = /** @class */ (function () {
-		        function Client(settings, customURLBuilder) {
+		        function Client(settings) {
 		            if (settings === void 0) { settings = DEFAULT_ENDPOINT; }
-		            var _a, _b;
 		            if (typeof (settings) === "string") {
 		                //
 		                // endpoint by url
 		                //
-		                var url = (settings.startsWith("/"))
-		                    ? new URL(settings, DEFAULT_ENDPOINT)
-		                    : new URL(settings);
+		                var url = new URL(settings);
 		                var secure = (url.protocol === "https:" || url.protocol === "wss:");
 		                var port = Number(url.port || (secure ? 443 : 80));
 		                this.settings = {
@@ -7422,16 +7359,6 @@
 		            }
 		            this.http = new HTTP(this);
 		            this.auth = new Auth(this.http);
-		            this.urlBuilder = customURLBuilder;
-		            //
-		            // Discord Embedded SDK requires a custom URL builder
-		            //
-		            if (!this.urlBuilder &&
-		                typeof (window) !== "undefined" &&
-		                ((_b = (_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.hostname) === null || _b === void 0 ? void 0 : _b.includes("discordsays.com"))) {
-		                this.urlBuilder = discordURLBuilder;
-		                console.log("Colyseus SDK: Discord Embedded SDK detected. Using custom URL builder.");
-		            }
 		        }
 		        Client.prototype.joinOrCreate = function (roomName, options, rootSchema) {
 		            if (options === void 0) { options = {}; }
@@ -7633,18 +7560,12 @@
 		            else {
 		                endpoint += "".concat(this.settings.hostname).concat(this.getEndpointPort()).concat(this.settings.pathname);
 		            }
-		            var endpointURL = "".concat(endpoint, "/").concat(room.processId, "/").concat(room.roomId, "?").concat(params.join('&'));
-		            return (this.urlBuilder)
-		                ? this.urlBuilder(new URL(endpointURL))
-		                : endpointURL;
+		            return "".concat(endpoint, "/").concat(room.processId, "/").concat(room.roomId, "?").concat(params.join('&'));
 		        };
 		        Client.prototype.getHttpEndpoint = function (segments) {
 		            if (segments === void 0) { segments = ''; }
 		            var path = segments.startsWith("/") ? segments : "/".concat(segments);
-		            var endpointURL = "".concat((this.settings.secure) ? "https" : "http", "://").concat(this.settings.hostname).concat(this.getEndpointPort()).concat(this.settings.pathname).concat(path);
-		            return (this.urlBuilder)
-		                ? this.urlBuilder(new URL(endpointURL))
-		                : endpointURL;
+		            return "".concat((this.settings.secure) ? "https" : "http", "://").concat(this.settings.hostname).concat(this.getEndpointPort()).concat(this.settings.pathname).concat(path);
 		        };
 		        Client.prototype.getEndpointPort = function () {
 		            return (this.settings.port !== 80 && this.settings.port !== 443)
@@ -7750,14 +7671,14 @@
 		    }
 
 		    function __decorate(decorators, target, key, desc) {
-		        var c = arguments.length, r = c < 3 ? target : desc, d;
+		        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 		        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
 		        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 		        return c > 3 && r && Object.defineProperty(target, key, r), r;
 		    }
 
 		    function __spreadArray(to, from, pack) {
-		        if (arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+		        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 		            if (ar || !(i in from)) {
 		                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 		                ar[i] = from[i];
@@ -8195,13 +8116,6 @@
 		            //
 		            // FIXME: this should be O(1)
 		            //
-		            index = Math.trunc(index) || 0;
-		            // Allow negative indexing from the end
-		            if (index < 0)
-		                index += this.length;
-		            // OOB access is guaranteed to return undefined
-		            if (index < 0 || index >= this.length)
-		                return undefined;
 		            var key = Array.from(this.$items.keys())[index];
 		            return this.$items.get(key);
 		        };
@@ -9407,22 +9321,22 @@
 
 		    var encode = /*#__PURE__*/Object.freeze({
 		        __proto__: null,
-		        boolean: boolean$1,
+		        utf8Write: utf8Write,
+		        int8: int8$1,
+		        uint8: uint8$1,
+		        int16: int16$1,
+		        uint16: uint16$1,
+		        int32: int32$1,
+		        uint32: uint32$1,
+		        int64: int64$1,
+		        uint64: uint64$1,
 		        float32: float32$1,
 		        float64: float64$1,
-		        int16: int16$1,
-		        int32: int32$1,
-		        int64: int64$1,
-		        int8: int8$1,
-		        number: number$1,
-		        string: string$1,
-		        uint16: uint16$1,
-		        uint32: uint32$1,
-		        uint64: uint64$1,
-		        uint8: uint8$1,
-		        utf8Write: utf8Write,
 		        writeFloat32: writeFloat32,
-		        writeFloat64: writeFloat64
+		        writeFloat64: writeFloat64,
+		        boolean: boolean$1,
+		        string: string$1,
+		        number: number$1
 		    });
 
 		    /**
@@ -9657,25 +9571,25 @@
 
 		    var decode = /*#__PURE__*/Object.freeze({
 		        __proto__: null,
-		        arrayCheck: arrayCheck,
-		        boolean: boolean,
+		        int8: int8,
+		        uint8: uint8,
+		        int16: int16,
+		        uint16: uint16,
+		        int32: int32,
+		        uint32: uint32,
 		        float32: float32,
 		        float64: float64,
-		        int16: int16,
-		        int32: int32,
 		        int64: int64,
-		        int8: int8,
-		        number: number,
-		        numberCheck: numberCheck,
+		        uint64: uint64,
 		        readFloat32: readFloat32,
 		        readFloat64: readFloat64,
+		        boolean: boolean,
 		        string: string,
 		        stringCheck: stringCheck,
-		        switchStructureCheck: switchStructureCheck,
-		        uint16: uint16,
-		        uint32: uint32,
-		        uint64: uint64,
-		        uint8: uint8
+		        number: number,
+		        numberCheck: numberCheck,
+		        arrayCheck: arrayCheck,
+		        switchStructureCheck: switchStructureCheck
 		    });
 
 		    var CollectionSchema = /** @class */ (function () {
@@ -11113,6 +11027,8 @@
 		    exports.registerType = registerType;
 		    exports.type = type;
 
+		    Object.defineProperty(exports, '__esModule', { value: true });
+
 		})); 
 	} (umd, umd.exports));
 
@@ -11420,7 +11336,7 @@
 	    }
 	});
 
-	/* src\hud\Menu.svelte generated by Svelte v4.2.19 */
+	/* src/hud/Menu.svelte generated by Svelte v4.2.9 */
 
 	const { window: window_1$1 } = globals;
 
@@ -11549,6 +11465,12 @@
 		};
 	}
 
+	function isSane(c) {
+		const limitX = window.innerWidth * 3 + 1000;
+		const limitY = window.innerHeight * 3 + 1000;
+		return Number.isFinite(c.x) && Number.isFinite(c.y) && Math.abs(c.x) < limitX && Math.abs(c.y) < limitY;
+	}
+
 	function instance$x($$self, $$props, $$invalidate) {
 		let $coordSpring;
 		let { $$slots: slots = {}, $$scope } = $$props;
@@ -11569,9 +11491,31 @@
 		let returnX = coords.x;
 		let returnY = coords.y;
 
+		// The spring integrates using the time since the last animation frame. When the tab is
+		// in the background, frames are throttled, the timestep gets huge and the spring can
+		// blow up to +-Infinity, leaving the menu permanently off-screen. Track the target and
+		// snap straight to it whenever the position stops being sane.
+		let springTarget = coords;
+
+		function setCoords(target) {
+			springTarget = target;
+
+			coordSpring.set(target, {
+				hard: document.hidden || !isSane(get_store_value(coordSpring))
+			});
+		}
+
+		coordSpring.subscribe(c => {
+			if (!isSane(c) && isSane(springTarget)) coordSpring.set(springTarget, { hard: true });
+		});
+
+		document.addEventListener("visibilitychange", () => {
+			if (!document.hidden) coordSpring.set(springTarget, { hard: true });
+		});
+
 		function onResize() {
 			let coords = get_store_value(coordSpring);
-			coordSpring.set(moveInbounds(coords.x, coords.y));
+			setCoords(moveInbounds(coords.x, coords.y));
 		}
 
 		function moveInbounds(x, y) {
@@ -11587,7 +11531,7 @@
 		// move out of the way when the hud is hidden
 		showHud.subscribe(v => {
 			if (v) {
-				coordSpring.set(moveInbounds(returnX, returnY));
+				setCoords(moveInbounds(returnX, returnY));
 				transitioning = false;
 			} else {
 				transitioning = true;
@@ -11607,9 +11551,9 @@
 				: window.innerHeight;
 
 				if (Math.abs(endX - coords.x) < Math.abs(endY - coords.y)) {
-					coordSpring.set({ x: endX, y: coords.y });
+					setCoords({ x: endX, y: coords.y });
 				} else {
-					coordSpring.set({ x: coords.x, y: endY });
+					setCoords({ x: coords.x, y: endY });
 				}
 			}
 		});
@@ -11631,6 +11575,7 @@
 		function saveTransform() {
 			if (transitioning) return;
 			let coords = get_store_value(coordSpring);
+			if (!isSane(coords)) return;
 
 			setMenuTransform(name, {
 				x: coords.x,
@@ -11658,7 +11603,7 @@
 				let newY = event.clientY - startY;
 				returnX = newX;
 				returnY = newY;
-				coordSpring.set(moveInbounds(newX, newY));
+				setCoords(moveInbounds(newX, newY));
 				saveTransformDebounce();
 			}
 		}
@@ -11730,7 +11675,7 @@
 		}
 	}
 
-	/* node_modules\svelte-material-icons\KeyboardOutline.svelte generated by Svelte v4.2.19 */
+	/* node_modules/svelte-material-icons/KeyboardOutline.svelte generated by Svelte v4.2.9 */
 
 	function create_if_block_1$5(ctx) {
 		let desc_1;
@@ -11968,7 +11913,7 @@
 	}
 	const keybindManager = new KeybindManager();
 
-	/* src\hud\KeybindCreator.svelte generated by Svelte v4.2.19 */
+	/* src/hud/KeybindCreator.svelte generated by Svelte v4.2.9 */
 
 	function add_css$e(target) {
 		append_styles(target, "svelte-1j00okq", "dialog.svelte-1j00okq{width:400px;height:300px;border-radius:15px;background-color:white;border:3px solid black;display:flex;flex-direction:column}h2.svelte-1j00okq{width:100%;text-align:center}button[disabled].svelte-1j00okq{opacity:0.5;cursor:not-allowed}.recordBtn.svelte-1j00okq{width:100%;height:50px;border:none;background-color:#f0f0f0;cursor:pointer;border-radius:10px}.hotkeyDisplay.svelte-1j00okq{width:100%;text-align:center;height:80px;overflow-y:auto;margin-top:20px}.completeContainer.svelte-1j00okq{display:flex;justify-content:space-between;margin-top:20px}.confirm.svelte-1j00okq,.cancel.svelte-1j00okq{width:40%;border:none;border-radius:3px}.confirm.svelte-1j00okq{background-color:lightgreen}.cancel.svelte-1j00okq{background-color:lightcoral}");
@@ -12358,7 +12303,7 @@
 		}
 	}
 
-	/* src\hud\components\Hotkey.svelte generated by Svelte v4.2.19 */
+	/* src/hud/components/Hotkey.svelte generated by Svelte v4.2.9 */
 
 	function add_css$d(target) {
 		append_styles(target, "svelte-1tsrn0k", "button.svelte-1tsrn0k{background-color:transparent;border:none;height:30px;margin:0px;padding-right:0px}");
@@ -12516,7 +12461,7 @@
 		}
 	}
 
-	/* src\hud\components\Button.svelte generated by Svelte v4.2.19 */
+	/* src/hud/components/Button.svelte generated by Svelte v4.2.9 */
 
 	function add_css$c(target) {
 		append_styles(target, "svelte-o69qzc", ".wrap.svelte-o69qzc{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;margin:5px 10px}button.svelte-o69qzc{background-color:var(--buttonBackgroundColor);border:1px solid var(--buttonBorderColor);border-radius:5px;transition:transform 0.1s;flex-grow:1}button.svelte-o69qzc:disabled{opacity:0.5;cursor:not-allowed}button.svelte-o69qzc:active,button.active.svelte-o69qzc{transform:scale(0.95)}");
@@ -12740,7 +12685,7 @@
 		}
 	}
 
-	/* src\hud\Group.svelte generated by Svelte v4.2.19 */
+	/* src/hud/Group.svelte generated by Svelte v4.2.9 */
 
 	function add_css$b(target) {
 		append_styles(target, "svelte-151a7uw", ".groupContent.svelte-151a7uw{transform:translateX(100%);opacity:0;pointer-events:none;display:none}@keyframes slide-in-left{0%{transform:translateX(-100%);opacity:0;pointer-events:none}100%{transform:translateX(0%);opacity:1;pointer-events:all}}@keyframes slide-out-left{0%{transform:translateX(0%);opacity:1;pointer-events:all}100%{transform:translateX(-100%);opacity:0;pointer-events:none}}@keyframes slide-in-right{0%{transform:translateX(100%);opacity:0;pointer-events:none}100%{transform:translateX(0%);opacity:1;pointer-events:all}}@keyframes slide-out-right{0%{transform:translateX(0%);opacity:1;pointer-events:all}100%{transform:translateX(100%);opacity:0;pointer-events:none}}");
@@ -12964,7 +12909,7 @@
 		}
 	}
 
-	/* src\hud\components\ColorPicker.svelte generated by Svelte v4.2.19 */
+	/* src/hud/components/ColorPicker.svelte generated by Svelte v4.2.9 */
 
 	function add_css$a(target) {
 		append_styles(target, "svelte-qar3ci", ".colorPicker.svelte-qar3ci{width:100%;display:flex;flex-direction:column;align-items:center}.inputs.svelte-qar3ci{display:flex;align-items:center;justify-content:space-around;width:100%;max-width:100%}.opacityBlock.svelte-qar3ci{display:flex;flex-direction:column;align-items:center}.alphaInput.svelte-qar3ci{flex-shrink:1;min-width:0;width:100%}.colorInput.svelte-qar3ci{flex-shrink:0}.preview.svelte-qar3ci{width:50px;height:50px;border-radius:10px;flex-shrink:0;border:2px solid black}");
@@ -13221,7 +13166,7 @@
 		}
 	}
 
-	/* src\hud\ResetStyles.svelte generated by Svelte v4.2.19 */
+	/* src/hud/ResetStyles.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$k(ctx) {
 		let t;
@@ -13308,7 +13253,7 @@
 		}
 	}
 
-	/* src\hud\components\ToggleButton.svelte generated by Svelte v4.2.19 */
+	/* src/hud/components/ToggleButton.svelte generated by Svelte v4.2.9 */
 
 	function create_else_block$2(ctx) {
 		let t;
@@ -13489,7 +13434,7 @@
 		}
 	}
 
-	/* src\scripts\AutoAnswer.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/AutoAnswer.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$v(ctx) {
 		let togglebutton;
@@ -13660,7 +13605,7 @@
 		}
 	}
 
-	/* src\scripts\2d\InstantUse.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/2d/InstantUse.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$u(ctx) {
 		let togglebutton;
@@ -13764,7 +13709,7 @@
 	const knownSkins = ["dayOne", "echoAgent", "stripeDoubleGreen", "mustache", "vortexAgent", "grayGradient", "redNinja", "sprinklesRed", "redDeliciousApple", "sunny", "fadedBlueGradient", "glassHalfFull", "whiteAndBlueVerticalStripes", "polkaDotBlueAndYellow", "pinkPaste", "volcanoCracks", "mustachePink", "mountainAndSun", "camoTan", "redDinoCostume", "stripeDoubleRed", "coolRedBlueGradient", "pencilPack", "glyphsYellowBrown", "camoBlue", "purplePaste", "galaxy", "luchador", "fox", "pumpkin", "rockyWest", "mummy", "ghostCostume", "fifthBirthday", "corn", "feast", "pumpkinPie", "frostBuddy", "polkaDotWhiteAndRed", "festiveOnesieBlue", "festiveOnesieRed", "festiveOnesieGreen", "festiveOnesieTan", "gift", "hotChocolate", "snowman", "snowglobe", "mustacheSanta", "firework", "polkaDotFestiveReverse", "polkaDotFestive", "puzzleYellowPurple", "puzzleGreenBlue", "puzzleOrangeBlue", "puzzleGrayWhite", "puzzleRedGreen", "roses", "heart", "hamster", "leprechaun", "cellGold", "pirate", "constellationPurpleYellow", "constellationBlackGreen", "constellationBlackWhite", "constellationPinkGreen", "constellationYellowPink", "detective", "sketch", "astroHelmet", "mustacheBrown", "yinYang", "fisher", "coffee", "partyPineapple", "construction", "graduate", "graduateBlue", "stripeDoublePurple", "bananaSplit", "rainbowWave", "rockstar", "mountain", "tent", "goat", "daisy", "climber", "cookie", "zebra", "diamondRainbow", "circuitGreen", "circuitBlue", "circuitGray", "clock", "squiggles", "autumnTree", "crashTestDummy", "stripeDoubleYellow", "witch", "skeleton", "spiderWeb", "trickTreat", "calacaOne", "turkey", "farmer", "knight", "yellowCracksPurple", "arcticFox", "whistle", "penguinBlue", "goldenHotChocolate", "blastball", "blastballGimchester", "blastballKitcelona", "pufferJacket", "christmasTree", "rudolph", "snowball", "santaClaus", "causticWaterBlue", "causticWaterRed", "causticWaterGreen", "causticWaterCaribe", "causticWaterOcean", "causticWaterPurple", "taco", "gimKing", "sketchBlue", "clown", "camoGreen", "cellBlue", "burger", "sprinklesChocolate", "glyphsOrangeBlue", "frozenMummy", "evilPlantGreen", "evilPlantPink", "gamerGreen", "gamerPink", "gamerPurple", "gamerYellow", "sentryRobot", "8bit", "redDino", "calacaTwo", "calacaThree", "yarn", "racoon", "pilot", "shark", "redPanda", "marshmallow", "discoBall", "incognito", "dragon", "golden", "valenTime", "referee", "pilot", "sprinklesChocolate", "miningCart", "rainCloud", "watermelon", "terrainBlock", "floatingTube", "miner", "sproutingFlower", "luckyClover", "shark", "axolotlPink", "axolotlBlue", "axolotlYellow", "astroCaptain", "tuxedo", "blacksmith"];
 	const knownTrails = ["origin_token", "fire_notes", "banana_peel", "rainbow_dots", "dust_particles", "bubble", "flowers", "metal_spring", "candy", "day_of_the_dead", "autumn_leaves", "corn", "hearts", "stars", "yin_yang", "puzzle_pieces", "taco", "blastball_phrases", "penguin_footprints", "blastball", "cupid_arrow", "birds", "mining_terrains", "beachball", "clovers", "easter_eggs"];
 
-	/* src\hud\components\InputWithSelect.svelte generated by Svelte v4.2.19 */
+	/* src/hud/components/InputWithSelect.svelte generated by Svelte v4.2.9 */
 
 	function add_css$9(target) {
 		append_styles(target, "svelte-bgasye", ".container.svelte-bgasye{display:flex;padding:5px 10px;width:100%;justify-items:center;align-self:center}input.svelte-bgasye{flex-grow:1;color:black}select.svelte-bgasye{width:20px;color:black}");
@@ -13932,13 +13877,13 @@
 		}
 	}
 
-	/* src\scripts\customization\CosmeticPicker.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/customization/CosmeticPicker.svelte generated by Svelte v4.2.9 */
 
 	function add_css$8(target) {
 		append_styles(target, "svelte-1ychv30", ".disclaimer.svelte-1ychv30{margin-left:5px;margin-right:5px;text-align:center}.description.svelte-1ychv30{width:100%;text-align:center}");
 	}
 
-	// (54:4) <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
+	// (61:4) <Button disabled={!gotSkinId} disabledMsg="Character hasn't loaded" on:click={apply}>
 	function create_default_slot_1$5(ctx) {
 		let t;
 
@@ -13957,7 +13902,7 @@
 		};
 	}
 
-	// (42:0) <Group name="Cosmetic Picker">
+	// (49:0) <Group name="Cosmetic Picker">
 	function create_default_slot$i(ctx) {
 		let div0;
 		let t1;
@@ -14067,7 +14012,7 @@
 				const button_changes = {};
 				if (dirty & /*gotSkinId*/ 4) button_changes.disabled = !/*gotSkinId*/ ctx[2];
 
-				if (dirty & /*$$scope*/ 256) {
+				if (dirty & /*$$scope*/ 1024) {
 					button_changes.$$scope = { dirty, ctx };
 				}
 
@@ -14128,7 +14073,7 @@
 			p(ctx, [dirty]) {
 				const group_changes = {};
 
-				if (dirty & /*$$scope, gotSkinId, trailId, skinId*/ 263) {
+				if (dirty & /*$$scope, gotSkinId, trailId, skinId*/ 1031) {
 					group_changes.$$scope = { dirty, ctx };
 				}
 
@@ -14151,21 +14096,26 @@
 
 	function instance$l($$self, $$props, $$invalidate) {
 		let $playerId;
-		component_subscribe($$self, playerId, $$value => $$invalidate(6, $playerId = $$value));
+		component_subscribe($$self, playerId, $$value => $$invalidate(8, $playerId = $$value));
 		let skinId = '';
 		let trailId = '';
 		let gotSkinId = false;
 
+		// The character spawns with a default skin and the real one is applied a moment later,
+		// so keep the fields in sync with the character until the user edits them.
+		let syncedSkinId = null;
+
+		let syncedTrailId = null;
+
 		let checkInterval = setInterval(
 			() => {
 				let char = getUnsafeWindow()?.stores?.phaser?.scene?.characterManager?.characters?.get($playerId);
-
-				if (char) {
-					$$invalidate(0, skinId = char.skin.skinId);
-					$$invalidate(1, trailId = char.characterTrail.currentAppearanceId);
-					$$invalidate(2, gotSkinId = true);
-					clearInterval(checkInterval);
-				}
+				if (!char) return;
+				let currentSkin = String(char.skin.latestSkinId ?? char.skin.skinId ?? "").replace(/^character_/, "");
+				let currentTrail = char.characterTrail.currentAppearanceId;
+				if (syncedSkinId === null || skinId === syncedSkinId) $$invalidate(0, skinId = syncedSkinId = currentSkin);
+				if (syncedTrailId === null || trailId === syncedTrailId) $$invalidate(1, trailId = syncedTrailId = currentTrail);
+				$$invalidate(2, gotSkinId = true);
 			},
 			500
 		);
@@ -14461,7 +14411,7 @@
 	    }
 	];
 
-	/* node_modules\svelte-material-icons\Delete.svelte generated by Svelte v4.2.19 */
+	/* node_modules/svelte-material-icons/Delete.svelte generated by Svelte v4.2.9 */
 
 	function create_if_block_1$3(ctx) {
 		let desc_1;
@@ -14668,7 +14618,7 @@
 		}
 	}
 
-	/* node_modules\svelte-material-icons\PlusCircleOutline.svelte generated by Svelte v4.2.19 */
+	/* node_modules/svelte-material-icons/PlusCircleOutline.svelte generated by Svelte v4.2.9 */
 
 	function create_if_block_1$2(ctx) {
 		let desc_1;
@@ -14875,7 +14825,7 @@
 		}
 	}
 
-	/* src\scripts\customization\customTheme\CreateTheme.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/customization/customTheme/CreateTheme.svelte generated by Svelte v4.2.9 */
 
 	function add_css$7(target) {
 		append_styles(target, "svelte-v66qr8", ".buttons.svelte-v66qr8{display:flex;flex-direction:row;width:100%}.submit.svelte-v66qr8,.cancel.svelte-v66qr8{padding:10px;margin:10px;font-size:20px;border:none;border-radius:5px;flex-grow:1}.submit.svelte-v66qr8{background-color:green}.cancel.svelte-v66qr8{background-color:red}dialog.svelte-v66qr8{width:80%;height:80%;display:flex}.pickers.svelte-v66qr8{width:200px;overflow-y:auto;overflow-x:hidden}.wrap.svelte-v66qr8{display:flex;flex-direction:column;height:100%;flex-grow:1}.question.svelte-v66qr8{width:100%;height:30%;font-family:'Product Sans', sans-serif;display:flex;align-items:center;justify-content:center;font-size:50px}.options.svelte-v66qr8{flex-grow:1;display:grid;grid-template-columns:repeat(2, 1fr);width:100%}.option.svelte-v66qr8{background-color:blue;display:flex;align-items:center;justify-content:center;font-family:'Product Sans', sans-serif;font-size:25px;border:6px solid rgba(0, 0, 0, 0.3)}");
@@ -15539,7 +15489,7 @@
 		}
 	}
 
-	/* src\scripts\customization\customTheme\CustomTheme.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/customization/customTheme/CustomTheme.svelte generated by Svelte v4.2.9 */
 
 	function add_css$6(target) {
 		append_styles(target, "svelte-1yznqq", ".createTheme.svelte-1yznqq.svelte-1yznqq{display:flex;align-items:center;justify-content:center;gap:5px}.title.svelte-1yznqq.svelte-1yznqq{position:relative;width:100%;text-align:center;display:flex;justify-content:center}.title.svelte-1yznqq>div.svelte-1yznqq{position:absolute;right:0;top:0}.theme.svelte-1yznqq.svelte-1yznqq{display:flex;flex-direction:column;align-items:center;margin:10px}.theme.selected.svelte-1yznqq.svelte-1yznqq{border:5px solid black;outline:3px solid white}.options.svelte-1yznqq.svelte-1yznqq{display:flex;flex-direction:row;align-items:center;width:100%}.option.svelte-1yznqq.svelte-1yznqq{flex-grow:1;text-align:center;margin:5px}.themeEnabled.svelte-1yznqq.svelte-1yznqq{display:flex;align-items:center;justify-content:center;margin-left:10px;margin-right:10px}.themeEnabled.svelte-1yznqq>div.svelte-1yznqq{margin-right:10px}.themeEnabled.svelte-1yznqq>input.svelte-1yznqq{width:20px;height:20px}");
@@ -15601,7 +15551,7 @@
 		return {
 			c() {
 				div = element("div");
-				t = text("New Theme\r\n            ");
+				t = text("New Theme\n            ");
 				create_component(pluscircleoutline.$$.fragment);
 				attr(div, "class", "createTheme svelte-1yznqq");
 			},
@@ -16272,7 +16222,7 @@
 		}
 	}
 
-	/* src\scripts\2d\PlayerHighlighter.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/2d/PlayerHighlighter.svelte generated by Svelte v4.2.9 */
 
 	const { window: window_1 } = globals;
 
@@ -16557,7 +16507,7 @@
 		}
 	}
 
-	/* src\hud\components\Slider.svelte generated by Svelte v4.2.19 */
+	/* src/hud/components/Slider.svelte generated by Svelte v4.2.9 */
 
 	function add_css$4(target) {
 		append_styles(target, "svelte-vkb13i", ".sliderWrap.svelte-vkb13i{display:flex;flex-direction:column;align-items:center;margin:5px 10px}.sliderWrap.disabled.svelte-vkb13i{opacity:0.5}input.svelte-vkb13i{flex-grow:1;width:100%}input[disabled].svelte-vkb13i{cursor:not-allowed}");
@@ -16743,7 +16693,7 @@
 		}
 	}
 
-	/* src\scripts\2d\Freecam.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/2d/Freecam.svelte generated by Svelte v4.2.9 */
 
 	function add_css$3(target) {
 		append_styles(target, "svelte-oqtmhy", "select.svelte-oqtmhy{width:calc(100% - 10px);padding:5px;margin-left:5px;margin-right:5px;color:black}select[disabled].svelte-oqtmhy{cursor:not-allowed}");
@@ -16802,7 +16752,7 @@
 		};
 	}
 
-	// (129:4) <Button disabled={!$storesLoaded} disabledMsg="Camera hasn't loaded"      on:click={onBtnClick}>
+	// (129:4) <Button disabled={!$storesLoaded} disabledMsg="Camera hasn't loaded"     on:click={onBtnClick}>
 	function create_default_slot_1$3(ctx) {
 		let if_block_anchor;
 
@@ -17279,7 +17229,7 @@
 		}
 	}
 
-	/* src\scripts\2d\HideEnergyPopup.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/2d/HideEnergyPopup.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$k(ctx) {
 		let togglebutton;
@@ -17359,7 +17309,7 @@
 		}
 	}
 
-	/* src\scripts\classic\AutoPurchase.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/classic/AutoPurchase.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$e(ctx) {
 		let togglebutton;
@@ -17545,7 +17495,7 @@
 		}
 	};
 
-	/* src\scripts\superRichMode\AutoPurchase.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/superRichMode/AutoPurchase.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$d(ctx) {
 		let togglebutton;
@@ -17731,7 +17681,7 @@
 		}
 	}
 
-	/* src\scripts\trustNoOne\ShowImposters.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/trustNoOne/ShowImposters.svelte generated by Svelte v4.2.9 */
 
 	function add_css$2(target) {
 		append_styles(target, "svelte-1h3d0lh", "div.svelte-1h3d0lh{padding-left:10px;padding-right:10px}");
@@ -17754,7 +17704,7 @@
 				div = element("div");
 				p = element("p");
 				p.textContent = "This script will only work if you don't join mid-game.";
-				t1 = text("\r\n        Imposters: ");
+				t1 = text("\n        Imposters: ");
 				t2 = text(t2_value);
 				attr(div, "class", "svelte-1h3d0lh");
 			},
@@ -17841,7 +17791,7 @@
 		}
 	}
 
-	/* src\scripts\shared\PurchaseAnywhere.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/shared/PurchaseAnywhere.svelte generated by Svelte v4.2.9 */
 
 	function create_if_block$1(ctx) {
 		let t0;
@@ -17873,7 +17823,7 @@
 		};
 	}
 
-	// (65:0) <Button disabled={!$devicesLoaded || purchaseDevices.length == 0} disabledMsg={!$devicesLoaded ? "Devices haven't loaded yet" : "No matching purchase devices"}  on:click={purchase} >
+	// (61:0) <Button disabled={!$devicesLoaded || purchaseDevices.length == 0} disabledMsg={!$devicesLoaded ? "Devices haven't loaded yet" : "No matching purchase devices"} on:click={purchase} >
 	function create_default_slot$b(ctx) {
 		let t0;
 		let t1;
@@ -17958,7 +17908,7 @@
 				? "Devices haven't loaded yet"
 				: "No matching purchase devices";
 
-				if (dirty & /*$$scope, cost, purchaseDevices, displayText*/ 135) {
+				if (dirty & /*$$scope, cost, purchaseDevices, displayText*/ 1031) {
 					button_changes.$$scope = { dirty, ctx };
 				}
 
@@ -17988,65 +17938,55 @@
 		let { cost = undefined } = $$props;
 		let purchaseDevices = [];
 
-		devicesLoaded.subscribe(value => {
-			if (!value) return;
-			let devices = getUnsafeWindow()?.stores?.phaser?.scene?.worldManager?.devices?.allDevices;
+		function matchesSelector(device) {
+			for (let [category, matchFields] of Object.entries(selector)) {
+				for (let [key, value] of Object.entries(matchFields)) {
+					let actual = device?.[category]?.[key];
 
-			$$invalidate(2, purchaseDevices = devices.filter(device => {
-				let matches = true;
-
-				for (let [category, matchFields] of Object.entries(selector)) {
-					for (let [key, value] of Object.entries(matchFields)) {
-						if (value.endsWith?.("*")) {
-							value = value.slice(0, -1);
-
-							if (!device?.[category]?.[key]?.startsWith(value)) {
-								matches = false;
-								break;
-							}
-						} else if (typeof value == "function") {
-							if (device?.[category]?.[key] != value()) {
-								matches = false;
-								break;
-							}
-						} else {
-							// find an exact match
-							if (device?.[category]?.[key] != value) {
-								matches = false;
-								break;
-							}
-						}
+					if (typeof value == "function") {
+						if (actual != value()) return false;
+					} else if (typeof value == "string" && value.endsWith("*")) {
+						if (!actual?.startsWith?.(value.slice(0, -1))) return false;
+					} else if (actual != value) {
+						return false;
 					}
 				}
-
-				return matches;
-			}));
-
-			purchaseDevices.sort((a, b) => a?.options?.amountOfRequiredItem - b?.options?.amountOfRequiredItem);
-		});
-
-		async function purchase() {
-			let devices = getUnsafeWindow()?.stores?.phaser?.scene?.worldManager?.devices?.allDevices;
-
-			// this code has been here a while and I don't know what exactly it does but I don't dare remove it
-			if (!purchaseDevices[0]?.interactiveZones?.onInteraction) {
-				$$invalidate(2, purchaseDevices = purchaseDevices.map(device => {
-					return devices.find(d => d.id == device.id);
-				}));
-
-				return;
 			}
 
-			purchaseDevices[0]?.interactiveZones?.onInteraction();
+			return true;
+		}
+
+		// Re-run the selector regularly: some selectors depend on values (like the
+		// player's team) that aren't set yet when the devices first load, and the
+		// device objects can be replaced by the game.
+		function refreshDevices() {
+			let devices = getUnsafeWindow()?.stores?.phaser?.scene?.worldManager?.devices?.allDevices;
+			if (!devices) return;
+			$$invalidate(2, purchaseDevices = devices.filter(device => matchesSelector(device) && (reusable || device?.state?.active !== false)).sort((a, b) => a?.options?.amountOfRequiredItem - b?.options?.amountOfRequiredItem));
+		}
+
+		devicesLoaded.subscribe(value => {
+			if (value) refreshDevices();
+		});
+
+		const refreshInterval = setInterval(
+			() => {
+				if (get_store_value(devicesLoaded)) refreshDevices();
+			},
+			1000
+		);
+
+		onDestroy(() => clearInterval(refreshInterval));
+
+		async function purchase() {
+			refreshDevices();
+			purchaseDevices[0]?.interactiveZones?.onInteraction?.();
 			if (reusable) return;
 
-			// check whether it was successfully purchased
-			// wait 500ms for the purchase to go through
+			// wait for the purchase to go through, then drop it if it succeeded
 			await new Promise(resolve => setTimeout(resolve, 500));
 
-			if (purchaseDevices[0].state.active) return; // it wasn't purchased
-			purchaseDevices.shift();
-			$$invalidate(2, purchaseDevices);
+			refreshDevices();
 		}
 
 		$$self.$$set = $$props => {
@@ -18080,7 +18020,7 @@
 		}
 	}
 
-	/* src\scripts\ctf\Ctf.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/ctf/Ctf.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$a(ctx) {
 		let purchaseanywhere0;
@@ -18283,7 +18223,7 @@
 		}
 	}
 
-	/* src\scripts\tag\Tag.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/tag/Tag.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$9(ctx) {
 		let purchaseanywhere0;
@@ -18435,7 +18375,7 @@
 		}
 	}
 
-	/* src\scripts\oneWayOut\OneWayOut.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/oneWayOut/OneWayOut.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$8(ctx) {
 		let purchaseanywhere0;
@@ -18545,7 +18485,7 @@
 		}
 	}
 
-	/* src\scripts\shared\Rapidfire.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/shared/Rapidfire.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$c(ctx) {
 		let togglebutton;
@@ -18656,7 +18596,7 @@
 		}
 	}
 
-	/* src\scripts\snowbrawl\Snowbrawl.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/snowbrawl/Snowbrawl.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$7(ctx) {
 		let purchaseanywhere0;
@@ -18783,7 +18723,7 @@
 		}
 	}
 
-	/* src\scripts\floorIsLava\AutoBuild.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/floorIsLava/AutoBuild.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$a(ctx) {
 		let togglebutton;
@@ -18913,7 +18853,7 @@
 		}
 	}
 
-	/* src\scripts\floorIsLava\HidePopups.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/floorIsLava/HidePopups.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$9(ctx) {
 		let togglebutton;
@@ -19024,7 +18964,7 @@
 		}
 	}
 
-	/* src\scripts\floorIsLava\FloorIsLava.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/floorIsLava/FloorIsLava.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$6(ctx) {
 		let autobuild;
@@ -19119,7 +19059,7 @@
 		}
 	}
 
-	/* src\scripts\farmchain\AutoPlant.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/farmchain/AutoPlant.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$7(ctx) {
 		let togglebutton;
@@ -19209,14 +19149,16 @@
 
 						for (let seed of seedRanking) {
 							let recipie = recipieDevices[seed];
+							if (!recipie) continue;
 							let canPlant = true;
 
 							// check if we have enough of each ingredient
-							for (let i = 0; i < 5; i++) {
-								let reqIngredient = recipie?.options?.[`ingredient${i}Item`];
+							for (let i = 0; i <= 5; i++) {
+								let reqIngredient = recipie.options?.[`ingredient${i}Item`];
 								if (!reqIngredient) continue;
+								let have = inventory.get(reqIngredient)?.amount ?? 0;
 
-								if (!inventory.get(reqIngredient)?.amount >= recipie.options[`ingredient${i}Amount`]) {
+								if (have < (recipie.options[`ingredient${i}Amount`] ?? 0)) {
 									canPlant = false;
 									break;
 								}
@@ -19232,6 +19174,8 @@
 
 						// plant the seed in the last idle plot
 						let plantPlot = plots.findLast(plot => plot.state.status == "idle");
+
+						if (!plantPlot) return;
 
 						socketManager.sendMessage("MESSAGE_FOR_DEVICE", {
 							key: "craft",
@@ -19258,7 +19202,7 @@
 		}
 	}
 
-	/* src\scripts\farmchain\AutoHarvest.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/farmchain/AutoHarvest.svelte generated by Svelte v4.2.9 */
 
 	function create_fragment$6(ctx) {
 		let togglebutton;
@@ -19350,7 +19294,7 @@
 		}
 	}
 
-	/* src\scripts\farmchain\Farmchain.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/farmchain/Farmchain.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot_2$2(ctx) {
 		let purchaseanywhere0;
@@ -19943,7 +19887,7 @@
 		}
 	}
 
-	/* src\scripts\2d\Movement.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/2d/Movement.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$4(ctx) {
 		let slider;
@@ -20169,7 +20113,7 @@
 		}
 	}
 
-	/* src\scripts\digItUp\Purchasers.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/digItUp/Purchasers.svelte generated by Svelte v4.2.9 */
 
 	function add_css$1(target) {
 		append_styles(target, "svelte-1a7yjpn", ".notLoaded.svelte-1a7yjpn{width:100%;text-align:center}");
@@ -20959,7 +20903,7 @@
 		}
 	}
 
-	/* src\scripts\digItUp\DigItUp.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/digItUp/DigItUp.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$2(ctx) {
 		let rapidfire;
@@ -21062,7 +21006,7 @@
 		}
 	}
 
-	/* src\scripts\knockback\Knockback.svelte generated by Svelte v4.2.19 */
+	/* src/scripts/knockback/Knockback.svelte generated by Svelte v4.2.9 */
 
 	function create_default_slot$1(ctx) {
 		let rapidfire;
@@ -21150,13 +21094,13 @@
 		}
 	}
 
-	/* src\hud\Hud.svelte generated by Svelte v4.2.19 */
+	/* src/hud/Hud.svelte generated by Svelte v4.2.9 */
 
 	function add_css(target) {
 		append_styles(target, "svelte-1byew0x", "#gc-hud.svelte-1byew0x{position:absolute;top:0;left:0;z-index:9999999999;width:100vw;height:100vh;pointer-events:none;color:var(--textColor)}");
 	}
 
-	// (35:12) <Group name="Menu Appearance">
+	// (46:12) <Group name="Menu Appearance">
 	function create_default_slot_5(ctx) {
 		let colorpicker0;
 		let t0;
@@ -21246,7 +21190,7 @@
 		};
 	}
 
-	// (41:12) <Group name="Button Appearance">
+	// (52:12) <Group name="Button Appearance">
 	function create_default_slot_4(ctx) {
 		let colorpicker0;
 		let t;
@@ -21302,7 +21246,7 @@
 		};
 	}
 
-	// (33:8) <Group name="HUD Appearance">
+	// (44:8) <Group name="HUD Appearance">
 	function create_default_slot_3(ctx) {
 		let colorpicker;
 		let t0;
@@ -21354,14 +21298,14 @@
 			p(ctx, dirty) {
 				const group0_changes = {};
 
-				if (dirty & /*$$scope*/ 2) {
+				if (dirty & /*$$scope*/ 8) {
 					group0_changes.$$scope = { dirty, ctx };
 				}
 
 				group0.$set(group0_changes);
 				const group1_changes = {};
 
-				if (dirty & /*$$scope*/ 2) {
+				if (dirty & /*$$scope*/ 8) {
 					group1_changes.$$scope = { dirty, ctx };
 				}
 
@@ -21393,7 +21337,7 @@
 		};
 	}
 
-	// (32:4) <Menu name="Customization">
+	// (43:4) <Menu name="Customization">
 	function create_default_slot_2(ctx) {
 		let group;
 		let t0;
@@ -21439,7 +21383,7 @@
 			p(ctx, dirty) {
 				const group_changes = {};
 
-				if (dirty & /*$$scope*/ 2) {
+				if (dirty & /*$$scope*/ 8) {
 					group_changes.$$scope = { dirty, ctx };
 				}
 
@@ -21475,7 +21419,7 @@
 		};
 	}
 
-	// (51:4) <Menu name="General Cheats">
+	// (62:4) <Menu name="General Cheats">
 	function create_default_slot_1(ctx) {
 		let autoanswer;
 		let t0;
@@ -21562,7 +21506,7 @@
 		};
 	}
 
-	// (60:4) <Menu name="Gamemode Specific Cheats">
+	// (71:4) <Menu name="Gamemode Specific Cheats">
 	function create_default_slot(ctx) {
 		let classicautopurchase;
 		let t0;
@@ -21712,6 +21656,8 @@
 		let t1;
 		let menu2;
 		let current;
+		let mounted;
+		let dispose;
 
 		menu0 = new Menu({
 				props: {
@@ -21757,25 +21703,34 @@
 				append(div, t1);
 				mount_component(menu2, div, null);
 				current = true;
+
+				if (!mounted) {
+					dispose = [
+						listen(div, "keydown", /*stopIfTyping*/ ctx[1]),
+						listen(div, "keyup", /*stopIfTyping*/ ctx[1])
+					];
+
+					mounted = true;
+				}
 			},
 			p(ctx, [dirty]) {
 				const menu0_changes = {};
 
-				if (dirty & /*$$scope*/ 2) {
+				if (dirty & /*$$scope*/ 8) {
 					menu0_changes.$$scope = { dirty, ctx };
 				}
 
 				menu0.$set(menu0_changes);
 				const menu1_changes = {};
 
-				if (dirty & /*$$scope*/ 2) {
+				if (dirty & /*$$scope*/ 8) {
 					menu1_changes.$$scope = { dirty, ctx };
 				}
 
 				menu1.$set(menu1_changes);
 				const menu2_changes = {};
 
-				if (dirty & /*$$scope*/ 2) {
+				if (dirty & /*$$scope*/ 8) {
 					menu2_changes.$$scope = { dirty, ctx };
 				}
 
@@ -21806,6 +21761,8 @@
 				destroy_component(menu0);
 				destroy_component(menu1);
 				destroy_component(menu2);
+				mounted = false;
+				run_all(dispose);
 			}
 		};
 	}
@@ -21818,7 +21775,20 @@
 			showHud.update(v => !v);
 		});
 
-		return [$showHud];
+		// Keep keystrokes typed into HUD fields from reaching the game's hotkeys
+		// (and our own keybinds), which listen on window in the bubble phase.
+		const nonTextInputs = new Set(["checkbox", "radio", "range", "color", "button", "submit", "reset", "file"]);
+
+		function stopIfTyping(event) {
+			let target = event.target;
+			let isTextInput = target?.tagName === "INPUT" && !nonTextInputs.has(target.type);
+
+			if (isTextInput || target?.tagName === "TEXTAREA") {
+				event.stopPropagation();
+			}
+		}
+
+		return [$showHud, stopIfTyping];
 	}
 
 	class Hud extends SvelteComponent {
@@ -21838,6 +21808,18 @@
 	    addVars();
 	}
 
+	function isStores(value) {
+	    return value && typeof value === "object" && "assignment" in value && "phaser" in value;
+	}
+	async function tryModule(url) {
+	    try {
+	        const mod = await import(/* @vite-ignore */ url);
+	        return Object.values(mod).find(isStores) ?? null;
+	    }
+	    catch {
+	        return null;
+	    }
+	}
 	async function exposeValues() {
 	    if (!document.body) {
 	        await new Promise((res) => document.addEventListener('DOMContentLoaded', res));
@@ -21847,14 +21829,21 @@
 	        throw new Error("Failed to find script");
 	    const res = await fetch(script.src);
 	    const text = await res.text();
-	    const gameScriptUrl = text.match(/FixSpinePlugin-[^.]+\.js/)?.[0];
-	    if (!gameScriptUrl)
-	        throw new Error("Failed to find game script URL");
-	    const gameScript = await import(`/assets/${gameScriptUrl}`);
-	    const stores = Object.values(gameScript).find(v => v.assignment);
-	    getUnsafeWindow().stores = stores;
-	    storesLoaded.set(true);
-	    console.log("GC: Stores loaded");
+	    // Chunk names are hashed and change between Gimkit builds, so look for the
+	    // chunk(s) named "stores-*" first, falling back to the old chunk name.
+	    const chunks = [...new Set(text.match(/(?:stores|FixSpinePlugin)-[\w-]+\.js/g) ?? [])];
+	    if (chunks.length === 0)
+	        throw new Error("Failed to find stores chunk");
+	    for (const chunk of chunks) {
+	        const stores = await tryModule(new URL(chunk, script.src).href);
+	        if (!stores)
+	            continue;
+	        getUnsafeWindow().stores = stores;
+	        storesLoaded.set(true);
+	        console.log("GC: Stores loaded");
+	        return;
+	    }
+	    throw new Error("Failed to find stores object");
 	}
 
 	// confirm that no amplitude.com script exists

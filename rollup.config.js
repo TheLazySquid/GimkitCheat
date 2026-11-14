@@ -9,7 +9,7 @@ import terser from '@rollup/plugin-terser';
 import makeBookmarklet from './makeBookmarket.js';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
-const full = process.argv.includes('full');
+const full = process.argv.includes('full') || process.env.FULL === 'true';
 
 let output = [
     {

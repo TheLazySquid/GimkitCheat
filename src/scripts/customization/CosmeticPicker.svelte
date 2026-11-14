@@ -12,14 +12,21 @@
     let trailId: string = '';
     let gotSkinId: boolean = false;
 
+    // The character spawns with a default skin and the real one is applied a moment later,
+    // so keep the fields in sync with the character until the user edits them.
+    let syncedSkinId: string | null = null;
+    let syncedTrailId: string | null = null;
+
     let checkInterval = setInterval(() => {
         let char = getUnsafeWindow()?.stores?.phaser?.scene?.characterManager?.characters?.get($playerId)
-        if(char) {
-            skinId = char.skin.skinId;
-            trailId = char.characterTrail.currentAppearanceId;
-            gotSkinId = true;
-            clearInterval(checkInterval);
-        }
+        if(!char) return;
+
+        let currentSkin = String(char.skin.latestSkinId ?? char.skin.skinId ?? "").replace(/^character_/, "");
+        let currentTrail = char.characterTrail.currentAppearanceId;
+
+        if(syncedSkinId === null || skinId === syncedSkinId) skinId = syncedSkinId = currentSkin;
+        if(syncedTrailId === null || trailId === syncedTrailId) trailId = syncedTrailId = currentTrail;
+        gotSkinId = true;
     }, 500);
 
     function apply () {
